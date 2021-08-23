@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <CPS.settings>Settings</CPS.settings>
+  <CPS.commonality.label>Biome animal overall density</CPS.commonality.label>
+  <CPS.resetall.label>Manual config reset</CPS.resetall.label>
+  <CPS.resetall.tooltip>Reset all modified values</CPS.resetall.tooltip>
+  <CPS.resetall.button>Reset all</CPS.resetall.button>
+  <CPS.resetall.confirm>This will reset ALL values to vanilla values for all pawnkinds</CPS.resetall.confirm>
+  <CPS.resetone.confirm>This will reset the values for {0} to vanilla values</CPS.resetone.confirm>
+  <CPS.logging.label>Enable verbose logging</CPS.logging.label>
+  <CPS.logging.tooltip>Shows verbose logging, for finding errors</CPS.logging.tooltip>
+  <CPS.version.label>Installed mod-version: {0}</CPS.version.label>
+  <CPS.reset.button>Reset</CPS.reset.button>
+  <CPS.undo.button>Undo</CPS.undo.button>
+  <CPS.save.button>Save</CPS.save.button>
+  <CPS.search>Search pawn</CPS.search>
+  <CPS.customexists>Has custom values defined</CPS.customexists>
+  <CPS.percent>{0} percent</CPS.percent>
+  <CPS.biocoding>Biocoding</CPS.biocoding>
+  <CPS.biocoding.tooltip>Chance of biocoded items for the chosen pawnkind.</CPS.biocoding.tooltip>
+  <CPS.chemicaladdiction>Chemical Addiction</CPS.chemicaladdiction>
+  <CPS.chemicaladdiction.tooltip>Chance of having a chemical addiction for the chosen pawnkind.</CPS.chemicaladdiction.tooltip>
+  <CPS.combatenhancingdrugs>Combat Enhancing Drugs</CPS.combatenhancingdrugs>
+  <CPS.combatenhancingdrugs.tooltip>Chance of having combat enhancing drugs for the chosen pawnkind.</CPS.combatenhancingdrugs.tooltip>
+  <CPS.techhediffs>Tech Hediffs</CPS.techhediffs>
+  <CPS.techhediffs.tooltip>Chance of having artificial bodyparts for the chosen pawnkind.</CPS.techhediffs.tooltip>
+  <CPS.techhediffsmoney>Tech Hediffs Money</CPS.techhediffsmoney>
+  <CPS.techhediffsmoney.tooltip>The amount of money the pawnkind have to "buy" hediffs</CPS.techhediffsmoney.tooltip>
+</LanguageData>

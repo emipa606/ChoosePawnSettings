@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Choose Pawn Settings</name>
+  <packageId>Mlie.ChoosePawnSettings</packageId>
+  <author>Mlie</author>
+  <url>https://github.com/emipa606/ChoosePawnSettings</url>
+  <supportedVersions>
+    <li>1.3</li>
+  </supportedVersions>
+  <modDependencies />
+  <loadAfter />
+  <description>[img]https://i.imgur.com/WAEzk68.png[/img]
+
+Lets you change stuff for pawnkinds.
+Started as a replacemet for [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2020630826]Configurable Biocoding[/url] but started adding more properties to modify.
+
+Currently implemented
+[list]
+[*] Biocode Chance
+[*] Chemical Addiction Chance
+[*] Combat Enhancing Drugs Chance
+[*] Tech Hediffs Chance
+[*] Tech Hediffs Money
+[/list]
+
+Changes are instant but will only affect pawns when they spawn.
+
+If you have suggestions on more properties to change, leave a comment and Ill look into adding it.
+
+[table]
+    [tr]
+        [td][url=https://invite.gg/Mlie][img]https://i.imgur.com/zdzzBrc.png[/img][/url][/td]
+        [td][url=https://github.com/emipa606/ChoosePawnSettings][img]https://i.imgur.com/kTkpTOE.png[/img][/url][/td]
+    [/tr]
+[/table]
+	
+
+[img]https://i.imgur.com/pgjQLXV.png[/img]
+Since modding is just a hobby for me I expect no donations to keep modding. If you still want to show your support you can gift me anything from my [url=https://store.steampowered.com/wishlist/id/Mlie]Wishlist[/url] or buy me a cup of tea.
+
+[url=https://ko-fi.com/G2G55DDYD][img]https://i.ibb.co/VWJJb3w/Support-Me-dark-2x.png[/img][/url]
+
+[img]https://i.imgur.com/Rs6T6cr.png[/img]
+[list]
+[*] See if the the error persists if you just have this mod and its requirements active.
+[*] If not, try adding your other mods until it happens again.
+[*] Post your error-log using [url=https://steamcommunity.com/workshop/filedetails/?id=818773962]HugsLib[/url] and command Ctrl+F12
+[*] For best support, please use the Discord-channel for error-reporting.
+[*] Do not report errors by making a discussion-thread, I get no notification of that.
+[*] If you have the solution for a problem, please post it to the GitHub repository.
+[/list]
+</description>
+</ModMetaData>
