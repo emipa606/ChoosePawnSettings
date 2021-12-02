@@ -3,53 +3,52 @@ using System.Linq;
 using ChoosePawnSettings.Settings;
 using Verse;
 
-namespace ChoosePawnSettings
+namespace ChoosePawnSettings;
+
+[StaticConstructorOnStartup]
+public static class Main
 {
-    [StaticConstructorOnStartup]
-    public static class Main
+    private static List<PawnKindDef> allPawnKinds;
+
+    static Main()
     {
-        private static List<PawnKindDef> allPawnKinds;
+        Biocoding.Initialize();
+        ChemicalAddiction.Initialize();
+        CombatEnhancingDrugs.Initialize();
+        TechHediffs.Initialize();
+        TechHediffsMoney.Initialize();
+    }
 
-        static Main()
+    public static List<PawnKindDef> AllPawnKinds
+    {
+        get
         {
-            Biocoding.Initialize();
-            ChemicalAddiction.Initialize();
-            CombatEnhancingDrugs.Initialize();
-            TechHediffs.Initialize();
-            TechHediffsMoney.Initialize();
-        }
-
-        public static List<PawnKindDef> AllPawnKinds
-        {
-            get
+            if (allPawnKinds == null || allPawnKinds.Count == 0)
             {
-                if (allPawnKinds == null || allPawnKinds.Count == 0)
-                {
-                    allPawnKinds = (from pawn in DefDatabase<PawnKindDef>.AllDefsListForReading
-                        where pawn.RaceProps?.Humanlike == true
-                        orderby pawn.label
-                        select pawn).ToList();
-                }
-
-                return allPawnKinds;
-            }
-            set => allPawnKinds = value;
-        }
-
-        public static void LogMessage(string message, bool forced = false, bool warning = false)
-        {
-            if (warning)
-            {
-                Log.Warning($"[ChoosePawnSettings]: {message}");
-                return;
+                allPawnKinds = (from pawn in DefDatabase<PawnKindDef>.AllDefsListForReading
+                    where pawn.RaceProps?.Humanlike == true
+                    orderby pawn.label
+                    select pawn).ToList();
             }
 
-            if (!forced && !ChoosePawnSettings_Mod.instance.Settings.VerboseLogging)
-            {
-                return;
-            }
-
-            Log.Message($"[ChoosePawnSettings]: {message}");
+            return allPawnKinds;
         }
+        set => allPawnKinds = value;
+    }
+
+    public static void LogMessage(string message, bool forced = false, bool warning = false)
+    {
+        if (warning)
+        {
+            Log.Warning($"[ChoosePawnSettings]: {message}");
+            return;
+        }
+
+        if (!forced && !ChoosePawnSettings_Mod.instance.Settings.VerboseLogging)
+        {
+            return;
+        }
+
+        Log.Message($"[ChoosePawnSettings]: {message}");
     }
 }

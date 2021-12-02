@@ -1,4 +1,7 @@
 # Changelog for ChoosePawnSettings
 
+1.0.1.0 - Fixed the scrollview, thanks Taranchuk for the simple solution!
+
+
 1.0.0.0 - First publish
 
