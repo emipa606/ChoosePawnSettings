@@ -1,5 +1,8 @@
 # Changelog for ChoosePawnSettings
 
+1.0.2.0 - Added headgear-chance to the settings
+
+
 1.0.1.0 - Fixed the scrollview, thanks Taranchuk for the simple solution!
 
 

@@ -26,4 +26,6 @@
   <CPS.techhediffs.tooltip>Chance of having artificial bodyparts for the chosen pawnkind.</CPS.techhediffs.tooltip>
   <CPS.techhediffsmoney>Tech Hediffs Money</CPS.techhediffsmoney>
   <CPS.techhediffsmoney.tooltip>The amount of money the pawnkind have to "buy" hediffs</CPS.techhediffsmoney.tooltip>
+  <CPS.headgear>Headgear</CPS.headgear>
+  <CPS.headgear.tooltip>Chance of headgear for the chosen pawnkind.</CPS.headgear.tooltip>
 </LanguageData>

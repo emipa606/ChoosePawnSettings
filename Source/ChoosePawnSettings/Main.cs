@@ -15,6 +15,7 @@ public static class Main
         Biocoding.Initialize();
         ChemicalAddiction.Initialize();
         CombatEnhancingDrugs.Initialize();
+        Headgear.Initialize();
         TechHediffs.Initialize();
         TechHediffsMoney.Initialize();
     }

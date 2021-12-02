@@ -26,6 +26,13 @@ public class ChoosePawnSettings_Settings : ModSettings
 
     private List<float> customCombatEnhancingDrugsChancesValues;
 
+    public Dictionary<string, float> CustomHeadgearChances =
+        new Dictionary<string, float>();
+
+    private List<string> customHeadgearChancesKeys;
+
+    private List<float> customHeadgearChancesValues;
+
     public Dictionary<string, float> CustomTechHediffsChances =
         new Dictionary<string, float>();
 
@@ -49,6 +56,9 @@ public class ChoosePawnSettings_Settings : ModSettings
         Scribe_Collections.Look(ref CustomBiocodeChances, "CustomBiocodeChances", LookMode.Value,
             LookMode.Value,
             ref customBiocodeChancesKeys, ref customBiocodeChancesValues);
+        Scribe_Collections.Look(ref CustomHeadgearChances, "CustomHeadgearChances", LookMode.Value,
+            LookMode.Value,
+            ref customHeadgearChancesKeys, ref customHeadgearChancesValues);
         Scribe_Collections.Look(ref CustomChemicalAddictionChances, "CustomChemicalAddictionChances",
             LookMode.Value,
             LookMode.Value,
@@ -73,6 +83,14 @@ public class ChoosePawnSettings_Settings : ModSettings
         customBiocodeChancesValues = new List<float>();
         CustomBiocodeChances = new Dictionary<string, float>();
         Biocoding.ResetBiocodingToVanillaRates();
+    }
+
+    public void ResetHeadgearValues()
+    {
+        customHeadgearChancesKeys = new List<string>();
+        customHeadgearChancesValues = new List<float>();
+        CustomHeadgearChances = new Dictionary<string, float>();
+        Headgear.ResetHeadgearToVanillaRates();
     }
 
     public void ResetChemicalAddictionValues()
@@ -110,6 +128,7 @@ public class ChoosePawnSettings_Settings : ModSettings
     public void ResetManualValues()
     {
         ResetBiocodeValues();
+        ResetHeadgearValues();
         ResetChemicalAddictionValues();
         ResetCombatEnhancingDrugsValues();
         ResetTechHediffsValues();
