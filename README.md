@@ -12,6 +12,7 @@ Currently implemented
 -  Biocode Chance
 -  Chemical Addiction Chance
 -  Combat Enhancing Drugs Chance
+-  Headgear Chance
 -  Tech Hediffs Chance
 -  Tech Hediffs Money
 
