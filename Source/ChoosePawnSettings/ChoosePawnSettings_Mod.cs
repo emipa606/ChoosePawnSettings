@@ -68,6 +68,11 @@ public class ChoosePawnSettings_Mod : Mod
             instance.Settings.CustomBiocodeChances = new Dictionary<string, float>();
         }
 
+        if (ModLister.RoyaltyInstalled)
+        {
+            settingTabs.Add("RoyalTitleChance");
+        }
+
         SelectedDef = "Settings";
         currentVersion =
             VersionFromManifest.GetVersionFromModMetaData(
@@ -258,6 +263,11 @@ public class ChoosePawnSettings_Mod : Mod
             case "TechHediffsMoney":
             {
                 techhediffsmoneyScrollView(ref frameRect);
+                break;
+            }
+            case "RoyalTitleChance":
+            {
+                royalTitleChanceScrollView(ref frameRect);
                 break;
             }
         }
@@ -712,6 +722,120 @@ public class ChoosePawnSettings_Mod : Mod
                     pawnKindDef.apparelAllowHeadgearChance, 0,
                     1f, false,
                     "CPS.percent".Translate(Math.Round(pawnKindDef.apparelAllowHeadgearChance * 100)),
+                    pawnkindLabel,
+                    modInfo), 2);
+
+            GUI.color = Color.white;
+        }
+
+        scrollListing.End();
+        Widgets.EndScrollView();
+    }
+
+    private void royalTitleChanceScrollView(ref Rect frameRect)
+    {
+        listing_Standard.Begin(frameRect);
+
+        Text.Font = GameFont.Medium;
+
+        var headerLabel = listing_Standard.Label("CPS.royaltitlechance".Translate());
+        TooltipHandler.TipRegion(new Rect(
+            headerLabel.position,
+            searchSize), "CPS.royaltitlechance.tooltip".Translate());
+
+        if (instance.Settings.CustomRoyalTitleChances == null)
+        {
+            instance.Settings.CustomRoyalTitleChances = new Dictionary<string, float>();
+        }
+
+        if (instance.Settings.CustomRoyalTitleChances.Any())
+        {
+            DrawButton(() =>
+                {
+                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
+                        "CPS.resetone.confirm".Translate("CPS.royalTitleChance".Translate().ToLower()),
+                        delegate { instance.Settings.ResetRoyalTitleChanceValues(); }));
+                }, "CPS.reset.button".Translate(),
+                new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
+                    headerLabel.position.y));
+        }
+
+        Text.Font = GameFont.Small;
+
+        searchText =
+            Widgets.TextField(
+                new Rect(headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
+                    searchSize),
+                searchText);
+        TooltipHandler.TipRegion(new Rect(
+            headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
+            searchSize), "CPS.search".Translate());
+
+        listing_Standard.End();
+
+        var allPawnKinds = Main.AllPawnKinds;
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            allPawnKinds = Main.AllPawnKinds.Where(def =>
+                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack.Name.ToLower()
+                        .Contains(searchText.ToLower()))
+                .ToList();
+        }
+
+        var borderRect = frameRect;
+        borderRect.y += headerLabel.y + 40;
+        borderRect.height -= headerLabel.y + 40;
+        var scrollContentRect = frameRect;
+        scrollContentRect.height = allPawnKinds.Count * 51f;
+        scrollContentRect.width -= 20;
+        scrollContentRect.x = 0;
+        scrollContentRect.y = 0;
+
+        var scrollListing = new Listing_Standard();
+        Widgets.BeginScrollView(borderRect, ref scrollPosition, scrollContentRect);
+        scrollListing.Begin(scrollContentRect);
+        var alternate = false;
+        foreach (var pawnKindDef in allPawnKinds)
+        {
+            var modInfo = pawnKindDef.modContentPack?.Name;
+            var sliderRect = scrollListing.GetRect(50);
+            alternate = !alternate;
+            if (alternate)
+            {
+                Widgets.DrawBoxSolid(sliderRect, alternateBackground);
+            }
+
+            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            if (pawnkindLabel.Length > 45)
+            {
+                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
+            }
+
+            if (modInfo is { Length: > 45 })
+            {
+                modInfo = $"{modInfo.Substring(0, 42)}...";
+            }
+
+            if (pawnKindDef.royalTitleChance != RoyalTitleChance.RoyalTitleChances[pawnKindDef.defName])
+            {
+                instance.Settings.CustomRoyalTitleChances[pawnKindDef.defName] =
+                    pawnKindDef.royalTitleChance;
+                GUI.color = Color.green;
+            }
+            else
+            {
+                if (instance.Settings.CustomRoyalTitleChances.ContainsKey(pawnKindDef.defName))
+                {
+                    instance.Settings.CustomRoyalTitleChances.Remove(pawnKindDef.defName);
+                }
+            }
+
+            pawnKindDef.royalTitleChance =
+                (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                    sliderRect,
+                    pawnKindDef.royalTitleChance, 0,
+                    1f, false,
+                    "CPS.percent".Translate(Math.Round(pawnKindDef.royalTitleChance * 100)),
                     pawnkindLabel,
                     modInfo), 2);
 

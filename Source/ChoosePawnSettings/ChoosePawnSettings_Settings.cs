@@ -46,8 +46,13 @@ public class ChoosePawnSettings_Settings : ModSettings
     private List<string> customTechHediffsMoneyKeys;
 
     private List<FloatRange> customTechHediffsMoneyValues;
+    private List<string> royalTitleChanceKeys;
+
+    private List<float> royalTitleChanceValues;
 
     public bool VerboseLogging;
+    public Dictionary<string, float> CustomRoyalTitleChances { get; set; }
+
 
     public override void ExposeData()
     {
@@ -107,6 +112,14 @@ public class ChoosePawnSettings_Settings : ModSettings
         customCombatEnhancingDrugsChancesValues = new List<float>();
         CustomCombatEnhancingDrugsChances = new Dictionary<string, float>();
         CombatEnhancingDrugs.ResetCombatEnhancingDrugsToVanillaRates();
+    }
+
+    public void ResetRoyalTitleChanceValues()
+    {
+        royalTitleChanceKeys = new List<string>();
+        royalTitleChanceValues = new List<float>();
+        CustomRoyalTitleChances = new Dictionary<string, float>();
+        RoyalTitleChance.ResetRoyalTitleChanceToVanillaRates();
     }
 
     public void ResetTechHediffsValues()

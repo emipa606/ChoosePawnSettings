@@ -28,4 +28,6 @@
   <CPS.techhediffsmoney.tooltip>The amount of money the pawnkind have to "buy" hediffs</CPS.techhediffsmoney.tooltip>
   <CPS.headgear>Headgear</CPS.headgear>
   <CPS.headgear.tooltip>Chance of headgear for the chosen pawnkind.</CPS.headgear.tooltip>
+  <CPS.royaltitlechance>Royal Title Chance</CPS.royaltitlechance>
+  <CPS.royaltitlechance.tooltip>Chance of pawn spawning with a royal title.</CPS.royaltitlechance.tooltip>
 </LanguageData>

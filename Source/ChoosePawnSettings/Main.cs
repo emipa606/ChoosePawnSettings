@@ -18,6 +18,10 @@ public static class Main
         Headgear.Initialize();
         TechHediffs.Initialize();
         TechHediffsMoney.Initialize();
+        if (ModLister.RoyaltyInstalled)
+        {
+            RoyalTitleChance.Initialize();
+        }
     }
 
     public static List<PawnKindDef> AllPawnKinds
