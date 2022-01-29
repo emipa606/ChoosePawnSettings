@@ -47,7 +47,9 @@ public class ChoosePawnSettings_Mod : Mod
         "CombatEnhancingDrugs",
         "Headgear",
         "TechHediffs",
-        "TechHediffsMoney"
+        "TechHediffsMoney",
+        "WeaponMoney",
+        "ApparelMoney"
     };
 
     /// <summary>
@@ -206,10 +208,7 @@ public class ChoosePawnSettings_Mod : Mod
                 Text.Font = GameFont.Small;
                 listing_Standard.Gap();
 
-                if (instance.Settings.CustomBiocodeChances?.Any() == true ||
-                    instance.Settings.CustomChemicalAddictionChances?.Any() == true ||
-                    instance.Settings.CustomCombatEnhancingDrugsChances?.Any() == true ||
-                    instance.Settings.CustomHeadgearChances?.Any() == true)
+                if (instance.Settings.HasCustomValues())
                 {
                     var labelPoint = listing_Standard.Label("CPS.resetall.label".Translate(), -1F,
                         "CPS.resetall.tooltip".Translate());
@@ -217,7 +216,7 @@ public class ChoosePawnSettings_Mod : Mod
                         {
                             Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
                                 "CPS.resetall.confirm".Translate(),
-                                delegate { instance.Settings.ResetManualValues(); }));
+                                delegate { instance.Settings.ResetValues("all"); }));
                         }, "CPS.resetall.button".Translate(),
                         new Vector2(labelPoint.position.x + buttonSpacer, labelPoint.position.y));
                 }
@@ -237,65 +236,86 @@ public class ChoosePawnSettings_Mod : Mod
             }
             case "Biocoding":
             {
-                biocodingScrollView(ref frameRect);
+                FloatScrollView(ref frameRect, ref instance.Settings.CustomBiocodeChances,
+                    Biocoding.VanillaBiocodeChances, "biocoding");
                 break;
             }
             case "ChemicalAddiction":
             {
-                chemicaladdictionScrollView(ref frameRect);
+                FloatScrollView(ref frameRect, ref instance.Settings.CustomChemicalAddictionChances,
+                    ChemicalAddiction.VanillaChemicalAddictionChances, "chemicaladdiction");
                 break;
             }
             case "CombatEnhancingDrugs":
             {
-                combatenhancingdrugsScrollView(ref frameRect);
+                FloatScrollView(ref frameRect, ref instance.Settings.CustomCombatEnhancingDrugsChances,
+                    CombatEnhancingDrugs.VanillaCombatEnhancingDrugsChances, "combatenhancingdrugs");
                 break;
             }
             case "Headgear":
             {
-                headgearScrollView(ref frameRect);
+                FloatScrollView(ref frameRect, ref instance.Settings.CustomHeadgearChances,
+                    Headgear.VanillaHeadgearChances, "headgear");
                 break;
             }
             case "TechHediffs":
             {
-                techhediffsScrollView(ref frameRect);
+                FloatScrollView(ref frameRect, ref instance.Settings.CustomTechHediffsChances,
+                    TechHediffs.VanillaTechHediffsChances, "techhediffs");
                 break;
             }
             case "TechHediffsMoney":
             {
-                techhediffsmoneyScrollView(ref frameRect);
+                RangeScrollView(ref frameRect, ref instance.Settings.CustomTechHediffsMoney,
+                    TechHediffsMoney.VanillaTechHediffsMoney, "techhediffsmoney", 8000, 99999);
+                break;
+            }
+            case "WeaponMoney":
+            {
+                RangeScrollView(ref frameRect, ref instance.Settings.CustomWeaponMoney,
+                    WeaponMoney.VanillaWeaponMoney, "weaponmoney", 10000, 99999);
+                break;
+            }
+            case "ApparelMoney":
+            {
+                RangeScrollView(ref frameRect, ref instance.Settings.CustomApparelMoney,
+                    ApparelMoney.VanillaApparelMoney, "apparelmoney", 12000, 9999999);
                 break;
             }
             case "RoyalTitleChance":
             {
-                royalTitleChanceScrollView(ref frameRect);
+                FloatScrollView(ref frameRect, ref instance.Settings.CustomRoyalTitleChances,
+                    RoyalTitleChance.VanillaRoyalTitleChances, "royaltitlechance");
                 break;
             }
         }
     }
 
-    private void biocodingScrollView(ref Rect frameRect)
+
+    private void FloatScrollView(ref Rect frameRect, ref Dictionary<string, float> modifiedValues,
+        Dictionary<string, float> vanillaValues, string header)
     {
         listing_Standard.Begin(frameRect);
 
         Text.Font = GameFont.Medium;
 
-        var headerLabel = listing_Standard.Label("CPS.biocoding".Translate());
+        var headerLabel = listing_Standard.Label($"CPS.{header}".Translate());
         TooltipHandler.TipRegion(new Rect(
             headerLabel.position,
-            searchSize), "CPS.biocoding.tooltip".Translate());
+            searchSize), $"CPS.{header}.tooltip".Translate());
 
-        if (instance.Settings.CustomBiocodeChances == null)
+        if (modifiedValues == null)
         {
-            instance.Settings.CustomBiocodeChances = new Dictionary<string, float>();
+            modifiedValues = new Dictionary<string, float>();
         }
 
-        if (instance.Settings.CustomBiocodeChances.Any())
+        if (modifiedValues.Any())
         {
             DrawButton(() =>
                 {
                     Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                        "CPS.resetone.confirm".Translate("CPS.biocoding".Translate().ToLower()),
-                        delegate { instance.Settings.ResetBiocodeValues(); }));
+                        "CPS.resetone.confirm".Translate($"CPS.{header}".Translate().ToLower()),
+                        delegate { instance.Settings.ResetValues(header); }));
                 }, "CPS.reset.button".Translate(),
                 new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
                     headerLabel.position.y));
@@ -357,59 +377,192 @@ public class ChoosePawnSettings_Mod : Mod
                 modInfo = $"{modInfo.Substring(0, 42)}...";
             }
 
-            if (pawnKindDef.biocodeWeaponChance != Biocoding.VanillaBiocodeChances[pawnKindDef.defName])
+            switch (header)
             {
-                instance.Settings.CustomBiocodeChances[pawnKindDef.defName] =
-                    pawnKindDef.biocodeWeaponChance;
-                GUI.color = Color.green;
-            }
-            else
-            {
-                if (instance.Settings.CustomBiocodeChances.ContainsKey(pawnKindDef.defName))
-                {
-                    instance.Settings.CustomBiocodeChances.Remove(pawnKindDef.defName);
-                }
-            }
+                case "biocoding":
+                    if (pawnKindDef.biocodeWeaponChance !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.biocodeWeaponChance;
+                        GUI.color = Color.green;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
 
-            pawnKindDef.biocodeWeaponChance =
-                (float)Math.Round((decimal)Widgets.HorizontalSlider(
-                    sliderRect,
-                    pawnKindDef.biocodeWeaponChance, 0,
-                    1f, false,
-                    "CPS.percent".Translate(Math.Round(pawnKindDef.biocodeWeaponChance * 100)),
-                    pawnkindLabel,
-                    modInfo), 2);
+                    pawnKindDef.biocodeWeaponChance =
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                            sliderRect,
+                            pawnKindDef.biocodeWeaponChance, 0,
+                            1f, false,
+                            "CPS.percent".Translate(Math.Round(pawnKindDef.biocodeWeaponChance * 100)),
+                            pawnkindLabel,
+                            modInfo), 2);
+                    break;
+                case "chemicaladdiction":
+                    if (pawnKindDef.chemicalAddictionChance !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.chemicalAddictionChance;
+                        GUI.color = Color.green;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
+
+                    pawnKindDef.chemicalAddictionChance =
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                            sliderRect,
+                            pawnKindDef.chemicalAddictionChance, 0,
+                            1f, false,
+                            "CPS.percent".Translate(Math.Round(pawnKindDef.chemicalAddictionChance * 100)),
+                            pawnkindLabel,
+                            modInfo), 2);
+                    break;
+                case "combatenhancingdrugs":
+                    if (pawnKindDef.combatEnhancingDrugsChance !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.combatEnhancingDrugsChance;
+                        GUI.color = Color.green;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
+
+                    pawnKindDef.combatEnhancingDrugsChance =
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                            sliderRect,
+                            pawnKindDef.combatEnhancingDrugsChance, 0,
+                            1f, false,
+                            "CPS.percent".Translate(Math.Round(pawnKindDef.combatEnhancingDrugsChance * 100)),
+                            pawnkindLabel,
+                            modInfo), 2);
+                    break;
+                case "headgear":
+                    if (pawnKindDef.apparelAllowHeadgearChance !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.apparelAllowHeadgearChance;
+                        GUI.color = Color.green;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
+
+                    pawnKindDef.apparelAllowHeadgearChance =
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                            sliderRect,
+                            pawnKindDef.apparelAllowHeadgearChance, 0,
+                            1f, false,
+                            "CPS.percent".Translate(Math.Round(pawnKindDef.apparelAllowHeadgearChance * 100)),
+                            pawnkindLabel,
+                            modInfo), 2);
+                    break;
+                case "techhediffs":
+                    if (pawnKindDef.techHediffsChance !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.techHediffsChance;
+                        GUI.color = Color.green;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
+
+                    pawnKindDef.techHediffsChance =
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                            sliderRect,
+                            pawnKindDef.techHediffsChance, 0,
+                            1f, false,
+                            "CPS.percent".Translate(Math.Round(pawnKindDef.techHediffsChance * 100)),
+                            pawnkindLabel,
+                            modInfo), 2);
+                    break;
+                case "royaltitlechance":
+                    if (pawnKindDef.royalTitleChance !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.royalTitleChance;
+                        GUI.color = Color.green;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
+
+                    pawnKindDef.royalTitleChance =
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                            sliderRect,
+                            pawnKindDef.royalTitleChance, 0,
+                            1f, false,
+                            "CPS.percent".Translate(Math.Round(pawnKindDef.royalTitleChance * 100)),
+                            pawnkindLabel,
+                            modInfo), 2);
+                    break;
+            }
 
             GUI.color = Color.white;
         }
 
         scrollListing.End();
+
         Widgets.EndScrollView();
     }
 
-    private void chemicaladdictionScrollView(ref Rect frameRect)
+    private void RangeScrollView(ref Rect frameRect, ref Dictionary<string, FloatRange> modifiedValues,
+        Dictionary<string, FloatRange> vanillaValues, string header, int maxValue, int unlimitedValue)
     {
         listing_Standard.Begin(frameRect);
 
         Text.Font = GameFont.Medium;
 
-        var headerLabel = listing_Standard.Label("CPS.chemicaladdiction".Translate());
+        var headerLabel = listing_Standard.Label($"CPS.{header}".Translate());
         TooltipHandler.TipRegion(new Rect(
             headerLabel.position,
-            searchSize), "CPS.chemicaladdiction.tooltip".Translate());
+            searchSize), $"CPS.{header}.tooltip".Translate());
 
-        if (instance.Settings.CustomChemicalAddictionChances == null)
+        if (modifiedValues == null)
         {
-            instance.Settings.CustomChemicalAddictionChances = new Dictionary<string, float>();
+            modifiedValues = new Dictionary<string, FloatRange>();
         }
 
-        if (instance.Settings.CustomChemicalAddictionChances.Any())
+        if (modifiedValues.Any())
         {
             DrawButton(() =>
                 {
                     Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                        "CPS.resetone.confirm".Translate("CPS.chemicaladdiction".Translate().ToLower()),
-                        delegate { instance.Settings.ResetChemicalAddictionValues(); }));
+                        "CPS.resetone.confirm".Translate($"CPS.{header}".Translate().ToLower()),
+                        delegate { instance.Settings.ResetValues(header); }));
                 }, "CPS.reset.button".Translate(),
                 new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
                     headerLabel.position.y));
@@ -441,582 +594,7 @@ public class ChoosePawnSettings_Mod : Mod
         borderRect.y += headerLabel.y + 40;
         borderRect.height -= headerLabel.y + 40;
         var scrollContentRect = frameRect;
-        scrollContentRect.height = allPawnKinds.Count * 51f;
-        scrollContentRect.width -= 20;
-        scrollContentRect.x = 0;
-        scrollContentRect.y = 0;
-
-        var scrollListing = new Listing_Standard();
-        Widgets.BeginScrollView(borderRect, ref scrollPosition, scrollContentRect);
-        scrollListing.Begin(scrollContentRect);
-        var alternate = false;
-        foreach (var pawnKindDef in allPawnKinds)
-        {
-            var modInfo = pawnKindDef.modContentPack?.Name;
-            var sliderRect = scrollListing.GetRect(50);
-            alternate = !alternate;
-            if (alternate)
-            {
-                Widgets.DrawBoxSolid(sliderRect, alternateBackground);
-            }
-
-            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
-            if (pawnkindLabel.Length > 45)
-            {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
-            }
-
-            if (modInfo is { Length: > 45 })
-            {
-                modInfo = $"{modInfo.Substring(0, 42)}...";
-            }
-
-            if (pawnKindDef.chemicalAddictionChance !=
-                ChemicalAddiction.VanillaChemicalAddictionChances[pawnKindDef.defName])
-            {
-                instance.Settings.CustomChemicalAddictionChances[pawnKindDef.defName] =
-                    pawnKindDef.chemicalAddictionChance;
-                GUI.color = Color.green;
-            }
-            else
-            {
-                if (instance.Settings.CustomChemicalAddictionChances.ContainsKey(pawnKindDef.defName))
-                {
-                    instance.Settings.CustomChemicalAddictionChances.Remove(pawnKindDef.defName);
-                }
-            }
-
-            pawnKindDef.chemicalAddictionChance =
-                (float)Math.Round((decimal)Widgets.HorizontalSlider(
-                    sliderRect,
-                    pawnKindDef.chemicalAddictionChance, 0,
-                    1f, false,
-                    "CPS.percent".Translate(Math.Round(pawnKindDef.chemicalAddictionChance * 100)),
-                    pawnkindLabel,
-                    modInfo), 2);
-
-            GUI.color = Color.white;
-        }
-
-        scrollListing.End();
-        Widgets.EndScrollView();
-    }
-
-    private void combatenhancingdrugsScrollView(ref Rect frameRect)
-    {
-        listing_Standard.Begin(frameRect);
-
-        Text.Font = GameFont.Medium;
-
-        var headerLabel = listing_Standard.Label("CPS.combatenhancingdrugs".Translate());
-        TooltipHandler.TipRegion(new Rect(
-            headerLabel.position,
-            searchSize), "CPS.combatenhancingdrugs.tooltip".Translate());
-
-        if (instance.Settings.CustomCombatEnhancingDrugsChances == null)
-        {
-            instance.Settings.CustomCombatEnhancingDrugsChances = new Dictionary<string, float>();
-        }
-
-        if (instance.Settings.CustomCombatEnhancingDrugsChances.Any())
-        {
-            DrawButton(() =>
-                {
-                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                        "CPS.resetone.confirm".Translate("CPS.combatenhancingdrugs".Translate().ToLower()),
-                        delegate { instance.Settings.ResetCombatEnhancingDrugsValues(); }));
-                }, "CPS.reset.button".Translate(),
-                new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
-                    headerLabel.position.y));
-        }
-
-        Text.Font = GameFont.Small;
-
-        searchText =
-            Widgets.TextField(
-                new Rect(headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
-                    searchSize),
-                searchText);
-        TooltipHandler.TipRegion(new Rect(
-            headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
-            searchSize), "CPS.search".Translate());
-
-        listing_Standard.End();
-
-        var allPawnKinds = Main.AllPawnKinds;
-        if (!string.IsNullOrEmpty(searchText))
-        {
-            allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack.Name.ToLower()
-                        .Contains(searchText.ToLower()))
-                .ToList();
-        }
-
-        var borderRect = frameRect;
-        borderRect.y += headerLabel.y + 40;
-        borderRect.height -= headerLabel.y + 40;
-        var scrollContentRect = frameRect;
-        scrollContentRect.height = allPawnKinds.Count * 51f;
-        scrollContentRect.width -= 20;
-        scrollContentRect.x = 0;
-        scrollContentRect.y = 0;
-
-        var scrollListing = new Listing_Standard();
-        Widgets.BeginScrollView(borderRect, ref scrollPosition, scrollContentRect);
-        scrollListing.Begin(scrollContentRect);
-        var alternate = false;
-        foreach (var pawnKindDef in allPawnKinds)
-        {
-            var modInfo = pawnKindDef.modContentPack?.Name;
-            var sliderRect = scrollListing.GetRect(50);
-            alternate = !alternate;
-            if (alternate)
-            {
-                Widgets.DrawBoxSolid(sliderRect, alternateBackground);
-            }
-
-            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
-            if (pawnkindLabel.Length > 45)
-            {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
-            }
-
-            if (modInfo is { Length: > 45 })
-            {
-                modInfo = $"{modInfo.Substring(0, 42)}...";
-            }
-
-            if (pawnKindDef.combatEnhancingDrugsChance !=
-                CombatEnhancingDrugs.VanillaCombatEnhancingDrugsChances[pawnKindDef.defName])
-            {
-                instance.Settings.CustomCombatEnhancingDrugsChances[pawnKindDef.defName] =
-                    pawnKindDef.combatEnhancingDrugsChance;
-                GUI.color = Color.green;
-            }
-            else
-            {
-                if (instance.Settings.CustomCombatEnhancingDrugsChances.ContainsKey(pawnKindDef.defName))
-                {
-                    instance.Settings.CustomCombatEnhancingDrugsChances.Remove(pawnKindDef.defName);
-                }
-            }
-
-            pawnKindDef.combatEnhancingDrugsChance =
-                (float)Math.Round((decimal)Widgets.HorizontalSlider(
-                    sliderRect,
-                    pawnKindDef.combatEnhancingDrugsChance, 0,
-                    1f, false,
-                    "CPS.percent".Translate(Math.Round(pawnKindDef.combatEnhancingDrugsChance * 100)),
-                    pawnkindLabel,
-                    modInfo), 2);
-
-            GUI.color = Color.white;
-        }
-
-        scrollListing.End();
-
-        Widgets.EndScrollView();
-    }
-
-    private void headgearScrollView(ref Rect frameRect)
-    {
-        listing_Standard.Begin(frameRect);
-
-        Text.Font = GameFont.Medium;
-
-        var headerLabel = listing_Standard.Label("CPS.headgear".Translate());
-        TooltipHandler.TipRegion(new Rect(
-            headerLabel.position,
-            searchSize), "CPS.headgear.tooltip".Translate());
-
-        if (instance.Settings.CustomHeadgearChances == null)
-        {
-            instance.Settings.CustomHeadgearChances = new Dictionary<string, float>();
-        }
-
-        if (instance.Settings.CustomHeadgearChances.Any())
-        {
-            DrawButton(() =>
-                {
-                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                        "CPS.resetone.confirm".Translate("CPS.headgear".Translate().ToLower()),
-                        delegate { instance.Settings.ResetHeadgearValues(); }));
-                }, "CPS.reset.button".Translate(),
-                new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
-                    headerLabel.position.y));
-        }
-
-        Text.Font = GameFont.Small;
-
-        searchText =
-            Widgets.TextField(
-                new Rect(headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
-                    searchSize),
-                searchText);
-        TooltipHandler.TipRegion(new Rect(
-            headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
-            searchSize), "CPS.search".Translate());
-
-        listing_Standard.End();
-
-        var allPawnKinds = Main.AllPawnKinds;
-        if (!string.IsNullOrEmpty(searchText))
-        {
-            allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack.Name.ToLower()
-                        .Contains(searchText.ToLower()))
-                .ToList();
-        }
-
-        var borderRect = frameRect;
-        borderRect.y += headerLabel.y + 40;
-        borderRect.height -= headerLabel.y + 40;
-        var scrollContentRect = frameRect;
-        scrollContentRect.height = allPawnKinds.Count * 51f;
-        scrollContentRect.width -= 20;
-        scrollContentRect.x = 0;
-        scrollContentRect.y = 0;
-
-        var scrollListing = new Listing_Standard();
-        Widgets.BeginScrollView(borderRect, ref scrollPosition, scrollContentRect);
-        scrollListing.Begin(scrollContentRect);
-        var alternate = false;
-        foreach (var pawnKindDef in allPawnKinds)
-        {
-            var modInfo = pawnKindDef.modContentPack?.Name;
-            var sliderRect = scrollListing.GetRect(50);
-            alternate = !alternate;
-            if (alternate)
-            {
-                Widgets.DrawBoxSolid(sliderRect, alternateBackground);
-            }
-
-            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
-            if (pawnkindLabel.Length > 45)
-            {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
-            }
-
-            if (modInfo is { Length: > 45 })
-            {
-                modInfo = $"{modInfo.Substring(0, 42)}...";
-            }
-
-            if (pawnKindDef.apparelAllowHeadgearChance != Headgear.VanillaHeadgearChances[pawnKindDef.defName])
-            {
-                instance.Settings.CustomHeadgearChances[pawnKindDef.defName] =
-                    pawnKindDef.apparelAllowHeadgearChance;
-                GUI.color = Color.green;
-            }
-            else
-            {
-                if (instance.Settings.CustomHeadgearChances.ContainsKey(pawnKindDef.defName))
-                {
-                    instance.Settings.CustomHeadgearChances.Remove(pawnKindDef.defName);
-                }
-            }
-
-            pawnKindDef.apparelAllowHeadgearChance =
-                (float)Math.Round((decimal)Widgets.HorizontalSlider(
-                    sliderRect,
-                    pawnKindDef.apparelAllowHeadgearChance, 0,
-                    1f, false,
-                    "CPS.percent".Translate(Math.Round(pawnKindDef.apparelAllowHeadgearChance * 100)),
-                    pawnkindLabel,
-                    modInfo), 2);
-
-            GUI.color = Color.white;
-        }
-
-        scrollListing.End();
-        Widgets.EndScrollView();
-    }
-
-    private void royalTitleChanceScrollView(ref Rect frameRect)
-    {
-        listing_Standard.Begin(frameRect);
-
-        Text.Font = GameFont.Medium;
-
-        var headerLabel = listing_Standard.Label("CPS.royaltitlechance".Translate());
-        TooltipHandler.TipRegion(new Rect(
-            headerLabel.position,
-            searchSize), "CPS.royaltitlechance.tooltip".Translate());
-
-        if (instance.Settings.CustomRoyalTitleChances == null)
-        {
-            instance.Settings.CustomRoyalTitleChances = new Dictionary<string, float>();
-        }
-
-        if (instance.Settings.CustomRoyalTitleChances.Any())
-        {
-            DrawButton(() =>
-                {
-                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                        "CPS.resetone.confirm".Translate("CPS.royalTitleChance".Translate().ToLower()),
-                        delegate { instance.Settings.ResetRoyalTitleChanceValues(); }));
-                }, "CPS.reset.button".Translate(),
-                new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
-                    headerLabel.position.y));
-        }
-
-        Text.Font = GameFont.Small;
-
-        searchText =
-            Widgets.TextField(
-                new Rect(headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
-                    searchSize),
-                searchText);
-        TooltipHandler.TipRegion(new Rect(
-            headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
-            searchSize), "CPS.search".Translate());
-
-        listing_Standard.End();
-
-        var allPawnKinds = Main.AllPawnKinds;
-        if (!string.IsNullOrEmpty(searchText))
-        {
-            allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack.Name.ToLower()
-                        .Contains(searchText.ToLower()))
-                .ToList();
-        }
-
-        var borderRect = frameRect;
-        borderRect.y += headerLabel.y + 40;
-        borderRect.height -= headerLabel.y + 40;
-        var scrollContentRect = frameRect;
-        scrollContentRect.height = allPawnKinds.Count * 51f;
-        scrollContentRect.width -= 20;
-        scrollContentRect.x = 0;
-        scrollContentRect.y = 0;
-
-        var scrollListing = new Listing_Standard();
-        Widgets.BeginScrollView(borderRect, ref scrollPosition, scrollContentRect);
-        scrollListing.Begin(scrollContentRect);
-        var alternate = false;
-        foreach (var pawnKindDef in allPawnKinds)
-        {
-            var modInfo = pawnKindDef.modContentPack?.Name;
-            var sliderRect = scrollListing.GetRect(50);
-            alternate = !alternate;
-            if (alternate)
-            {
-                Widgets.DrawBoxSolid(sliderRect, alternateBackground);
-            }
-
-            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
-            if (pawnkindLabel.Length > 45)
-            {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
-            }
-
-            if (modInfo is { Length: > 45 })
-            {
-                modInfo = $"{modInfo.Substring(0, 42)}...";
-            }
-
-            if (pawnKindDef.royalTitleChance != RoyalTitleChance.RoyalTitleChances[pawnKindDef.defName])
-            {
-                instance.Settings.CustomRoyalTitleChances[pawnKindDef.defName] =
-                    pawnKindDef.royalTitleChance;
-                GUI.color = Color.green;
-            }
-            else
-            {
-                if (instance.Settings.CustomRoyalTitleChances.ContainsKey(pawnKindDef.defName))
-                {
-                    instance.Settings.CustomRoyalTitleChances.Remove(pawnKindDef.defName);
-                }
-            }
-
-            pawnKindDef.royalTitleChance =
-                (float)Math.Round((decimal)Widgets.HorizontalSlider(
-                    sliderRect,
-                    pawnKindDef.royalTitleChance, 0,
-                    1f, false,
-                    "CPS.percent".Translate(Math.Round(pawnKindDef.royalTitleChance * 100)),
-                    pawnkindLabel,
-                    modInfo), 2);
-
-            GUI.color = Color.white;
-        }
-
-        scrollListing.End();
-        Widgets.EndScrollView();
-    }
-
-    private void techhediffsScrollView(ref Rect frameRect)
-    {
-        listing_Standard.Begin(frameRect);
-
-        Text.Font = GameFont.Medium;
-
-        var headerLabel = listing_Standard.Label("CPS.techhediffs".Translate());
-        TooltipHandler.TipRegion(new Rect(
-            headerLabel.position,
-            searchSize), "CPS.techhediffs.tooltip".Translate());
-
-        if (instance.Settings.CustomTechHediffsChances == null)
-        {
-            instance.Settings.CustomTechHediffsChances = new Dictionary<string, float>();
-        }
-
-        if (instance.Settings.CustomTechHediffsChances.Any())
-        {
-            DrawButton(() =>
-                {
-                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                        "CPS.resetone.confirm".Translate("CPS.techhediffs".Translate().ToLower()),
-                        delegate { instance.Settings.ResetTechHediffsValues(); }));
-                }, "CPS.reset.button".Translate(),
-                new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
-                    headerLabel.position.y));
-        }
-
-        Text.Font = GameFont.Small;
-
-        searchText =
-            Widgets.TextField(
-                new Rect(headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
-                    searchSize),
-                searchText);
-        TooltipHandler.TipRegion(new Rect(
-            headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
-            searchSize), "CPS.search".Translate());
-
-        listing_Standard.End();
-
-        var allPawnKinds = Main.AllPawnKinds;
-        if (!string.IsNullOrEmpty(searchText))
-        {
-            allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack.Name.ToLower()
-                        .Contains(searchText.ToLower()))
-                .ToList();
-        }
-
-        var borderRect = frameRect;
-        borderRect.y += headerLabel.y + 40;
-        borderRect.height -= headerLabel.y + 40;
-        var scrollContentRect = frameRect;
-        scrollContentRect.height = allPawnKinds.Count * 51f;
-        scrollContentRect.width -= 20;
-        scrollContentRect.x = 0;
-        scrollContentRect.y = 0;
-
-        var scrollListing = new Listing_Standard();
-        Widgets.BeginScrollView(borderRect, ref scrollPosition, scrollContentRect);
-        scrollListing.Begin(scrollContentRect);
-        var alternate = false;
-        foreach (var pawnKindDef in allPawnKinds)
-        {
-            var modInfo = pawnKindDef.modContentPack?.Name;
-            var sliderRect = scrollListing.GetRect(50);
-            alternate = !alternate;
-            if (alternate)
-            {
-                Widgets.DrawBoxSolid(sliderRect, alternateBackground);
-            }
-
-            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
-            if (pawnkindLabel.Length > 45)
-            {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
-            }
-
-            if (modInfo is { Length: > 45 })
-            {
-                modInfo = $"{modInfo.Substring(0, 42)}...";
-            }
-
-            if (pawnKindDef.techHediffsChance !=
-                TechHediffs.VanillaTechHediffsChances[pawnKindDef.defName])
-            {
-                instance.Settings.CustomTechHediffsChances[pawnKindDef.defName] =
-                    pawnKindDef.techHediffsChance;
-                GUI.color = Color.green;
-            }
-            else
-            {
-                if (instance.Settings.CustomTechHediffsChances.ContainsKey(pawnKindDef.defName))
-                {
-                    instance.Settings.CustomTechHediffsChances.Remove(pawnKindDef.defName);
-                }
-            }
-
-            pawnKindDef.techHediffsChance =
-                (float)Math.Round((decimal)Widgets.HorizontalSlider(
-                    sliderRect,
-                    pawnKindDef.techHediffsChance, 0,
-                    1f, false,
-                    "CPS.percent".Translate(Math.Round(pawnKindDef.techHediffsChance * 100)),
-                    pawnkindLabel,
-                    modInfo), 2);
-
-            GUI.color = Color.white;
-        }
-
-        scrollListing.End();
-
-        Widgets.EndScrollView();
-    }
-
-    private void techhediffsmoneyScrollView(ref Rect frameRect)
-    {
-        listing_Standard.Begin(frameRect);
-
-        Text.Font = GameFont.Medium;
-
-        var headerLabel = listing_Standard.Label("CPS.techhediffsmoney".Translate());
-        TooltipHandler.TipRegion(new Rect(
-            headerLabel.position,
-            searchSize), "CPS.techhediffsmoney.tooltip".Translate());
-
-        if (instance.Settings.CustomTechHediffsMoney == null)
-        {
-            instance.Settings.CustomTechHediffsMoney = new Dictionary<string, FloatRange>();
-        }
-
-        if (instance.Settings.CustomTechHediffsMoney.Any())
-        {
-            DrawButton(() =>
-                {
-                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                        "CPS.resetone.confirm".Translate("CPS.techhediffsmoney".Translate().ToLower()),
-                        delegate { instance.Settings.ResetTechHediffsMoneyValues(); }));
-                }, "CPS.reset.button".Translate(),
-                new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
-                    headerLabel.position.y));
-        }
-
-        Text.Font = GameFont.Small;
-
-        searchText =
-            Widgets.TextField(
-                new Rect(headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
-                    searchSize),
-                searchText);
-        TooltipHandler.TipRegion(new Rect(
-            headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
-            searchSize), "CPS.search".Translate());
-
-        listing_Standard.End();
-
-        var allPawnKinds = Main.AllPawnKinds;
-        if (!string.IsNullOrEmpty(searchText))
-        {
-            allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack.Name.ToLower()
-                        .Contains(searchText.ToLower()))
-                .ToList();
-        }
-
-        var borderRect = frameRect;
-        borderRect.y += headerLabel.y + 40;
-        borderRect.height -= headerLabel.y + 40;
-        var scrollContentRect = frameRect;
-        scrollContentRect.height = allPawnKinds.Count * 51f;
+        scrollContentRect.height = allPawnKinds.Count * 81f;
         scrollContentRect.width -= 20;
         scrollContentRect.x = 0;
         scrollContentRect.y = 0;
@@ -1028,7 +606,7 @@ public class ChoosePawnSettings_Mod : Mod
         foreach (var pawnKindDef in allPawnKinds)
         {
             alternate = !alternate;
-            var sliderRect = scrollListing.GetRect(50);
+            var sliderRect = scrollListing.GetRect(70);
             if (alternate)
             {
                 Widgets.DrawBoxSolid(sliderRect, alternateBackground);
@@ -1047,37 +625,150 @@ public class ChoosePawnSettings_Mod : Mod
                 modInfo = $"{modInfo.Substring(0, 42)}...";
             }
 
-            if (pawnKindDef.techHediffsMoney !=
-                TechHediffsMoney.VanillaTechHediffsMoney[pawnKindDef.defName])
-            {
-                instance.Settings.CustomTechHediffsMoney[pawnKindDef.defName] =
-                    pawnKindDef.techHediffsMoney;
-                GUI.color = Color.green;
-            }
-            else
-            {
-                if (instance.Settings.CustomTechHediffsMoney.ContainsKey(pawnKindDef.defName))
-                {
-                    instance.Settings.CustomTechHediffsMoney.Remove(pawnKindDef.defName);
-                }
-            }
-
-            var smallerRect = sliderRect.ContractedBy(4f, 10f);
+            var smallerRect = sliderRect.ContractedBy(4f, 20f);
+            smallerRect.width -= 100f;
             smallerRect.y += 5;
             smallerRect.x += 2;
+            var checkboxRect = sliderRect;
+            checkboxRect.width = sliderRect.width - smallerRect.width - 10f;
+            checkboxRect.height -= 20f;
+            checkboxRect.y += 20f;
+            checkboxRect.x = sliderRect.x + smallerRect.width + 10f;
+            bool unlimited;
+            bool wasOn;
+            switch (header)
+            {
+                case "techhediffsmoney":
+                    if (pawnKindDef.techHediffsMoney !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.techHediffsMoney;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
 
-            Widgets.FloatRange(
-                smallerRect,
-                pawnKindDef.GetHashCode(),
-                ref pawnKindDef.techHediffsMoney,
-                0,
-                8000,
-                null,
-                ToStringStyle.Money);
+                    unlimited = pawnKindDef.techHediffsMoney.max > maxValue;
+                    wasOn = unlimited;
+                    Widgets.CheckboxLabeled(checkboxRect, "CPS.unlimited".Translate(), ref unlimited);
+                    Widgets.FloatRange(
+                        smallerRect,
+                        pawnKindDef.GetHashCode(),
+                        ref pawnKindDef.techHediffsMoney,
+                        0,
+                        maxValue,
+                        null,
+                        ToStringStyle.Money);
+                    if (unlimited)
+                    {
+                        pawnKindDef.techHediffsMoney.max = unlimitedValue;
+                        pawnKindDef.techHediffsMoney.min = unlimitedValue;
+                    }
+                    else
+                    {
+                        if (wasOn)
+                        {
+                            pawnKindDef.techHediffsMoney.max = maxValue / 2f;
+                            pawnKindDef.techHediffsMoney.min = maxValue / 2f;
+                        }
+                    }
+
+                    break;
+                case "weaponmoney":
+                    if (pawnKindDef.weaponMoney !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.weaponMoney;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
+
+                    unlimited = pawnKindDef.weaponMoney.max > maxValue;
+                    wasOn = unlimited;
+                    Widgets.CheckboxLabeled(checkboxRect, "CPS.unlimited".Translate(), ref unlimited);
+                    Widgets.FloatRange(
+                        smallerRect,
+                        pawnKindDef.GetHashCode(),
+                        ref pawnKindDef.weaponMoney,
+                        0,
+                        maxValue,
+                        null,
+                        ToStringStyle.Money);
+                    if (unlimited)
+                    {
+                        pawnKindDef.weaponMoney.max = unlimitedValue;
+                        pawnKindDef.weaponMoney.min = unlimitedValue;
+                    }
+                    else
+                    {
+                        if (wasOn)
+                        {
+                            pawnKindDef.weaponMoney.max = maxValue / 2f;
+                            pawnKindDef.weaponMoney.min = maxValue / 2f;
+                        }
+                    }
+
+                    break;
+                case "apparelmoney":
+                    if (pawnKindDef.apparelMoney !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.apparelMoney;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
+
+                    unlimited = pawnKindDef.apparelMoney.max > maxValue;
+                    wasOn = unlimited;
+                    Widgets.CheckboxLabeled(checkboxRect, "CPS.unlimited".Translate(), ref unlimited);
+                    Widgets.FloatRange(
+                        smallerRect,
+                        pawnKindDef.GetHashCode(),
+                        ref pawnKindDef.apparelMoney,
+                        0,
+                        maxValue,
+                        null,
+                        ToStringStyle.Money);
+                    if (unlimited)
+                    {
+                        pawnKindDef.apparelMoney.max = unlimitedValue;
+                        pawnKindDef.apparelMoney.min = unlimitedValue;
+                    }
+                    else
+                    {
+                        if (wasOn)
+                        {
+                            pawnKindDef.apparelMoney.max = maxValue / 2f;
+                            pawnKindDef.apparelMoney.min = maxValue / 2f;
+                        }
+                    }
+
+                    break;
+            }
+
+            var textRect = sliderRect;
+            textRect.width -= 100f;
             Text.Anchor = TextAnchor.UpperLeft;
-            Widgets.Label(smallerRect, pawnkindLabel);
+            Widgets.Label(textRect, pawnkindLabel);
             Text.Anchor = TextAnchor.UpperRight;
-            Widgets.Label(smallerRect, modInfo);
+            Widgets.Label(textRect, modInfo);
             Text.Anchor = default;
             GUI.color = Color.white;
             scrollListing.Gap(10);

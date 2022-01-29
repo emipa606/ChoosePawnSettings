@@ -15,6 +15,7 @@ Currently implemented
 -  Headgear Chance
 -  Tech Hediffs Chance
 -  Tech Hediffs Money
+-  Royal Title Chance (Royalty required)
 
 
 

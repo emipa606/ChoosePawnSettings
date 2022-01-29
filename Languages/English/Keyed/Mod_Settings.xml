@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <CPS.settings>Settings</CPS.settings>
+  <CPS.unlimited>Unlimited</CPS.unlimited>
   <CPS.commonality.label>Biome animal overall density</CPS.commonality.label>
   <CPS.resetall.label>Manual config reset</CPS.resetall.label>
   <CPS.resetall.tooltip>Reset all modified values</CPS.resetall.tooltip>
@@ -30,4 +31,8 @@
   <CPS.headgear.tooltip>Chance of headgear for the chosen pawnkind.</CPS.headgear.tooltip>
   <CPS.royaltitlechance>Royal Title Chance</CPS.royaltitlechance>
   <CPS.royaltitlechance.tooltip>Chance of pawn spawning with a royal title.</CPS.royaltitlechance.tooltip>
+  <CPS.weaponmoney>Weapon Money</CPS.weaponmoney>
+  <CPS.weaponmoney.tooltip>The amount of money the pawnkind have to "buy" weapons</CPS.weaponmoney.tooltip>
+  <CPS.apparelmoney>Apparel Money</CPS.apparelmoney>
+  <CPS.apparelmoney.tooltip>The amount of money the pawnkind have to "buy" apparel</CPS.apparelmoney.tooltip>
 </LanguageData>

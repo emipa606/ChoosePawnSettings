@@ -1,10 +1,18 @@
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace ChoosePawnSettings;
 
 public class ChoosePawnSettings_Settings : ModSettings
 {
+    public Dictionary<string, FloatRange> CustomApparelMoney =
+        new Dictionary<string, FloatRange>();
+
+    private List<string> customApparelMoneyKeys;
+
+    private List<FloatRange> customApparelMoneyValues;
+
     public Dictionary<string, float> CustomBiocodeChances =
         new Dictionary<string, float>();
 
@@ -33,6 +41,13 @@ public class ChoosePawnSettings_Settings : ModSettings
 
     private List<float> customHeadgearChancesValues;
 
+    public Dictionary<string, float> CustomRoyalTitleChances =
+        new Dictionary<string, float>();
+
+    private List<string> customRoyalTitleChancesKeys;
+
+    private List<float> customRoyalTitleChancesValues;
+
     public Dictionary<string, float> CustomTechHediffsChances =
         new Dictionary<string, float>();
 
@@ -46,12 +61,15 @@ public class ChoosePawnSettings_Settings : ModSettings
     private List<string> customTechHediffsMoneyKeys;
 
     private List<FloatRange> customTechHediffsMoneyValues;
-    private List<string> royalTitleChanceKeys;
 
-    private List<float> royalTitleChanceValues;
+    public Dictionary<string, FloatRange> CustomWeaponMoney =
+        new Dictionary<string, FloatRange>();
+
+    private List<string> customWeaponMoneyKeys;
+
+    private List<FloatRange> customWeaponMoneyValues;
 
     public bool VerboseLogging;
-    public Dictionary<string, float> CustomRoyalTitleChances { get; set; }
 
 
     public override void ExposeData()
@@ -80,71 +98,158 @@ public class ChoosePawnSettings_Settings : ModSettings
             LookMode.Value,
             LookMode.Value,
             ref customTechHediffsMoneyKeys, ref customTechHediffsMoneyValues);
+        Scribe_Collections.Look(ref CustomWeaponMoney, "CustomWeaponMoney",
+            LookMode.Value,
+            LookMode.Value,
+            ref customWeaponMoneyKeys, ref customWeaponMoneyValues);
+        Scribe_Collections.Look(ref CustomApparelMoney, "CustomApparelMoney",
+            LookMode.Value,
+            LookMode.Value,
+            ref customApparelMoneyKeys, ref customApparelMoneyValues);
+        Scribe_Collections.Look(ref CustomRoyalTitleChances, "CustomRoyalTitleChances",
+            LookMode.Value,
+            LookMode.Value,
+            ref customRoyalTitleChancesKeys, ref customRoyalTitleChancesValues);
     }
 
-    public void ResetBiocodeValues()
+    public void Initialize()
     {
-        customBiocodeChancesKeys = new List<string>();
-        customBiocodeChancesValues = new List<float>();
-        CustomBiocodeChances = new Dictionary<string, float>();
-        Biocoding.ResetBiocodingToVanillaRates();
+        Biocoding.Initialize();
+        ChemicalAddiction.Initialize();
+        CombatEnhancingDrugs.Initialize();
+        Headgear.Initialize();
+        TechHediffs.Initialize();
+        TechHediffsMoney.Initialize();
+        WeaponMoney.Initialize();
+        ApparelMoney.Initialize();
+        if (ModLister.RoyaltyInstalled)
+        {
+            RoyalTitleChance.Initialize();
+        }
     }
 
-    public void ResetHeadgearValues()
+    public void ResetValues(string valueLabel)
     {
-        customHeadgearChancesKeys = new List<string>();
-        customHeadgearChancesValues = new List<float>();
-        CustomHeadgearChances = new Dictionary<string, float>();
-        Headgear.ResetHeadgearToVanillaRates();
+        if (valueLabel is "biocoding" or "all")
+        {
+            customBiocodeChancesKeys = new List<string>();
+            customBiocodeChancesValues = new List<float>();
+            CustomBiocodeChances = new Dictionary<string, float>();
+            Biocoding.ResetBiocodingToVanillaRates();
+        }
+
+        if (valueLabel is "chemicaladdiction" or "all")
+        {
+            customChemicalAddictionChancesKeys = new List<string>();
+            customChemicalAddictionChancesValues = new List<float>();
+            CustomChemicalAddictionChances = new Dictionary<string, float>();
+            ChemicalAddiction.ResetChemicalAddictionToVanillaRates();
+        }
+
+        if (valueLabel is "combatenhancingdrugs" or "all")
+        {
+            customCombatEnhancingDrugsChancesKeys = new List<string>();
+            customCombatEnhancingDrugsChancesValues = new List<float>();
+            CustomCombatEnhancingDrugsChances = new Dictionary<string, float>();
+            CombatEnhancingDrugs.ResetCombatEnhancingDrugsToVanillaRates();
+        }
+
+        if (valueLabel is "headgear" or "all")
+        {
+            customHeadgearChancesKeys = new List<string>();
+            customHeadgearChancesValues = new List<float>();
+            CustomHeadgearChances = new Dictionary<string, float>();
+            Headgear.ResetHeadgearToVanillaRates();
+        }
+
+        if (valueLabel is "techhediffs" or "all")
+        {
+            customTechHediffsChancesKeys = new List<string>();
+            customTechHediffsChancesValues = new List<float>();
+            CustomTechHediffsChances = new Dictionary<string, float>();
+            TechHediffs.ResetTechHediffsToVanillaRates();
+        }
+
+        if (valueLabel is "techhediffsmoney" or "all")
+        {
+            customTechHediffsMoneyKeys = new List<string>();
+            customTechHediffsMoneyValues = new List<FloatRange>();
+            CustomTechHediffsMoney = new Dictionary<string, FloatRange>();
+            TechHediffsMoney.ResetTechHediffsMoneyToVanillaRates();
+        }
+
+        if (valueLabel is "weaponmoney" or "all")
+        {
+            customWeaponMoneyKeys = new List<string>();
+            customWeaponMoneyValues = new List<FloatRange>();
+            CustomWeaponMoney = new Dictionary<string, FloatRange>();
+            WeaponMoney.ResetWeaponMoneyToVanillaRates();
+        }
+
+        if (valueLabel is "apparelmoney" or "all")
+        {
+            customApparelMoneyKeys = new List<string>();
+            customApparelMoneyValues = new List<FloatRange>();
+            CustomApparelMoney = new Dictionary<string, FloatRange>();
+            ApparelMoney.ResetApparelMoneyToVanillaRates();
+        }
+
+        if (valueLabel is "royaltitlechance" or "all")
+        {
+            customRoyalTitleChancesKeys = new List<string>();
+            customRoyalTitleChancesValues = new List<float>();
+            CustomRoyalTitleChances = new Dictionary<string, float>();
+            RoyalTitleChance.ResetRoyalTitleChanceToVanillaRates();
+        }
     }
 
-    public void ResetChemicalAddictionValues()
+    public bool HasCustomValues()
     {
-        customChemicalAddictionChancesKeys = new List<string>();
-        customChemicalAddictionChancesValues = new List<float>();
-        CustomChemicalAddictionChances = new Dictionary<string, float>();
-        ChemicalAddiction.ResetChemicalAddictionToVanillaRates();
-    }
+        if (CustomBiocodeChances?.Any() == true)
+        {
+            return true;
+        }
 
-    public void ResetCombatEnhancingDrugsValues()
-    {
-        customCombatEnhancingDrugsChancesKeys = new List<string>();
-        customCombatEnhancingDrugsChancesValues = new List<float>();
-        CustomCombatEnhancingDrugsChances = new Dictionary<string, float>();
-        CombatEnhancingDrugs.ResetCombatEnhancingDrugsToVanillaRates();
-    }
+        if (CustomChemicalAddictionChances?.Any() == true)
+        {
+            return true;
+        }
 
-    public void ResetRoyalTitleChanceValues()
-    {
-        royalTitleChanceKeys = new List<string>();
-        royalTitleChanceValues = new List<float>();
-        CustomRoyalTitleChances = new Dictionary<string, float>();
-        RoyalTitleChance.ResetRoyalTitleChanceToVanillaRates();
-    }
+        if (CustomCombatEnhancingDrugsChances?.Any() == true)
+        {
+            return true;
+        }
 
-    public void ResetTechHediffsValues()
-    {
-        customTechHediffsChancesKeys = new List<string>();
-        customTechHediffsChancesValues = new List<float>();
-        CustomTechHediffsChances = new Dictionary<string, float>();
-        TechHediffs.ResetTechHediffsToVanillaRates();
-    }
+        if (CustomHeadgearChances?.Any() == true)
+        {
+            return true;
+        }
 
-    public void ResetTechHediffsMoneyValues()
-    {
-        customTechHediffsMoneyKeys = new List<string>();
-        customTechHediffsMoneyValues = new List<FloatRange>();
-        CustomTechHediffsMoney = new Dictionary<string, FloatRange>();
-        TechHediffsMoney.ResetTechHediffsMoneyToVanillaRates();
-    }
+        if (CustomTechHediffsChances?.Any() == true)
+        {
+            return true;
+        }
 
-    public void ResetManualValues()
-    {
-        ResetBiocodeValues();
-        ResetHeadgearValues();
-        ResetChemicalAddictionValues();
-        ResetCombatEnhancingDrugsValues();
-        ResetTechHediffsValues();
-        ResetTechHediffsMoneyValues();
+        if (CustomTechHediffsMoney?.Any() == true)
+        {
+            return true;
+        }
+
+        if (CustomWeaponMoney?.Any() == true)
+        {
+            return true;
+        }
+
+        if (CustomApparelMoney?.Any() == true)
+        {
+            return true;
+        }
+
+        if (CustomRoyalTitleChances?.Any() == true)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

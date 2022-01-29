@@ -12,16 +12,7 @@ public static class Main
 
     static Main()
     {
-        Biocoding.Initialize();
-        ChemicalAddiction.Initialize();
-        CombatEnhancingDrugs.Initialize();
-        Headgear.Initialize();
-        TechHediffs.Initialize();
-        TechHediffsMoney.Initialize();
-        if (ModLister.RoyaltyInstalled)
-        {
-            RoyalTitleChance.Initialize();
-        }
+        ChoosePawnSettings_Mod.instance.Settings.Initialize();
     }
 
     public static List<PawnKindDef> AllPawnKinds

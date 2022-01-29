@@ -5,7 +5,7 @@ namespace ChoosePawnSettings;
 
 public static class RoyalTitleChance
 {
-    public static readonly Dictionary<string, float> RoyalTitleChances = new Dictionary<string, float>();
+    public static readonly Dictionary<string, float> VanillaRoyalTitleChances = new Dictionary<string, float>();
 
     static RoyalTitleChance()
     {
@@ -21,7 +21,7 @@ public static class RoyalTitleChance
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            RoyalTitleChances[pawnKindDef.defName] = pawnKindDef.royalTitleChance;
+            VanillaRoyalTitleChances[pawnKindDef.defName] = pawnKindDef.royalTitleChance;
         }
     }
 
@@ -55,7 +55,7 @@ public static class RoyalTitleChance
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            pawnKindDef.royalTitleChance = RoyalTitleChances[pawnKindDef.defName];
+            pawnKindDef.royalTitleChance = VanillaRoyalTitleChances[pawnKindDef.defName];
         }
     }
 }
