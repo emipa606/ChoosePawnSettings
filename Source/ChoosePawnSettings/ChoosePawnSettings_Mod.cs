@@ -16,7 +16,7 @@ public class ChoosePawnSettings_Mod : Mod
     /// </summary>
     public static ChoosePawnSettings_Mod instance;
 
-    private static readonly Vector2 buttonSize = new Vector2(100f, 25f);
+    public static readonly Vector2 buttonSize = new Vector2(100f, 25f);
 
     private static readonly Vector2 searchSize = new Vector2(175f, 25f);
 
@@ -36,6 +36,9 @@ public class ChoosePawnSettings_Mod : Mod
 
     private static string searchText = "";
 
+    public static List<string> CurrentTags;
+    public static string TagStage;
+
     private static readonly Color alternateBackground = new Color(0.1f, 0.1f, 0.1f, 0.5f);
 
     private static readonly List<string> settingTabs = new List<string>
@@ -49,7 +52,9 @@ public class ChoosePawnSettings_Mod : Mod
         "TechHediffs",
         "TechHediffsMoney",
         "WeaponMoney",
-        "ApparelMoney"
+        "ApparelMoney",
+        "WeaponTags",
+        "ApparelTags"
     };
 
     /// <summary>
@@ -282,6 +287,16 @@ public class ChoosePawnSettings_Mod : Mod
                     ApparelMoney.VanillaApparelMoney, "apparelmoney", 12000, 9999999);
                 break;
             }
+            case "WeaponTags":
+            {
+                TagsScrollView(ref frameRect, ref instance.Settings.CustomWeaponTags, "weapontags");
+                break;
+            }
+            case "ApparelTags":
+            {
+                TagsScrollView(ref frameRect, ref instance.Settings.CustomApparelTags, "appareltags");
+                break;
+            }
             case "RoyalTitleChance":
             {
                 FloatScrollView(ref frameRect, ref instance.Settings.CustomRoyalTitleChances,
@@ -339,6 +354,7 @@ public class ChoosePawnSettings_Mod : Mod
         {
             allPawnKinds = Main.AllPawnKinds.Where(def =>
                     def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack.Name.ToLower()
+                        .Contains(searchText.ToLower()) || def.defName.ToLower()
                         .Contains(searchText.ToLower()))
                 .ToList();
         }
@@ -586,6 +602,7 @@ public class ChoosePawnSettings_Mod : Mod
         {
             allPawnKinds = Main.AllPawnKinds.Where(def =>
                     def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack.Name.ToLower()
+                        .Contains(searchText.ToLower()) || def.defName.ToLower()
                         .Contains(searchText.ToLower()))
                 .ToList();
         }
@@ -778,6 +795,205 @@ public class ChoosePawnSettings_Mod : Mod
         Widgets.EndScrollView();
     }
 
+    private void TagsScrollView(ref Rect frameRect, ref Dictionary<string, string> modifiedValues, string header)
+    {
+        listing_Standard.Begin(frameRect);
+
+        Text.Font = GameFont.Medium;
+
+        var headerLabel = listing_Standard.Label($"CPS.{header}".Translate());
+        TooltipHandler.TipRegion(new Rect(
+            headerLabel.position,
+            searchSize), $"CPS.{header}.tooltip".Translate());
+
+        if (modifiedValues == null)
+        {
+            modifiedValues = new Dictionary<string, string>();
+        }
+
+        if (modifiedValues.Any())
+        {
+            DrawButton(() =>
+                {
+                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
+                        "CPS.resetone.confirm".Translate($"CPS.{header}".Translate().ToLower()),
+                        delegate { instance.Settings.ResetValues(header); }));
+                }, "CPS.reset.button".Translate(),
+                new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
+                    headerLabel.position.y));
+        }
+
+        Text.Font = GameFont.Small;
+
+        searchText =
+            Widgets.TextField(
+                new Rect(headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
+                    searchSize),
+                searchText);
+        TooltipHandler.TipRegion(new Rect(
+            headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
+            searchSize), "CPS.search".Translate());
+
+        listing_Standard.End();
+
+        var allPawnKinds = Main.AllPawnKinds;
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            allPawnKinds = Main.AllPawnKinds.Where(def =>
+                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack.Name.ToLower()
+                        .Contains(searchText.ToLower()) || def.defName.ToLower()
+                        .Contains(searchText.ToLower()))
+                .ToList();
+        }
+
+        var borderRect = frameRect;
+        borderRect.y += headerLabel.y + 40;
+        borderRect.height -= headerLabel.y + 40;
+        var scrollContentRect = frameRect;
+        scrollContentRect.height = allPawnKinds.Count * 61f;
+        scrollContentRect.width -= 20;
+        scrollContentRect.x = 0;
+        scrollContentRect.y = 0;
+
+        var scrollListing = new Listing_Standard();
+        Widgets.BeginScrollView(borderRect, ref scrollPosition, scrollContentRect);
+        scrollListing.Begin(scrollContentRect);
+        var alternate = false;
+        foreach (var pawnKindDef in allPawnKinds)
+        {
+            alternate = !alternate;
+            var sliderRect = scrollListing.GetRect(50);
+            if (alternate)
+            {
+                Widgets.DrawBoxSolid(sliderRect, alternateBackground);
+            }
+
+            var modInfo = pawnKindDef.modContentPack?.Name;
+            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            if (pawnkindLabel.Length > 45)
+            {
+                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
+            }
+
+            if (modInfo is { Length: > 45 })
+            {
+                modInfo = $"{modInfo.Substring(0, 42)}...";
+            }
+
+            var smallerRect = sliderRect.ContractedBy(4f);
+            smallerRect.width -= buttonSize.x + 2;
+            smallerRect.y += 15;
+            smallerRect.x += buttonSize.x + 2;
+            var buttonRect = smallerRect;
+            buttonRect.size = buttonSize;
+            buttonRect.x -= buttonSize.x + 2;
+            int tagCount;
+            string tags;
+            switch (header)
+            {
+                case "weapontags":
+                    if (TagStage == pawnKindDef.defName)
+                    {
+                        if (CurrentTags == null ||
+                            CurrentTags == WeaponTags.VanillaWeaponTagsDictionary[pawnKindDef.defName])
+                        {
+                            WeaponTags.ResetWeaponTagsToVanillaValues(pawnKindDef.defName);
+                        }
+                        else
+                        {
+                            pawnKindDef.weaponTags = CurrentTags;
+                            modifiedValues[pawnKindDef.defName] = string.Join("|", pawnKindDef.weaponTags);
+                        }
+
+                        TagStage = null;
+                    }
+
+                    tagCount = 0;
+                    tags = string.Empty;
+                    if (pawnKindDef.weaponTags != null)
+                    {
+                        tagCount = pawnKindDef.weaponTags.Count;
+                        tags = string.Join("\n", pawnKindDef.weaponTags.OrderBy(s => s));
+                    }
+
+                    if (Widgets.ButtonText(buttonRect, "CPS.edit".Translate()))
+                    {
+                        CurrentTags = pawnKindDef.weaponTags;
+                        TagStage = "selecting";
+                        Find.WindowStack.Add(new Dialog_ChooseTags(WeaponTags.WeaponTagDictionary,
+                            pawnKindDef.defName));
+                    }
+
+                    if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                    {
+                        GUI.color = Color.green;
+                    }
+
+                    Widgets.Label(smallerRect, "CPS.currenttags".Translate(tagCount));
+                    TooltipHandler.TipRegion(smallerRect, tags);
+
+                    break;
+                case "appareltags":
+                    if (TagStage == pawnKindDef.defName)
+                    {
+                        if (CurrentTags == null ||
+                            CurrentTags == ApparelTags.VanillaApparelTagsDictionary[pawnKindDef.defName])
+                        {
+                            ApparelTags.ResetApparelTagsToVanillaValues(pawnKindDef.defName);
+                        }
+                        else
+                        {
+                            pawnKindDef.apparelTags = CurrentTags;
+                            modifiedValues[pawnKindDef.defName] = string.Join("|", pawnKindDef.apparelTags);
+                        }
+
+                        TagStage = null;
+                    }
+
+
+                    tagCount = 0;
+                    tags = string.Empty;
+                    if (pawnKindDef.apparelTags != null)
+                    {
+                        tagCount = pawnKindDef.apparelTags.Count;
+                        tags = string.Join("\n", pawnKindDef.apparelTags.OrderBy(s => s));
+                    }
+
+                    if (Widgets.ButtonText(buttonRect, "CPS.edit".Translate()))
+                    {
+                        CurrentTags = pawnKindDef.apparelTags;
+                        TagStage = "selecting";
+                        Find.WindowStack.Add(new Dialog_ChooseTags(ApparelTags.ApparelTagDictionary,
+                            pawnKindDef.defName));
+                    }
+
+                    if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                    {
+                        GUI.color = Color.green;
+                    }
+
+                    Widgets.Label(smallerRect, "CPS.currenttags".Translate(tagCount));
+                    TooltipHandler.TipRegion(smallerRect, tags);
+
+                    break;
+            }
+
+            GUI.color = Color.white;
+            Text.Font = GameFont.Tiny;
+            Text.Anchor = TextAnchor.UpperLeft;
+            Widgets.Label(sliderRect, pawnkindLabel);
+            Text.Anchor = TextAnchor.UpperRight;
+            Widgets.Label(sliderRect, modInfo);
+            Text.Anchor = default;
+            GUI.color = Color.white;
+            scrollListing.Gap(10);
+            Text.Font = GameFont.Small;
+        }
+
+        scrollListing.End();
+        Widgets.EndScrollView();
+    }
+
     private void DrawTabsList(Rect rect)
     {
         var scrollContainer = rect.ContractedBy(10);
@@ -808,11 +1024,18 @@ public class ChoosePawnSettings_Mod : Mod
                 continue;
             }
 
+            if (instance.Settings.HasCustomValues(settingTab.ToLower()))
+            {
+                GUI.color = Color.green;
+            }
+
             if (listing_Standard.ListItemSelectable($"CPS.{settingTab.ToLower()}".Translate(), Color.yellow,
                     out _, SelectedDef == settingTab))
             {
                 SelectedDef = SelectedDef == settingTab ? null : settingTab;
             }
+
+            GUI.color = Color.white;
         }
 
         listing_Standard.End();

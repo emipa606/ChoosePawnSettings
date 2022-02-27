@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<HugsLib.UpdateFeatureDef Abstract="true" Name="ChoosePawnSettings_UpdateFeatureBase">
+		<modNameReadable>ChoosePawnSettings</modNameReadable>
+		<linkUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2583236920</linkUrl>
+	</HugsLib.UpdateFeatureDef>
+	<HugsLib.UpdateFeatureDef ParentName="ChoosePawnSettings_UpdateFeatureBase">
+		<defName>ChoosePawnSettings_1_3_3</defName>
+		<assemblyVersion>1.3.3</assemblyVersion>
+		<content>This update adds the option to change what apparel and weapon tags each pawnkind can spawn with. 
+Some pawns will still spawn with specific gear depending on their definitions, as some have hardcoded requirements.
+But if you want all pirates spawning with longsword only, now you can!</content>
+	</HugsLib.UpdateFeatureDef>
+</Defs>
+

@@ -12,6 +12,10 @@ public class ChoosePawnSettings_Settings : ModSettings
     private List<string> customApparelMoneyKeys;
 
     private List<FloatRange> customApparelMoneyValues;
+    private List<string> customApparelTagKeys;
+    public Dictionary<string, string> CustomApparelTags;
+
+    private List<string> customApparelTagValues;
 
     public Dictionary<string, float> CustomBiocodeChances =
         new Dictionary<string, float>();
@@ -68,7 +72,11 @@ public class ChoosePawnSettings_Settings : ModSettings
     private List<string> customWeaponMoneyKeys;
 
     private List<FloatRange> customWeaponMoneyValues;
+    private List<string> customWeaponTagKeys;
 
+    public Dictionary<string, string> CustomWeaponTags;
+
+    private List<string> customWeaponTagValues;
     public bool VerboseLogging;
 
 
@@ -110,6 +118,14 @@ public class ChoosePawnSettings_Settings : ModSettings
             LookMode.Value,
             LookMode.Value,
             ref customRoyalTitleChancesKeys, ref customRoyalTitleChancesValues);
+        Scribe_Collections.Look(ref CustomWeaponTags, "CustomWeaponTags",
+            LookMode.Value,
+            LookMode.Value,
+            ref customWeaponTagKeys, ref customWeaponTagValues);
+        Scribe_Collections.Look(ref CustomApparelTags, "CustomApparelTags",
+            LookMode.Value,
+            LookMode.Value,
+            ref customApparelTagKeys, ref customApparelTagValues);
     }
 
     public void Initialize()
@@ -122,6 +138,8 @@ public class ChoosePawnSettings_Settings : ModSettings
         TechHediffsMoney.Initialize();
         WeaponMoney.Initialize();
         ApparelMoney.Initialize();
+        WeaponTags.Initialize();
+        ApparelTags.Initialize();
         if (ModLister.RoyaltyInstalled)
         {
             RoyalTitleChance.Initialize();
@@ -194,6 +212,22 @@ public class ChoosePawnSettings_Settings : ModSettings
             ApparelMoney.ResetApparelMoneyToVanillaRates();
         }
 
+        if (valueLabel is "weapontags" or "all")
+        {
+            customWeaponTagKeys = new List<string>();
+            customWeaponTagValues = new List<string>();
+            CustomWeaponTags = new Dictionary<string, string>();
+            WeaponTags.ResetWeaponTagsToVanillaValues();
+        }
+
+        if (valueLabel is "appareltags" or "all")
+        {
+            customApparelTagKeys = new List<string>();
+            customApparelTagValues = new List<string>();
+            CustomApparelTags = new Dictionary<string, string>();
+            ApparelTags.ResetApparelTagsToVanillaValues();
+        }
+
         if (valueLabel is "royaltitlechance" or "all")
         {
             customRoyalTitleChancesKeys = new List<string>();
@@ -203,49 +237,59 @@ public class ChoosePawnSettings_Settings : ModSettings
         }
     }
 
-    public bool HasCustomValues()
+    public bool HasCustomValues(string type = null)
     {
-        if (CustomBiocodeChances?.Any() == true)
+        if (type is null or "biocoding" && CustomBiocodeChances?.Any() == true)
         {
             return true;
         }
 
-        if (CustomChemicalAddictionChances?.Any() == true)
+        if (type is null or "chemicaladdiction" && CustomChemicalAddictionChances?.Any() == true)
         {
             return true;
         }
 
-        if (CustomCombatEnhancingDrugsChances?.Any() == true)
+        if (type is null or "combatenhancingdrugs" && CustomCombatEnhancingDrugsChances?.Any() == true)
         {
             return true;
         }
 
-        if (CustomHeadgearChances?.Any() == true)
+        if (type is null or "headgear" && CustomHeadgearChances?.Any() == true)
         {
             return true;
         }
 
-        if (CustomTechHediffsChances?.Any() == true)
+        if (type is null or "techhediffs" && CustomTechHediffsChances?.Any() == true)
         {
             return true;
         }
 
-        if (CustomTechHediffsMoney?.Any() == true)
+        if (type is null or "techhediffsmoney" && CustomTechHediffsMoney?.Any() == true)
         {
             return true;
         }
 
-        if (CustomWeaponMoney?.Any() == true)
+        if (type is null or "weaponmoney" && CustomWeaponMoney?.Any() == true)
         {
             return true;
         }
 
-        if (CustomApparelMoney?.Any() == true)
+        if (type is null or "apparelmoney" && CustomApparelMoney?.Any() == true)
         {
             return true;
         }
 
-        if (CustomRoyalTitleChances?.Any() == true)
+        if (type is null or "weapontags" && CustomWeaponTags?.Any() == true)
+        {
+            return true;
+        }
+
+        if (type is null or "appareltags" && CustomApparelTags?.Any() == true)
+        {
+            return true;
+        }
+
+        if (type is null or "royaltitlechance" && CustomRoyalTitleChances?.Any() == true)
         {
             return true;
         }

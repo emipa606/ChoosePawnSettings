@@ -2,7 +2,9 @@
 <LanguageData>
   <CPS.settings>Settings</CPS.settings>
   <CPS.unlimited>Unlimited</CPS.unlimited>
-  <CPS.commonality.label>Biome animal overall density</CPS.commonality.label>
+  <CPS.currenttags>{0} current tags</CPS.currenttags>
+  <CPS.edit>Edit</CPS.edit>
+  <CPS.selecttags>Select tags</CPS.selecttags>
   <CPS.resetall.label>Manual config reset</CPS.resetall.label>
   <CPS.resetall.tooltip>Reset all modified values</CPS.resetall.tooltip>
   <CPS.resetall.button>Reset all</CPS.resetall.button>
@@ -31,6 +33,10 @@
   <CPS.headgear.tooltip>Chance of headgear for the chosen pawnkind.</CPS.headgear.tooltip>
   <CPS.royaltitlechance>Royal Title Chance</CPS.royaltitlechance>
   <CPS.royaltitlechance.tooltip>Chance of pawn spawning with a royal title.</CPS.royaltitlechance.tooltip>
+  <CPS.weapontags>Weapon Tags</CPS.weapontags>
+  <CPS.weapontags.tooltip>What weapon-tags are allowed for the pawn to spawn with.</CPS.weapontags.tooltip>
+  <CPS.appareltags>Apparel Tags</CPS.appareltags>
+  <CPS.appareltags.tooltip>What apparel-tags are allowed for the pawn to spawn with.</CPS.appareltags.tooltip>
   <CPS.weaponmoney>Weapon Money</CPS.weaponmoney>
   <CPS.weaponmoney.tooltip>The amount of money the pawnkind have to "buy" weapons</CPS.weaponmoney.tooltip>
   <CPS.apparelmoney>Apparel Money</CPS.apparelmoney>
