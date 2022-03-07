@@ -54,7 +54,8 @@ public class ChoosePawnSettings_Mod : Mod
         "WeaponMoney",
         "ApparelMoney",
         "WeaponTags",
-        "ApparelTags"
+        "ApparelTags",
+        "DeathAcidifier"
     };
 
     /// <summary>
@@ -295,6 +296,12 @@ public class ChoosePawnSettings_Mod : Mod
             case "ApparelTags":
             {
                 TagsScrollView(ref frameRect, ref instance.Settings.CustomApparelTags, "appareltags");
+                break;
+            }
+            case "DeathAcidifier":
+            {
+                BoolScrollView(ref frameRect, ref instance.Settings.CustomDeathAcidifier,
+                    DeathAcidifier.VanillaDeathAcidifiers, "deathacidifier");
                 break;
             }
             case "RoyalTitleChance":
@@ -991,6 +998,145 @@ public class ChoosePawnSettings_Mod : Mod
         }
 
         scrollListing.End();
+        Widgets.EndScrollView();
+    }
+
+
+    private void BoolScrollView(ref Rect frameRect, ref Dictionary<string, bool> modifiedValues,
+        Dictionary<string, bool> vanillaValues, string header)
+    {
+        listing_Standard.Begin(frameRect);
+
+        Text.Font = GameFont.Medium;
+
+        var headerLabel = listing_Standard.Label($"CPS.{header}".Translate());
+        TooltipHandler.TipRegion(new Rect(
+            headerLabel.position,
+            searchSize), $"CPS.{header}.tooltip".Translate());
+
+        if (modifiedValues == null)
+        {
+            modifiedValues = new Dictionary<string, bool>();
+        }
+
+        if (modifiedValues.Any())
+        {
+            DrawButton(() =>
+                {
+                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
+                        "CPS.resetone.confirm".Translate($"CPS.{header}".Translate().ToLower()),
+                        delegate { instance.Settings.ResetValues(header); }));
+                }, "CPS.reset.button".Translate(),
+                new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
+                    headerLabel.position.y));
+        }
+
+        Text.Font = GameFont.Small;
+
+        searchText =
+            Widgets.TextField(
+                new Rect(headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
+                    searchSize),
+                searchText);
+        TooltipHandler.TipRegion(new Rect(
+            headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
+            searchSize), "CPS.search".Translate());
+
+        listing_Standard.End();
+
+        var allPawnKinds = Main.AllPawnKinds;
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            allPawnKinds = Main.AllPawnKinds.Where(def =>
+                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack.Name.ToLower()
+                        .Contains(searchText.ToLower()) || def.defName.ToLower()
+                        .Contains(searchText.ToLower()))
+                .ToList();
+        }
+
+        var borderRect = frameRect;
+        borderRect.y += headerLabel.y + 40;
+        borderRect.height -= headerLabel.y + 40;
+        var scrollContentRect = frameRect;
+        scrollContentRect.height = allPawnKinds.Count * 51f;
+        scrollContentRect.width -= 20;
+        scrollContentRect.x = 0;
+        scrollContentRect.y = 0;
+
+        var scrollListing = new Listing_Standard();
+        Widgets.BeginScrollView(borderRect, ref scrollPosition, scrollContentRect);
+        scrollListing.Begin(scrollContentRect);
+        var alternate = false;
+        foreach (var pawnKindDef in allPawnKinds)
+        {
+            var modInfo = pawnKindDef.modContentPack?.Name;
+            var sliderRect = scrollListing.GetRect(50);
+            alternate = !alternate;
+            if (alternate)
+            {
+                Widgets.DrawBoxSolid(sliderRect, alternateBackground);
+            }
+
+            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            if (pawnkindLabel.Length > 65)
+            {
+                pawnkindLabel = $"{pawnkindLabel.Substring(0, 62)}...";
+            }
+
+            if (modInfo is { Length: > 65 })
+            {
+                modInfo = $"{modInfo.Substring(0, 62)}...";
+            }
+
+            switch (header)
+            {
+                case "deathacidifier":
+                    var hasDeathAcidifier =
+                        pawnKindDef.techHediffsRequired?.Contains(DeathAcidifier.DeathAcidifierThingDef) == true;
+                    if (hasDeathAcidifier != vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            hasDeathAcidifier;
+                        GUI.color = Color.green;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
+
+                    Widgets.CheckboxLabeled(sliderRect, $"{pawnkindLabel} - {modInfo}", ref hasDeathAcidifier);
+
+                    if (hasDeathAcidifier)
+                    {
+                        if (pawnKindDef.techHediffsRequired == null)
+                        {
+                            pawnKindDef.techHediffsRequired = new List<ThingDef>();
+                        }
+
+                        if (!pawnKindDef.techHediffsRequired.Contains(DeathAcidifier.DeathAcidifierThingDef))
+                        {
+                            pawnKindDef.techHediffsRequired.Add(DeathAcidifier.DeathAcidifierThingDef);
+                        }
+                    }
+                    else
+                    {
+                        if (pawnKindDef.techHediffsRequired?.Contains(DeathAcidifier.DeathAcidifierThingDef) == true)
+                        {
+                            pawnKindDef.techHediffsRequired.Remove(DeathAcidifier.DeathAcidifierThingDef);
+                        }
+                    }
+
+                    break;
+            }
+
+            GUI.color = Color.white;
+        }
+
+        scrollListing.End();
+
         Widgets.EndScrollView();
     }
 

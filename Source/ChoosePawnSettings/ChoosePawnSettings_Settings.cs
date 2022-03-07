@@ -38,6 +38,10 @@ public class ChoosePawnSettings_Settings : ModSettings
 
     private List<float> customCombatEnhancingDrugsChancesValues;
 
+    public Dictionary<string, bool> CustomDeathAcidifier;
+    public List<string> customDeathAcidifiersKeys;
+    public List<bool> customDeathAcidifiersValues;
+
     public Dictionary<string, float> CustomHeadgearChances =
         new Dictionary<string, float>();
 
@@ -126,6 +130,10 @@ public class ChoosePawnSettings_Settings : ModSettings
             LookMode.Value,
             LookMode.Value,
             ref customApparelTagKeys, ref customApparelTagValues);
+        Scribe_Collections.Look(ref CustomDeathAcidifier, "CustomDeathAcidifier",
+            LookMode.Value,
+            LookMode.Value,
+            ref customDeathAcidifiersKeys, ref customDeathAcidifiersValues);
     }
 
     public void Initialize()
@@ -140,6 +148,7 @@ public class ChoosePawnSettings_Settings : ModSettings
         ApparelMoney.Initialize();
         WeaponTags.Initialize();
         ApparelTags.Initialize();
+        DeathAcidifier.Initialize();
         if (ModLister.RoyaltyInstalled)
         {
             RoyalTitleChance.Initialize();
@@ -228,6 +237,14 @@ public class ChoosePawnSettings_Settings : ModSettings
             ApparelTags.ResetApparelTagsToVanillaValues();
         }
 
+        if (valueLabel is "deathacidifier" or "all")
+        {
+            customDeathAcidifiersKeys = new List<string>();
+            customDeathAcidifiersValues = new List<bool>();
+            CustomDeathAcidifier = new Dictionary<string, bool>();
+            DeathAcidifier.ResetDeathAcidifierToVanillaValues();
+        }
+
         if (valueLabel is "royaltitlechance" or "all")
         {
             customRoyalTitleChancesKeys = new List<string>();
@@ -285,6 +302,11 @@ public class ChoosePawnSettings_Settings : ModSettings
         }
 
         if (type is null or "appareltags" && CustomApparelTags?.Any() == true)
+        {
+            return true;
+        }
+
+        if (type is null or "deathacidifier" && CustomDeathAcidifier?.Any() == true)
         {
             return true;
         }

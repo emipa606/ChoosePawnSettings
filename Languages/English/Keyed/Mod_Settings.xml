@@ -20,25 +20,27 @@
   <CPS.customexists>Has custom values defined</CPS.customexists>
   <CPS.percent>{0} percent</CPS.percent>
   <CPS.biocoding>Biocoding</CPS.biocoding>
-  <CPS.biocoding.tooltip>Chance of biocoded items for the chosen pawnkind.</CPS.biocoding.tooltip>
+  <CPS.biocoding.tooltip>Chance of biocoded items for the chosen pawnkind</CPS.biocoding.tooltip>
   <CPS.chemicaladdiction>Chemical Addiction</CPS.chemicaladdiction>
-  <CPS.chemicaladdiction.tooltip>Chance of having a chemical addiction for the chosen pawnkind.</CPS.chemicaladdiction.tooltip>
+  <CPS.chemicaladdiction.tooltip>Chance of having a chemical addiction for the chosen pawnkind</CPS.chemicaladdiction.tooltip>
   <CPS.combatenhancingdrugs>Combat Enhancing Drugs</CPS.combatenhancingdrugs>
-  <CPS.combatenhancingdrugs.tooltip>Chance of having combat enhancing drugs for the chosen pawnkind.</CPS.combatenhancingdrugs.tooltip>
+  <CPS.combatenhancingdrugs.tooltip>Chance of having combat enhancing drugs for the chosen pawnkind</CPS.combatenhancingdrugs.tooltip>
   <CPS.techhediffs>Tech Hediffs</CPS.techhediffs>
-  <CPS.techhediffs.tooltip>Chance of having artificial bodyparts for the chosen pawnkind.</CPS.techhediffs.tooltip>
+  <CPS.techhediffs.tooltip>Chance of having artificial bodyparts for the chosen pawnkind</CPS.techhediffs.tooltip>
   <CPS.techhediffsmoney>Tech Hediffs Money</CPS.techhediffsmoney>
   <CPS.techhediffsmoney.tooltip>The amount of money the pawnkind have to "buy" hediffs</CPS.techhediffsmoney.tooltip>
   <CPS.headgear>Headgear</CPS.headgear>
-  <CPS.headgear.tooltip>Chance of headgear for the chosen pawnkind.</CPS.headgear.tooltip>
+  <CPS.headgear.tooltip>Chance of headgear for the chosen pawnkind</CPS.headgear.tooltip>
   <CPS.royaltitlechance>Royal Title Chance</CPS.royaltitlechance>
-  <CPS.royaltitlechance.tooltip>Chance of pawn spawning with a royal title.</CPS.royaltitlechance.tooltip>
+  <CPS.royaltitlechance.tooltip>Chance of pawn spawning with a royal title</CPS.royaltitlechance.tooltip>
   <CPS.weapontags>Weapon Tags</CPS.weapontags>
-  <CPS.weapontags.tooltip>What weapon-tags are allowed for the pawn to spawn with.</CPS.weapontags.tooltip>
+  <CPS.weapontags.tooltip>What weapon-tags are allowed for the pawn to spawn with</CPS.weapontags.tooltip>
   <CPS.appareltags>Apparel Tags</CPS.appareltags>
-  <CPS.appareltags.tooltip>What apparel-tags are allowed for the pawn to spawn with.</CPS.appareltags.tooltip>
+  <CPS.appareltags.tooltip>What apparel-tags are allowed for the pawn to spawn with</CPS.appareltags.tooltip>
   <CPS.weaponmoney>Weapon Money</CPS.weaponmoney>
   <CPS.weaponmoney.tooltip>The amount of money the pawnkind have to "buy" weapons</CPS.weaponmoney.tooltip>
   <CPS.apparelmoney>Apparel Money</CPS.apparelmoney>
   <CPS.apparelmoney.tooltip>The amount of money the pawnkind have to "buy" apparel</CPS.apparelmoney.tooltip>
+  <CPS.deathacidifier>Death Acidifier</CPS.deathacidifier>
+  <CPS.deathacidifier.tooltip>If the pawn should spawn with a death acidifier</CPS.deathacidifier.tooltip>
 </LanguageData>

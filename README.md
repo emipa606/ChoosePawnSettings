@@ -17,6 +17,8 @@ Currently implemented
 -  Tech Hediffs Money
 -  Weapon Money
 -  Apparel Money
+-  Weapon Tags
+-  Apparel Tags
 -  Royal Title Chance (Royalty required)
 
 
