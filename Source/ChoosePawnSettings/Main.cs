@@ -10,6 +10,7 @@ public static class Main
 {
     private static List<PawnKindDef> allPawnKinds;
     private static List<ThingDef> allWeapons;
+    private static List<ThingDef> allTechHediffs;
     private static List<ThingDef> allApparel;
 
     static Main()
@@ -49,6 +50,23 @@ public static class Main
             return allWeapons;
         }
         set => allWeapons = value;
+    }
+
+    public static List<ThingDef> AllTechHediffs
+    {
+        get
+        {
+            if (allTechHediffs == null || allTechHediffs.Count == 0)
+            {
+                allTechHediffs = (from techHediff in DefDatabase<ThingDef>.AllDefsListForReading
+                    where techHediff.isTechHediff
+                    orderby techHediff.label
+                    select techHediff).ToList();
+            }
+
+            return allTechHediffs;
+        }
+        set => allTechHediffs = value;
     }
 
     public static List<ThingDef> AllApparel

@@ -37,6 +37,8 @@
   <CPS.weapontags.tooltip>What weapon-tags are allowed for the pawn to spawn with</CPS.weapontags.tooltip>
   <CPS.appareltags>Apparel Tags</CPS.appareltags>
   <CPS.appareltags.tooltip>What apparel-tags are allowed for the pawn to spawn with</CPS.appareltags.tooltip>
+  <CPS.techhedifftags>Tech Hediff Tags</CPS.techhedifftags>
+  <CPS.techhedifftags.tooltip>What tech hediff-tags (implants and bionics) are allowed for the pawn to spawn with</CPS.techhedifftags.tooltip>
   <CPS.weaponmoney>Weapon Money</CPS.weaponmoney>
   <CPS.weaponmoney.tooltip>The amount of money the pawnkind have to "buy" weapons</CPS.weaponmoney.tooltip>
   <CPS.apparelmoney>Apparel Money</CPS.apparelmoney>

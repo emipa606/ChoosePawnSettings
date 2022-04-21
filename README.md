@@ -19,6 +19,7 @@ Currently implemented
 -  Apparel Money
 -  Weapon Tags
 -  Apparel Tags
+-  Death Acidifier
 -  Royal Title Chance (Royalty required)
 
 

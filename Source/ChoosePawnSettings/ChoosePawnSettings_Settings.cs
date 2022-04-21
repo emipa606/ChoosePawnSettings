@@ -70,6 +70,11 @@ public class ChoosePawnSettings_Settings : ModSettings
 
     private List<FloatRange> customTechHediffsMoneyValues;
 
+    private List<string> customTechHediffTagKeys;
+    public Dictionary<string, string> CustomTechHediffTags;
+
+    private List<string> customTechHediffTagValues;
+
     public Dictionary<string, FloatRange> CustomWeaponMoney =
         new Dictionary<string, FloatRange>();
 
@@ -130,6 +135,10 @@ public class ChoosePawnSettings_Settings : ModSettings
             LookMode.Value,
             LookMode.Value,
             ref customApparelTagKeys, ref customApparelTagValues);
+        Scribe_Collections.Look(ref CustomTechHediffTags, "CustomTechHediffTags",
+            LookMode.Value,
+            LookMode.Value,
+            ref customTechHediffTagKeys, ref customTechHediffTagValues);
         Scribe_Collections.Look(ref CustomDeathAcidifier, "CustomDeathAcidifier",
             LookMode.Value,
             LookMode.Value,
@@ -148,6 +157,7 @@ public class ChoosePawnSettings_Settings : ModSettings
         ApparelMoney.Initialize();
         WeaponTags.Initialize();
         ApparelTags.Initialize();
+        TechHediffTags.Initialize();
         DeathAcidifier.Initialize();
         if (ModLister.RoyaltyInstalled)
         {
@@ -203,6 +213,14 @@ public class ChoosePawnSettings_Settings : ModSettings
             customTechHediffsMoneyValues = new List<FloatRange>();
             CustomTechHediffsMoney = new Dictionary<string, FloatRange>();
             TechHediffsMoney.ResetTechHediffsMoneyToVanillaRates();
+        }
+
+        if (valueLabel is "techhedifftags" or "all")
+        {
+            customTechHediffTagKeys = new List<string>();
+            customTechHediffTagValues = new List<string>();
+            CustomTechHediffTags = new Dictionary<string, string>();
+            TechHediffTags.ResetTechHediffTagsToVanillaValues();
         }
 
         if (valueLabel is "weaponmoney" or "all")
@@ -302,6 +320,11 @@ public class ChoosePawnSettings_Settings : ModSettings
         }
 
         if (type is null or "appareltags" && CustomApparelTags?.Any() == true)
+        {
+            return true;
+        }
+
+        if (type is null or "techhedifftags" && CustomTechHediffTags?.Any() == true)
         {
             return true;
         }

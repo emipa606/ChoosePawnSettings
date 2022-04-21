@@ -51,9 +51,10 @@ public class ChoosePawnSettings_Mod : Mod
         "Headgear",
         "TechHediffs",
         "TechHediffsMoney",
+        "TechHediffTags",
         "WeaponMoney",
-        "ApparelMoney",
         "WeaponTags",
+        "ApparelMoney",
         "ApparelTags",
         "DeathAcidifier"
     };
@@ -296,6 +297,11 @@ public class ChoosePawnSettings_Mod : Mod
             case "ApparelTags":
             {
                 TagsScrollView(ref frameRect, ref instance.Settings.CustomApparelTags, "appareltags");
+                break;
+            }
+            case "TechHediffTags":
+            {
+                TagsScrollView(ref frameRect, ref instance.Settings.CustomTechHediffTags, "techhedifftags");
                 break;
             }
             case "DeathAcidifier":
@@ -983,6 +989,49 @@ public class ChoosePawnSettings_Mod : Mod
                     TooltipHandler.TipRegion(smallerRect, tags);
 
                     break;
+                case "techhedifftags":
+                    if (TagStage == pawnKindDef.defName)
+                    {
+                        if (CurrentTags == null ||
+                            CurrentTags == TechHediffTags.VanillaTechHediffTagDictionary[pawnKindDef.defName])
+                        {
+                            TechHediffTags.ResetTechHediffTagsToVanillaValues(pawnKindDef.defName);
+                        }
+                        else
+                        {
+                            pawnKindDef.techHediffsTags = CurrentTags;
+                            modifiedValues[pawnKindDef.defName] = string.Join("|", pawnKindDef.techHediffsTags);
+                        }
+
+                        TagStage = null;
+                    }
+
+
+                    tagCount = 0;
+                    tags = string.Empty;
+                    if (pawnKindDef.techHediffsTags != null)
+                    {
+                        tagCount = pawnKindDef.techHediffsTags.Count;
+                        tags = string.Join("\n", pawnKindDef.techHediffsTags.OrderBy(s => s));
+                    }
+
+                    if (Widgets.ButtonText(buttonRect, "CPS.edit".Translate()))
+                    {
+                        CurrentTags = pawnKindDef.techHediffsTags;
+                        TagStage = "selecting";
+                        Find.WindowStack.Add(new Dialog_ChooseTags(TechHediffTags.TechHediffTagDictionary,
+                            pawnKindDef.defName));
+                    }
+
+                    if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                    {
+                        GUI.color = Color.green;
+                    }
+
+                    Widgets.Label(smallerRect, "CPS.currenttags".Translate(tagCount));
+                    TooltipHandler.TipRegion(smallerRect, tags);
+
+                    break;
             }
 
             GUI.color = Color.white;
@@ -1000,7 +1049,6 @@ public class ChoosePawnSettings_Mod : Mod
         scrollListing.End();
         Widgets.EndScrollView();
     }
-
 
     private void BoolScrollView(ref Rect frameRect, ref Dictionary<string, bool> modifiedValues,
         Dictionary<string, bool> vanillaValues, string header)
