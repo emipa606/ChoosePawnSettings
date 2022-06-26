@@ -15,9 +15,10 @@ Currently implemented
 -  Headgear Chance
 -  Tech Hediffs Chance
 -  Tech Hediffs Money
+-  Tech Hediffs Tags
 -  Weapon Money
--  Apparel Money
 -  Weapon Tags
+-  Apparel Money
 -  Apparel Tags
 -  Death Acidifier
 -  Royal Title Chance (Royalty required)
@@ -46,6 +47,7 @@ https://ko-fi.com/G2G55DDYD]![Image](https://i.imgur.com/Utx6OIH.png)
 -  For best support, please use the Discord-channel for error-reporting.
 -  Do not report errors by making a discussion-thread, I get no notification of that.
 -  If you have the solution for a problem, please post it to the GitHub repository.
+
 
 
 

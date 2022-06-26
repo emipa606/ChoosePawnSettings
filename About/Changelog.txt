@@ -1,5 +1,8 @@
 # Changelog for ChoosePawnSettings
 
+1.3.6 - Things added via patches does not have a defined mod-name, this caused the search-field to fail. Should be fixed now
+
+
 1.3.5 - Added tech hediff tag options
 
 
