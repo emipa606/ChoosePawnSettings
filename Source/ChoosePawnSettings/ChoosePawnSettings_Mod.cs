@@ -49,6 +49,7 @@ public class ChoosePawnSettings_Mod : Mod
         "ChemicalAddiction",
         "CombatEnhancingDrugs",
         "Headgear",
+        "CombatPower",
         "TechHediffs",
         "TechHediffsMoney",
         "TechHediffTags",
@@ -263,6 +264,12 @@ public class ChoosePawnSettings_Mod : Mod
             {
                 FloatScrollView(ref frameRect, ref instance.Settings.CustomHeadgearChances,
                     Headgear.VanillaHeadgearChances, "headgear");
+                break;
+            }
+            case "CombatPower":
+            {
+                FloatScrollView(ref frameRect, ref instance.Settings.CustomCombatPowers,
+                    CombatPower.VanillaCombatPowers, "combatpower");
                 break;
             }
             case "TechHediffs":
@@ -505,6 +512,31 @@ public class ChoosePawnSettings_Mod : Mod
                             pawnKindDef.apparelAllowHeadgearChance, 0,
                             1f, false,
                             "CPS.percent".Translate(Math.Round(pawnKindDef.apparelAllowHeadgearChance * 100)),
+                            pawnkindLabel,
+                            modInfo), 2);
+                    break;
+                case "combatpower":
+                    if (pawnKindDef.combatPower !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.combatPower;
+                        GUI.color = Color.green;
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
+
+                    pawnKindDef.combatPower =
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                            sliderRect,
+                            pawnKindDef.combatPower, 1f,
+                            700f, false,
+                            Math.Round(pawnKindDef.combatPower).ToString(),
                             pawnkindLabel,
                             modInfo), 2);
                     break;

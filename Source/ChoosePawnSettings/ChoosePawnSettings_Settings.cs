@@ -38,6 +38,13 @@ public class ChoosePawnSettings_Settings : ModSettings
 
     private List<float> customCombatEnhancingDrugsChancesValues;
 
+    public Dictionary<string, float> CustomCombatPowers =
+        new Dictionary<string, float>();
+
+    private List<string> customCombatPowersKeys;
+
+    private List<float> customCombatPowersValues;
+
     public Dictionary<string, bool> CustomDeathAcidifier;
     public List<string> customDeathAcidifiersKeys;
     public List<bool> customDeathAcidifiersValues;
@@ -99,6 +106,9 @@ public class ChoosePawnSettings_Settings : ModSettings
         Scribe_Collections.Look(ref CustomHeadgearChances, "CustomHeadgearChances", LookMode.Value,
             LookMode.Value,
             ref customHeadgearChancesKeys, ref customHeadgearChancesValues);
+        Scribe_Collections.Look(ref CustomCombatPowers, "CustomCombatPowers", LookMode.Value,
+            LookMode.Value,
+            ref customCombatPowersKeys, ref customCombatPowersValues);
         Scribe_Collections.Look(ref CustomChemicalAddictionChances, "CustomChemicalAddictionChances",
             LookMode.Value,
             LookMode.Value,
@@ -151,6 +161,7 @@ public class ChoosePawnSettings_Settings : ModSettings
         ChemicalAddiction.Initialize();
         CombatEnhancingDrugs.Initialize();
         Headgear.Initialize();
+        CombatPower.Initialize();
         TechHediffs.Initialize();
         TechHediffsMoney.Initialize();
         WeaponMoney.Initialize();
@@ -197,6 +208,14 @@ public class ChoosePawnSettings_Settings : ModSettings
             customHeadgearChancesValues = new List<float>();
             CustomHeadgearChances = new Dictionary<string, float>();
             Headgear.ResetHeadgearToVanillaRates();
+        }
+
+        if (valueLabel is "combatpower" or "all")
+        {
+            customCombatPowersKeys = new List<string>();
+            customCombatPowersValues = new List<float>();
+            CustomCombatPowers = new Dictionary<string, float>();
+            CombatPower.ResetCombatPowerToVanillaRates();
         }
 
         if (valueLabel is "techhediffs" or "all")
@@ -290,6 +309,11 @@ public class ChoosePawnSettings_Settings : ModSettings
         }
 
         if (type is null or "headgear" && CustomHeadgearChances?.Any() == true)
+        {
+            return true;
+        }
+
+        if (type is null or "combatpower" && CustomCombatPowers?.Any() == true)
         {
             return true;
         }

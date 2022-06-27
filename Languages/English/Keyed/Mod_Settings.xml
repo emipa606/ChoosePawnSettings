@@ -31,6 +31,8 @@
   <CPS.techhediffsmoney.tooltip>The amount of money the pawnkind have to "buy" hediffs</CPS.techhediffsmoney.tooltip>
   <CPS.headgear>Headgear</CPS.headgear>
   <CPS.headgear.tooltip>Chance of headgear for the chosen pawnkind</CPS.headgear.tooltip>
+  <CPS.combatpower>Combat Power</CPS.combatpower>
+  <CPS.combatpower.tooltip>Power of the pawn when calculating raid-sizes. The higher the value, the fewer will spawn</CPS.combatpower.tooltip>
   <CPS.royaltitlechance>Royal Title Chance</CPS.royaltitlechance>
   <CPS.royaltitlechance.tooltip>Chance of pawn spawning with a royal title</CPS.royaltitlechance.tooltip>
   <CPS.weapontags>Weapon Tags</CPS.weapontags>
