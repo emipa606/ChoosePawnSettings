@@ -51,7 +51,7 @@ public static class Biocoding
         }
     }
 
-    public static void ResetBiocodingToVanillaRates()
+    public static void ResetBiocodingToVanillaValues()
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {

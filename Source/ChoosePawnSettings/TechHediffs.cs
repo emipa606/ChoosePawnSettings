@@ -53,7 +53,7 @@ public static class TechHediffs
         }
     }
 
-    public static void ResetTechHediffsToVanillaRates()
+    public static void ResetTechHediffsToVanillaValues()
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {

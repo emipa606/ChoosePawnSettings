@@ -53,7 +53,7 @@ public static class ChemicalAddiction
         }
     }
 
-    public static void ResetChemicalAddictionToVanillaRates()
+    public static void ResetChemicalAddictionToVanillaValues()
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {

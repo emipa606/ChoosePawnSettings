@@ -57,7 +57,8 @@ public class ChoosePawnSettings_Mod : Mod
         "WeaponTags",
         "ApparelMoney",
         "ApparelTags",
-        "DeathAcidifier"
+        "DeathAcidifier",
+        "GenerationAge"
     };
 
     /// <summary>
@@ -280,19 +281,19 @@ public class ChoosePawnSettings_Mod : Mod
             }
             case "TechHediffsMoney":
             {
-                RangeScrollView(ref frameRect, ref instance.Settings.CustomTechHediffsMoney,
+                FloatRangeScrollView(ref frameRect, ref instance.Settings.CustomTechHediffsMoney,
                     TechHediffsMoney.VanillaTechHediffsMoney, "techhediffsmoney", 8000, 99999);
                 break;
             }
             case "WeaponMoney":
             {
-                RangeScrollView(ref frameRect, ref instance.Settings.CustomWeaponMoney,
+                FloatRangeScrollView(ref frameRect, ref instance.Settings.CustomWeaponMoney,
                     WeaponMoney.VanillaWeaponMoney, "weaponmoney", 10000, 99999);
                 break;
             }
             case "ApparelMoney":
             {
-                RangeScrollView(ref frameRect, ref instance.Settings.CustomApparelMoney,
+                FloatRangeScrollView(ref frameRect, ref instance.Settings.CustomApparelMoney,
                     ApparelMoney.VanillaApparelMoney, "apparelmoney", 12000, 9999999);
                 break;
             }
@@ -321,6 +322,12 @@ public class ChoosePawnSettings_Mod : Mod
             {
                 FloatScrollView(ref frameRect, ref instance.Settings.CustomRoyalTitleChances,
                     RoyalTitleChance.VanillaRoyalTitleChances, "royaltitlechance");
+                break;
+            }
+            case "GenerationAge":
+            {
+                IntRangeScrollView(ref frameRect, ref instance.Settings.CustomGenerationAge,
+                    GenerationAge.VanillaGenerationAge, "generationage", 1000, 999999);
                 break;
             }
         }
@@ -600,7 +607,7 @@ public class ChoosePawnSettings_Mod : Mod
         Widgets.EndScrollView();
     }
 
-    private void RangeScrollView(ref Rect frameRect, ref Dictionary<string, FloatRange> modifiedValues,
+    private void FloatRangeScrollView(ref Rect frameRect, ref Dictionary<string, FloatRange> modifiedValues,
         Dictionary<string, FloatRange> vanillaValues, string header, int maxValue, int unlimitedValue)
     {
         listing_Standard.Begin(frameRect);
@@ -819,6 +826,170 @@ public class ChoosePawnSettings_Mod : Mod
                         {
                             pawnKindDef.apparelMoney.max = maxValue / 2f;
                             pawnKindDef.apparelMoney.min = maxValue / 2f;
+                        }
+                    }
+
+                    break;
+            }
+
+            var textRect = sliderRect;
+            textRect.width -= 100f;
+            Text.Anchor = TextAnchor.UpperLeft;
+            Widgets.Label(textRect, pawnkindLabel);
+            Text.Anchor = TextAnchor.UpperRight;
+            Widgets.Label(textRect, modInfo);
+            Text.Anchor = default;
+            GUI.color = Color.white;
+            scrollListing.Gap(10);
+        }
+
+        scrollListing.End();
+        Widgets.EndScrollView();
+    }
+
+    private void IntRangeScrollView(ref Rect frameRect, ref Dictionary<string, IntRange> modifiedValues,
+        Dictionary<string, IntRange> vanillaValues, string header, int maxValue, int unlimitedValue)
+    {
+        listing_Standard.Begin(frameRect);
+
+        Text.Font = GameFont.Medium;
+
+        var headerLabel = listing_Standard.Label($"CPS.{header}".Translate());
+        TooltipHandler.TipRegion(new Rect(
+            headerLabel.position,
+            searchSize), $"CPS.{header}.tooltip".Translate());
+
+        if (modifiedValues == null)
+        {
+            modifiedValues = new Dictionary<string, IntRange>();
+        }
+
+        if (modifiedValues.Any())
+        {
+            DrawButton(() =>
+                {
+                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
+                        "CPS.resetone.confirm".Translate($"CPS.{header}".Translate().ToLower()),
+                        delegate { instance.Settings.ResetValues(header); }));
+                }, "CPS.reset.button".Translate(),
+                new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
+                    headerLabel.position.y));
+        }
+
+        Text.Font = GameFont.Small;
+
+        searchText =
+            Widgets.TextField(
+                new Rect(headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
+                    searchSize),
+                searchText);
+        TooltipHandler.TipRegion(new Rect(
+            headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
+            searchSize), "CPS.search".Translate());
+
+        listing_Standard.End();
+
+        var allPawnKinds = Main.AllPawnKinds;
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            allPawnKinds = Main.AllPawnKinds.Where(def =>
+                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack?.Name.ToLower()
+                        .Contains(searchText.ToLower()) == true || def.defName.ToLower()
+                        .Contains(searchText.ToLower()))
+                .ToList();
+        }
+
+        var borderRect = frameRect;
+        borderRect.y += headerLabel.y + 40;
+        borderRect.height -= headerLabel.y + 40;
+        var scrollContentRect = frameRect;
+        scrollContentRect.height = allPawnKinds.Count * 81f;
+        scrollContentRect.width -= 20;
+        scrollContentRect.x = 0;
+        scrollContentRect.y = 0;
+
+        var scrollListing = new Listing_Standard();
+        Widgets.BeginScrollView(borderRect, ref scrollPosition, scrollContentRect);
+        scrollListing.Begin(scrollContentRect);
+        var alternate = false;
+        foreach (var pawnKindDef in allPawnKinds)
+        {
+            alternate = !alternate;
+            var sliderRect = scrollListing.GetRect(70);
+            if (alternate)
+            {
+                Widgets.DrawBoxSolid(sliderRect, alternateBackground);
+            }
+
+            Text.Font = GameFont.Tiny;
+            var modInfo = pawnKindDef.modContentPack?.Name;
+            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            if (pawnkindLabel.Length > 45)
+            {
+                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
+            }
+
+            if (modInfo is { Length: > 45 })
+            {
+                modInfo = $"{modInfo.Substring(0, 42)}...";
+            }
+
+            var smallerRect = sliderRect.ContractedBy(4f, 20f);
+            smallerRect.width -= 100f;
+            smallerRect.y += 5;
+            smallerRect.x += 2;
+            var checkboxRect = sliderRect;
+            checkboxRect.width = sliderRect.width - smallerRect.width - 10f;
+            checkboxRect.height -= 20f;
+            checkboxRect.y += 20f;
+            checkboxRect.x = sliderRect.x + smallerRect.width + 10f;
+            bool unlimited;
+            bool wasOn;
+            switch (header)
+            {
+                case "generationage":
+                    if (pawnKindDef.minGenerationAge != vanillaValues[pawnKindDef.defName].min ||
+                        pawnKindDef.maxGenerationAge != vanillaValues[pawnKindDef.defName].max)
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            new IntRange(pawnKindDef.minGenerationAge, pawnKindDef.maxGenerationAge);
+                    }
+                    else
+                    {
+                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
+                        {
+                            modifiedValues.Remove(pawnKindDef.defName);
+                        }
+                    }
+
+                    unlimited = pawnKindDef.maxGenerationAge > maxValue;
+                    wasOn = unlimited;
+                    Widgets.CheckboxLabeled(checkboxRect, "CPS.unlimited".Translate(), ref unlimited);
+                    var tempRange = new IntRange(pawnKindDef.minGenerationAge, pawnKindDef.maxGenerationAge);
+                    Widgets.IntRange(
+                        smallerRect,
+                        pawnKindDef.GetHashCode(),
+                        ref tempRange,
+                        0,
+                        maxValue);
+                    if (wasOn != unlimited || pawnKindDef.minGenerationAge != tempRange.min ||
+                        pawnKindDef.maxGenerationAge != tempRange.max)
+                    {
+                        pawnKindDef.minGenerationAge = tempRange.min;
+                        if (unlimited)
+                        {
+                            pawnKindDef.maxGenerationAge = unlimitedValue;
+                        }
+                        else
+                        {
+                            if (wasOn)
+                            {
+                                pawnKindDef.maxGenerationAge = maxValue / 2;
+                            }
+                            else
+                            {
+                                pawnKindDef.maxGenerationAge = tempRange.max;
+                            }
                         }
                     }
 

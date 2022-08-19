@@ -54,7 +54,7 @@ public static class ApparelMoney
         }
     }
 
-    public static void ResetApparelMoneyToVanillaRates()
+    public static void ResetApparelMoneyToVanillaValues()
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {

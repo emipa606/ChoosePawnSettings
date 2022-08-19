@@ -54,7 +54,7 @@ public static class WeaponMoney
         }
     }
 
-    public static void ResetWeaponMoneyToVanillaRates()
+    public static void ResetWeaponMoneyToVanillaValues()
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {

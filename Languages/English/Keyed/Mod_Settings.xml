@@ -45,6 +45,8 @@
   <CPS.weaponmoney.tooltip>The amount of money the pawnkind have to "buy" weapons</CPS.weaponmoney.tooltip>
   <CPS.apparelmoney>Apparel Money</CPS.apparelmoney>
   <CPS.apparelmoney.tooltip>The amount of money the pawnkind have to "buy" apparel</CPS.apparelmoney.tooltip>
+  <CPS.generationage>Generation Age</CPS.generationage>
+  <CPS.generationage.tooltip>The min and max age allowed for pawns to generate with</CPS.generationage.tooltip>
   <CPS.deathacidifier>Death Acidifier</CPS.deathacidifier>
   <CPS.deathacidifier.tooltip>If the pawn should spawn with a death acidifier</CPS.deathacidifier.tooltip>
 </LanguageData>

@@ -54,7 +54,7 @@ public static class TechHediffsMoney
         }
     }
 
-    public static void ResetTechHediffsMoneyToVanillaRates()
+    public static void ResetTechHediffsMoneyToVanillaValues()
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {

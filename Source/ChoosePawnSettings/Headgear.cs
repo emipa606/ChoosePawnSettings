@@ -51,7 +51,7 @@ public static class Headgear
         }
     }
 
-    public static void ResetHeadgearToVanillaRates()
+    public static void ResetHeadgearToVanillaValues()
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {

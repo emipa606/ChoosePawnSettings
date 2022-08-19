@@ -53,7 +53,7 @@ public static class CombatEnhancingDrugs
         }
     }
 
-    public static void ResetCombatEnhancingDrugsToVanillaRates()
+    public static void ResetCombatEnhancingDrugsToVanillaValues()
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {

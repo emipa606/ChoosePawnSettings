@@ -51,7 +51,7 @@ public static class CombatPower
         }
     }
 
-    public static void ResetCombatPowerToVanillaRates()
+    public static void ResetCombatPowerToVanillaValues()
     {
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {

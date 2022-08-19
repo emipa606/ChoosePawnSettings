@@ -49,6 +49,13 @@ public class ChoosePawnSettings_Settings : ModSettings
     public List<string> customDeathAcidifiersKeys;
     public List<bool> customDeathAcidifiersValues;
 
+    public Dictionary<string, IntRange> CustomGenerationAge =
+        new Dictionary<string, IntRange>();
+
+    private List<string> customGenerationAgeKeys;
+
+    private List<IntRange> customGenerationAgeValues;
+
     public Dictionary<string, float> CustomHeadgearChances =
         new Dictionary<string, float>();
 
@@ -129,6 +136,10 @@ public class ChoosePawnSettings_Settings : ModSettings
             LookMode.Value,
             LookMode.Value,
             ref customWeaponMoneyKeys, ref customWeaponMoneyValues);
+        Scribe_Collections.Look(ref CustomGenerationAge, "CustomGenerationAge",
+            LookMode.Value,
+            LookMode.Value,
+            ref customGenerationAgeKeys, ref customGenerationAgeValues);
         Scribe_Collections.Look(ref CustomApparelMoney, "CustomApparelMoney",
             LookMode.Value,
             LookMode.Value,
@@ -170,6 +181,7 @@ public class ChoosePawnSettings_Settings : ModSettings
         ApparelTags.Initialize();
         TechHediffTags.Initialize();
         DeathAcidifier.Initialize();
+        GenerationAge.Initialize();
         if (ModLister.RoyaltyInstalled)
         {
             RoyalTitleChance.Initialize();
@@ -183,7 +195,7 @@ public class ChoosePawnSettings_Settings : ModSettings
             customBiocodeChancesKeys = new List<string>();
             customBiocodeChancesValues = new List<float>();
             CustomBiocodeChances = new Dictionary<string, float>();
-            Biocoding.ResetBiocodingToVanillaRates();
+            Biocoding.ResetBiocodingToVanillaValues();
         }
 
         if (valueLabel is "chemicaladdiction" or "all")
@@ -191,7 +203,7 @@ public class ChoosePawnSettings_Settings : ModSettings
             customChemicalAddictionChancesKeys = new List<string>();
             customChemicalAddictionChancesValues = new List<float>();
             CustomChemicalAddictionChances = new Dictionary<string, float>();
-            ChemicalAddiction.ResetChemicalAddictionToVanillaRates();
+            ChemicalAddiction.ResetChemicalAddictionToVanillaValues();
         }
 
         if (valueLabel is "combatenhancingdrugs" or "all")
@@ -199,7 +211,7 @@ public class ChoosePawnSettings_Settings : ModSettings
             customCombatEnhancingDrugsChancesKeys = new List<string>();
             customCombatEnhancingDrugsChancesValues = new List<float>();
             CustomCombatEnhancingDrugsChances = new Dictionary<string, float>();
-            CombatEnhancingDrugs.ResetCombatEnhancingDrugsToVanillaRates();
+            CombatEnhancingDrugs.ResetCombatEnhancingDrugsToVanillaValues();
         }
 
         if (valueLabel is "headgear" or "all")
@@ -207,7 +219,7 @@ public class ChoosePawnSettings_Settings : ModSettings
             customHeadgearChancesKeys = new List<string>();
             customHeadgearChancesValues = new List<float>();
             CustomHeadgearChances = new Dictionary<string, float>();
-            Headgear.ResetHeadgearToVanillaRates();
+            Headgear.ResetHeadgearToVanillaValues();
         }
 
         if (valueLabel is "combatpower" or "all")
@@ -215,7 +227,7 @@ public class ChoosePawnSettings_Settings : ModSettings
             customCombatPowersKeys = new List<string>();
             customCombatPowersValues = new List<float>();
             CustomCombatPowers = new Dictionary<string, float>();
-            CombatPower.ResetCombatPowerToVanillaRates();
+            CombatPower.ResetCombatPowerToVanillaValues();
         }
 
         if (valueLabel is "techhediffs" or "all")
@@ -223,7 +235,7 @@ public class ChoosePawnSettings_Settings : ModSettings
             customTechHediffsChancesKeys = new List<string>();
             customTechHediffsChancesValues = new List<float>();
             CustomTechHediffsChances = new Dictionary<string, float>();
-            TechHediffs.ResetTechHediffsToVanillaRates();
+            TechHediffs.ResetTechHediffsToVanillaValues();
         }
 
         if (valueLabel is "techhediffsmoney" or "all")
@@ -231,7 +243,7 @@ public class ChoosePawnSettings_Settings : ModSettings
             customTechHediffsMoneyKeys = new List<string>();
             customTechHediffsMoneyValues = new List<FloatRange>();
             CustomTechHediffsMoney = new Dictionary<string, FloatRange>();
-            TechHediffsMoney.ResetTechHediffsMoneyToVanillaRates();
+            TechHediffsMoney.ResetTechHediffsMoneyToVanillaValues();
         }
 
         if (valueLabel is "techhedifftags" or "all")
@@ -247,7 +259,7 @@ public class ChoosePawnSettings_Settings : ModSettings
             customWeaponMoneyKeys = new List<string>();
             customWeaponMoneyValues = new List<FloatRange>();
             CustomWeaponMoney = new Dictionary<string, FloatRange>();
-            WeaponMoney.ResetWeaponMoneyToVanillaRates();
+            WeaponMoney.ResetWeaponMoneyToVanillaValues();
         }
 
         if (valueLabel is "apparelmoney" or "all")
@@ -255,7 +267,7 @@ public class ChoosePawnSettings_Settings : ModSettings
             customApparelMoneyKeys = new List<string>();
             customApparelMoneyValues = new List<FloatRange>();
             CustomApparelMoney = new Dictionary<string, FloatRange>();
-            ApparelMoney.ResetApparelMoneyToVanillaRates();
+            ApparelMoney.ResetApparelMoneyToVanillaValues();
         }
 
         if (valueLabel is "weapontags" or "all")
@@ -280,6 +292,14 @@ public class ChoosePawnSettings_Settings : ModSettings
             customDeathAcidifiersValues = new List<bool>();
             CustomDeathAcidifier = new Dictionary<string, bool>();
             DeathAcidifier.ResetDeathAcidifierToVanillaValues();
+        }
+
+        if (valueLabel is "generationage" or "all")
+        {
+            customGenerationAgeKeys = new List<string>();
+            customGenerationAgeValues = new List<IntRange>();
+            CustomGenerationAge = new Dictionary<string, IntRange>();
+            GenerationAge.ResetGenerationAgeToVanillaValues();
         }
 
         if (valueLabel is "royaltitlechance" or "all")
@@ -354,6 +374,11 @@ public class ChoosePawnSettings_Settings : ModSettings
         }
 
         if (type is null or "deathacidifier" && CustomDeathAcidifier?.Any() == true)
+        {
+            return true;
+        }
+
+        if (type is null or "generationage" && CustomGenerationAge?.Any() == true)
         {
             return true;
         }
