@@ -21,6 +21,7 @@ Currently implemented
 -  Weapon Tags
 -  Apparel Money
 -  Apparel Tags
+-  Generation Age
 -  Death Acidifier
 -  Royal Title Chance (Royalty required)
 
