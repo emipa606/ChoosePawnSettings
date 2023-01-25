@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using ChoosePawnSettings.Settings;
+using HarmonyLib;
 using Verse;
 
 namespace ChoosePawnSettings;
@@ -16,6 +18,7 @@ public static class Main
     static Main()
     {
         ChoosePawnSettings_Mod.instance.Settings.Initialize();
+        new Harmony("Mlie.ChoosePawnSettings").PatchAll(Assembly.GetExecutingAssembly());
     }
 
     public static List<PawnKindDef> AllPawnKinds

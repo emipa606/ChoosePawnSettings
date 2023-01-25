@@ -50,4 +50,6 @@
   <CPS.generationage.tooltip>L'âge minimum et maximum autorisé pour les pions de générer avec</CPS.generationage.tooltip>
   <CPS.deathacidifier>Acidificateur de la mort</CPS.deathacidifier>
   <CPS.deathacidifier.tooltip>Si le pion doit frayer avec un acidificateur de mort</CPS.deathacidifier.tooltip>
+  <CPS.genderprobabilities>Probabilité de genre</CPS.genderprobabilities>
+  <CPS.genderprobabilities.tooltip>Chance pour le pion d'être un homme ou une femme, vanille est 50%/50%. Les pions dont le sexe est forcé auront priorité sur cette valeur. Toute valeur définie ici remplacera toute probabilité définie par les races aliens humanoïdes.</CPS.genderprobabilities.tooltip>
 </LanguageData>

@@ -58,7 +58,8 @@ public class ChoosePawnSettings_Mod : Mod
         "ApparelMoney",
         "ApparelTags",
         "DeathAcidifier",
-        "GenerationAge"
+        "GenerationAge",
+        "GenderProbabilities"
     };
 
     /// <summary>
@@ -324,6 +325,11 @@ public class ChoosePawnSettings_Mod : Mod
                     RoyalTitleChance.VanillaRoyalTitleChances, "royaltitlechance");
                 break;
             }
+            case "GenderProbabilities":
+            {
+                GenderScrollView(ref frameRect);
+                break;
+            }
             case "GenerationAge":
             {
                 IntRangeScrollView(ref frameRect, ref instance.Settings.CustomGenerationAge,
@@ -439,7 +445,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.biocodeWeaponChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
                             sliderRect,
                             pawnKindDef.biocodeWeaponChance, 0,
                             1f, false,
@@ -464,7 +470,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.chemicalAddictionChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
                             sliderRect,
                             pawnKindDef.chemicalAddictionChance, 0,
                             1f, false,
@@ -489,7 +495,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.combatEnhancingDrugsChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
                             sliderRect,
                             pawnKindDef.combatEnhancingDrugsChance, 0,
                             1f, false,
@@ -514,7 +520,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.apparelAllowHeadgearChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
                             sliderRect,
                             pawnKindDef.apparelAllowHeadgearChance, 0,
                             1f, false,
@@ -539,7 +545,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.combatPower =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
                             sliderRect,
                             pawnKindDef.combatPower, 1f,
                             700f, false,
@@ -564,7 +570,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.techHediffsChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
                             sliderRect,
                             pawnKindDef.techHediffsChance, 0,
                             1f, false,
@@ -589,7 +595,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.royalTitleChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
                             sliderRect,
                             pawnKindDef.royalTitleChance, 0,
                             1f, false,
@@ -597,6 +603,140 @@ public class ChoosePawnSettings_Mod : Mod
                             pawnkindLabel,
                             modInfo), 2);
                     break;
+            }
+
+            GUI.color = Color.white;
+        }
+
+        scrollListing.End();
+
+        Widgets.EndScrollView();
+    }
+
+    private void GenderScrollView(ref Rect frameRect)
+    {
+        listing_Standard.Begin(frameRect);
+
+        Text.Font = GameFont.Medium;
+
+        var headerLabel = listing_Standard.Label("CPS.genderprobabilities".Translate());
+        TooltipHandler.TipRegion(new Rect(
+            headerLabel.position,
+            searchSize), "CPS.genderprobabilities.tooltip".Translate());
+
+        if (instance.Settings.CustomGenderProbabilities == null)
+        {
+            instance.Settings.CustomGenderProbabilities = new Dictionary<string, float>();
+        }
+
+        if (instance.Settings.CustomGenderProbabilities.Any())
+        {
+            DrawButton(() =>
+                {
+                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
+                        "CPS.resetone.confirm".Translate("CPS.genderprobabilities".Translate().ToLower()),
+                        delegate { instance.Settings.ResetValues("genderprobabilities"); }));
+                }, "CPS.reset.button".Translate(),
+                new Vector2(headerLabel.position.x + headerLabel.width - buttonSize.x,
+                    headerLabel.position.y));
+        }
+
+        Text.Font = GameFont.Small;
+
+        searchText =
+            Widgets.TextField(
+                new Rect(headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
+                    searchSize),
+                searchText);
+        TooltipHandler.TipRegion(new Rect(
+            headerLabel.position + new Vector2((frameRect.width / 3 * 2) - (searchSize.x / 2), 0),
+            searchSize), "CPS.search".Translate());
+
+        listing_Standard.End();
+
+        var allPawnKinds = Main.AllPawnKinds;
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            allPawnKinds = Main.AllPawnKinds.Where(def =>
+                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack?.Name.ToLower()
+                        .Contains(searchText.ToLower()) == true || def.defName.ToLower()
+                        .Contains(searchText.ToLower()))
+                .ToList();
+        }
+
+        var borderRect = frameRect;
+        borderRect.y += headerLabel.y + 40;
+        borderRect.height -= headerLabel.y + 40;
+        var scrollContentRect = frameRect;
+        scrollContentRect.height = allPawnKinds.Count * 66f;
+        scrollContentRect.width -= 20;
+        scrollContentRect.x = 0;
+        scrollContentRect.y = 0;
+
+        var scrollListing = new Listing_Standard();
+        Widgets.BeginScrollView(borderRect, ref scrollPosition, scrollContentRect);
+        scrollListing.Begin(scrollContentRect);
+        var alternate = false;
+        foreach (var pawnKindDef in allPawnKinds)
+        {
+            var modInfo = pawnKindDef.modContentPack?.Name;
+            var sliderRect = scrollListing.GetRect(65);
+            var middleRect = sliderRect.ContractedBy(5, 5f);
+            middleRect.y -= 5f;
+            alternate = !alternate;
+            if (alternate)
+            {
+                Widgets.DrawBoxSolid(sliderRect, alternateBackground);
+            }
+
+            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            if (pawnkindLabel.Length > 45)
+            {
+                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
+            }
+
+            if (modInfo is { Length: > 45 })
+            {
+                modInfo = $"{modInfo.Substring(0, 42)}...";
+            }
+
+            pawnkindLabel = "Male".Translate().CapitalizeFirst() + "\n\n" + pawnkindLabel;
+            modInfo = "Female".Translate().CapitalizeFirst() + "\n\n" + modInfo;
+
+            var currentChance = 0.5f;
+
+            if (instance.Settings.CustomGenderProbabilities.ContainsKey(pawnKindDef.defName))
+            {
+                if (Math.Round(instance.Settings.CustomGenderProbabilities[pawnKindDef.defName], 2) == 0.5f)
+                {
+                    instance.Settings.CustomGenderProbabilities.Remove(pawnKindDef.defName);
+                }
+                else
+                {
+                    currentChance = instance.Settings.CustomGenderProbabilities[pawnKindDef.defName];
+                    GUI.color = Color.green;
+                }
+            }
+
+            currentChance =
+                (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
+                    middleRect,
+                    currentChance, 0,
+                    1f, false,
+                    $"{(1f - currentChance).ToStringPercent()}/{currentChance.ToStringPercent()}",
+                    pawnkindLabel,
+                    modInfo), 2);
+
+            if (currentChance != 0.5f)
+            {
+                instance.Settings.CustomGenderProbabilities[pawnKindDef.defName] = currentChance;
+            }
+            else
+            {
+                if (instance.Settings.CustomGenderProbabilities.ContainsKey(pawnKindDef.defName))
+                {
+                    instance.Settings.CustomGenderProbabilities.Remove(pawnKindDef.defName);
+                }
             }
 
             GUI.color = Color.white;

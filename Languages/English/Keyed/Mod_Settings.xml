@@ -35,6 +35,8 @@
   <CPS.combatpower.tooltip>Power of the pawn when calculating raid-sizes. The higher the value, the fewer will spawn</CPS.combatpower.tooltip>
   <CPS.royaltitlechance>Royal Title Chance</CPS.royaltitlechance>
   <CPS.royaltitlechance.tooltip>Chance of pawn spawning with a royal title</CPS.royaltitlechance.tooltip>
+  <CPS.genderprobabilities>Gender Probability</CPS.genderprobabilities>
+  <CPS.genderprobabilities.tooltip>Chance of pawn being male or female, vanilla is 50%/50%. Forced gender pawns will override this value. Any defined value here will override any probability defined by Humanoid Alien Races.</CPS.genderprobabilities.tooltip>
   <CPS.weapontags>Weapon Tags</CPS.weapontags>
   <CPS.weapontags.tooltip>What weapon-tags are allowed for the pawn to spawn with</CPS.weapontags.tooltip>
   <CPS.appareltags>Apparel Tags</CPS.appareltags>

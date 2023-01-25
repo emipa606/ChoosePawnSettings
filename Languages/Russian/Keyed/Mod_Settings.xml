@@ -50,4 +50,6 @@
   <CPS.generationage.tooltip>Минимальный и максимальный возраст, допустимый для генерации пешек с</CPS.generationage.tooltip>
   <CPS.deathacidifier>Подкислитель смерти</CPS.deathacidifier>
   <CPS.deathacidifier.tooltip>Если пешка должна породиться со смертельной кислотой</CPS.deathacidifier.tooltip>
+  <CPS.genderprobabilities>Вероятность пола</CPS.genderprobabilities>
+  <CPS.genderprobabilities.tooltip>Шанс того, что пешка будет мужского или женского пола, в ванильном варианте - 50%/50%. Принудительное определение пола пешки отменяет это значение. Любое определенное здесь значение отменяет любую вероятность, определенную в Гуманоидных инопланетных расах.</CPS.genderprobabilities.tooltip>
 </LanguageData>

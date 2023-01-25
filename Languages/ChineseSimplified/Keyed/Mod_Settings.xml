@@ -50,4 +50,6 @@
   <CPS.generationage.tooltip>允许棋子产生的最小和最大年龄与</CPS.generationage.tooltip>
   <CPS.deathacidifier>死亡酸化剂</CPS.deathacidifier>
   <CPS.deathacidifier.tooltip>如果卒子应该以死亡酸化剂的方式生成</CPS.deathacidifier.tooltip>
+  <CPS.genderprobabilities>性别概率</CPS.genderprobabilities>
+  <CPS.genderprobabilities.tooltip>卒子为男性或女性的几率，香草是50%/50%。强制的性别卒子将覆盖这个值。这里的任何定义值都将覆盖人形异形种族所定义的任何概率。</CPS.genderprobabilities.tooltip>
 </LanguageData>

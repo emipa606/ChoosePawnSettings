@@ -49,6 +49,13 @@ public class ChoosePawnSettings_Settings : ModSettings
     public List<string> customDeathAcidifiersKeys;
     public List<bool> customDeathAcidifiersValues;
 
+    public Dictionary<string, float> CustomGenderProbabilities =
+        new Dictionary<string, float>();
+
+    private List<string> customGenderProbabilitiesKeys;
+
+    private List<float> customGenderProbabilitiesValues;
+
     public Dictionary<string, IntRange> CustomGenerationAge =
         new Dictionary<string, IntRange>();
 
@@ -164,6 +171,10 @@ public class ChoosePawnSettings_Settings : ModSettings
             LookMode.Value,
             LookMode.Value,
             ref customDeathAcidifiersKeys, ref customDeathAcidifiersValues);
+        Scribe_Collections.Look(ref CustomGenderProbabilities, "CustomGenderProbabilities",
+            LookMode.Value,
+            LookMode.Value,
+            ref customGenderProbabilitiesKeys, ref customGenderProbabilitiesValues);
     }
 
     public void Initialize()
@@ -309,6 +320,13 @@ public class ChoosePawnSettings_Settings : ModSettings
             CustomRoyalTitleChances = new Dictionary<string, float>();
             RoyalTitleChance.ResetRoyalTitleChanceToVanillaRates();
         }
+
+        if (valueLabel is "genderprobabilities" or "all")
+        {
+            customGenderProbabilitiesKeys = new List<string>();
+            customGenderProbabilitiesValues = new List<float>();
+            CustomGenderProbabilities = new Dictionary<string, float>();
+        }
     }
 
     public bool HasCustomValues(string type = null)
@@ -384,6 +402,11 @@ public class ChoosePawnSettings_Settings : ModSettings
         }
 
         if (type is null or "royaltitlechance" && CustomRoyalTitleChances?.Any() == true)
+        {
+            return true;
+        }
+
+        if (type is null or "genderprobabilities" && CustomGenderProbabilities?.Any() == true)
         {
             return true;
         }
