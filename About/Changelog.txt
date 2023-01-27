@@ -1,5 +1,8 @@
 # Changelog for ChoosePawnSettings
 
+1.4.3 - Added some null-checks
+
+
 1.4.2 - Added gender setting.
 Used DeepL to update translations for ChineseSimplified, French, German, Russian
 

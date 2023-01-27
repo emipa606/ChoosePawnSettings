@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ChoosePawnSettings.Settings;
 using HarmonyLib;
 using Verse;
@@ -10,12 +11,19 @@ public static class PawnGenerator_GenerateRandomAge
 {
     public static void Prefix(ref Pawn pawn, PawnGenerationRequest request)
     {
-        if (request.FixedGender != null || pawn.kindDef.fixedGender != null || !pawn.RaceProps.hasGenders)
+        if (request.FixedGender != null || pawn.kindDef is not { fixedGender: null } || !pawn.RaceProps.hasGenders)
         {
             return;
         }
 
-        if (!ChoosePawnSettings_Mod.instance.Settings.CustomGenderProbabilities.ContainsKey(pawn.kindDef.defName))
+        if (ChoosePawnSettings_Mod.instance.Settings.CustomGenderProbabilities == null)
+        {
+            ChoosePawnSettings_Mod.instance.Settings.CustomGenderProbabilities = new Dictionary<string, float>();
+            return;
+        }
+
+        if (ChoosePawnSettings_Mod.instance.Settings.CustomGenderProbabilities.ContainsKey(pawn.kindDef.defName) ==
+            false)
         {
             return;
         }

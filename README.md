@@ -22,6 +22,7 @@ Currently implemented
 -  Apparel Money
 -  Apparel Tags
 -  Generation Age
+-  Gender Probability
 -  Death Acidifier
 -  Royal Title Chance (Royalty required)
 
@@ -51,6 +52,4 @@ https://ko-fi.com/G2G55DDYD]![Image](https://i.imgur.com/Utx6OIH.png)
 -  If you have the solution for a problem, please post it to the GitHub repository.
 
 
-
-
-https://steamcommunity.com/sharedfiles/filedetails/changelog/2583236920]Last updated 2023-01-25
+https://steamcommunity.com/sharedfiles/filedetails/changelog/2583236920]Last updated 2023-01-27
