@@ -65,7 +65,7 @@ public class ChoosePawnSettings_Mod : Mod
     /// <summary>
     ///     The private settings
     /// </summary>
-    private ChoosePawnSettings_Settings settings;
+    public readonly ChoosePawnSettings_Settings Settings;
 
     /// <summary>
     ///     Constructor
@@ -75,6 +75,7 @@ public class ChoosePawnSettings_Mod : Mod
         : base(content)
     {
         instance = this;
+        Settings = GetSettings<ChoosePawnSettings_Settings>();
         if (instance.Settings.CustomBiocodeChances == null)
         {
             instance.Settings.CustomBiocodeChances = new Dictionary<string, float>();
@@ -87,26 +88,7 @@ public class ChoosePawnSettings_Mod : Mod
 
         SelectedDef = "Settings";
         currentVersion =
-            VersionFromManifest.GetVersionFromModMetaData(
-                ModLister.GetActiveModWithIdentifier("Mlie.ChoosePawnSettings"));
-    }
-
-    /// <summary>
-    ///     The instance-settings for the mod
-    /// </summary>
-    internal ChoosePawnSettings_Settings Settings
-    {
-        get
-        {
-            if (settings == null)
-            {
-                settings = GetSettings<ChoosePawnSettings_Settings>();
-            }
-
-            return settings;
-        }
-
-        set => settings = value;
+            VersionFromManifest.GetVersionFromModMetaData(content.ModMetaData);
     }
 
     public string SelectedDef { get; set; }
@@ -386,7 +368,7 @@ public class ChoosePawnSettings_Mod : Mod
         if (!string.IsNullOrEmpty(searchText))
         {
             allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack?.Name.ToLower()
+                    def.label?.ToLower().Contains(searchText.ToLower()) == true || def.modContentPack?.Name.ToLower()
                         .Contains(searchText.ToLower()) == true || def.defName.ToLower()
                         .Contains(searchText.ToLower()))
                 .ToList();
@@ -658,7 +640,7 @@ public class ChoosePawnSettings_Mod : Mod
         if (!string.IsNullOrEmpty(searchText))
         {
             allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack?.Name.ToLower()
+                    def.label?.ToLower().Contains(searchText.ToLower()) == true || def.modContentPack?.Name.ToLower()
                         .Contains(searchText.ToLower()) == true || def.defName.ToLower()
                         .Contains(searchText.ToLower()))
                 .ToList();
@@ -793,7 +775,7 @@ public class ChoosePawnSettings_Mod : Mod
         if (!string.IsNullOrEmpty(searchText))
         {
             allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack?.Name.ToLower()
+                    def.label?.ToLower().Contains(searchText.ToLower()) == true || def.modContentPack?.Name.ToLower()
                         .Contains(searchText.ToLower()) == true || def.defName.ToLower()
                         .Contains(searchText.ToLower()))
                 .ToList();
@@ -1033,7 +1015,7 @@ public class ChoosePawnSettings_Mod : Mod
         if (!string.IsNullOrEmpty(searchText))
         {
             allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack?.Name.ToLower()
+                    def.label?.ToLower().Contains(searchText.ToLower()) == true || def.modContentPack?.Name.ToLower()
                         .Contains(searchText.ToLower()) == true || def.defName.ToLower()
                         .Contains(searchText.ToLower()))
                 .ToList();
@@ -1196,7 +1178,7 @@ public class ChoosePawnSettings_Mod : Mod
         if (!string.IsNullOrEmpty(searchText))
         {
             allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack?.Name.ToLower()
+                    def.label?.ToLower().Contains(searchText.ToLower()) == true || def.modContentPack?.Name.ToLower()
                         .Contains(searchText.ToLower()) == true || def.defName.ToLower()
                         .Contains(searchText.ToLower()))
                 .ToList();
@@ -1439,7 +1421,7 @@ public class ChoosePawnSettings_Mod : Mod
         if (!string.IsNullOrEmpty(searchText))
         {
             allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label.ToLower().Contains(searchText.ToLower()) || def.modContentPack?.Name.ToLower()
+                    def.label?.ToLower().Contains(searchText.ToLower()) == true || def.modContentPack?.Name.ToLower()
                         .Contains(searchText.ToLower()) == true || def.defName.ToLower()
                         .Contains(searchText.ToLower()))
                 .ToList();

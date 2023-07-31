@@ -1,6 +1,6 @@
 # ChoosePawnSettings
 
-![Image](https://i.imgur.com/buuPQel.png)
+![Image](https://i.imgur.com/iCj5o7O.png)
 
 
 Lets you change stuff for pawnkinds.
@@ -33,14 +33,14 @@ Changes are instant but will only affect pawns when they spawn.
 If you have suggestions on more properties to change, leave a comment and Ill look into adding it.
 	
 
-![Image](https://i.imgur.com/O0IIlYj.png)
+![Image](https://i.imgur.com/Ds0rBAD.png)
 
 Since modding is just a hobby for me I expect no donations to keep modding. If you still want to show your support you can gift me anything from my https://store.steampowered.com/wishlist/id/Mlie]Wishlist or buy me a cup of tea.
 
-https://ko-fi.com/G2G55DDYD]![Image](https://i.imgur.com/Utx6OIH.png)
+https://ko-fi.com/G2G55DDYD]![Image](https://i.imgur.com/VWG0yff.png)
 
 
-![Image](https://i.imgur.com/PwoNOj4.png)
+![Image](https://i.imgur.com/5xwDG6H.png)
 
 
 
@@ -52,4 +52,4 @@ https://ko-fi.com/G2G55DDYD]![Image](https://i.imgur.com/Utx6OIH.png)
 -  If you have the solution for a problem, please post it to the GitHub repository.
 
 
-https://steamcommunity.com/sharedfiles/filedetails/changelog/2583236920]Last updated 2023-01-27
+https://steamcommunity.com/sharedfiles/filedetails/changelog/2583236920]Last updated 2023-07-31

@@ -1,5 +1,8 @@
 # Changelog for ChoosePawnSettings
 
+1.4.4 - Fix for mods that add pawnkinds without labels
+
+
 1.4.3 - Added some null-checks
 
 
