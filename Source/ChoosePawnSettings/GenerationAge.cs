@@ -38,14 +38,13 @@ public static class GenerationAge
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomGenerationAge.ContainsKey(pawnKindDef
-                    .defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomGenerationAge.TryGetValue(pawnKindDef
+                    .defName, out var value))
             {
                 continue;
             }
 
-            pawnKindDef.minGenerationAge =
-                ChoosePawnSettings_Mod.instance.Settings.CustomGenerationAge[pawnKindDef.defName].min;
+            pawnKindDef.minGenerationAge = value.min;
             pawnKindDef.maxGenerationAge =
                 ChoosePawnSettings_Mod.instance.Settings.CustomGenerationAge[pawnKindDef.defName].max;
             counter++;

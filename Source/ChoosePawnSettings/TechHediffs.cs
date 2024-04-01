@@ -36,14 +36,13 @@ public static class TechHediffs
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffsChances.ContainsKey(pawnKindDef
-                    .defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffsChances.TryGetValue(pawnKindDef
+                    .defName, out var chance))
             {
                 continue;
             }
 
-            pawnKindDef.techHediffsChance =
-                ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffsChances[pawnKindDef.defName];
+            pawnKindDef.techHediffsChance = chance;
             counter++;
         }
 

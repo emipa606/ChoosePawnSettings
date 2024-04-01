@@ -22,14 +22,14 @@ public static class PawnGenerator_GenerateRandomAge
             return;
         }
 
-        if (ChoosePawnSettings_Mod.instance.Settings.CustomGenderProbabilities.ContainsKey(pawn.kindDef.defName) ==
-            false)
+        if (ChoosePawnSettings_Mod.instance.Settings.CustomGenderProbabilities.TryGetValue(pawn.kindDef.defName,
+                out var probability) == false)
         {
             return;
         }
 
         pawn.gender =
-            Rand.Chance(ChoosePawnSettings_Mod.instance.Settings.CustomGenderProbabilities[pawn.kindDef.defName])
+            Rand.Chance(probability)
                 ? Gender.Female
                 : Gender.Male;
     }

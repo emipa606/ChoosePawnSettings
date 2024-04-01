@@ -37,14 +37,13 @@ public static class ApparelMoney
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomApparelMoney.ContainsKey(pawnKindDef
-                    .defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomApparelMoney.TryGetValue(pawnKindDef.defName,
+                    out var value))
             {
                 continue;
             }
 
-            pawnKindDef.apparelMoney =
-                ChoosePawnSettings_Mod.instance.Settings.CustomApparelMoney[pawnKindDef.defName];
+            pawnKindDef.apparelMoney = value;
             counter++;
         }
 

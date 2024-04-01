@@ -35,13 +35,13 @@ public static class CombatPower
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomCombatPowers.ContainsKey(pawnKindDef.defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomCombatPowers.TryGetValue(pawnKindDef.defName,
+                    out var power))
             {
                 continue;
             }
 
-            pawnKindDef.combatPower =
-                ChoosePawnSettings_Mod.instance.Settings.CustomCombatPowers[pawnKindDef.defName];
+            pawnKindDef.combatPower = power;
             counter++;
         }
 

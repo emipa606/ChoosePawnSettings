@@ -39,13 +39,13 @@ public static class TechHediffTags
 
             foreach (var techHediffTag in techHediff.techHediffsTags)
             {
-                if (!TechHediffTagDictionary.ContainsKey(techHediffTag))
+                if (!TechHediffTagDictionary.TryGetValue(techHediffTag, out var value))
                 {
-                    TechHediffTagDictionary[techHediffTag] = new List<ThingDef> { techHediff };
+                    TechHediffTagDictionary[techHediffTag] = [techHediff];
                     continue;
                 }
 
-                TechHediffTagDictionary[techHediffTag].Add(techHediff);
+                value.Add(techHediff);
             }
         }
     }
@@ -68,7 +68,7 @@ public static class TechHediffTags
             counter++;
             if (ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffTags[pawnKindDef.defName] == string.Empty)
             {
-                pawnKindDef.techHediffsTags = new List<string>();
+                pawnKindDef.techHediffsTags = [];
                 continue;
             }
 

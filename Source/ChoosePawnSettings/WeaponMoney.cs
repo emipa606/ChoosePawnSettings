@@ -37,14 +37,13 @@ public static class WeaponMoney
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomWeaponMoney.ContainsKey(pawnKindDef
-                    .defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomWeaponMoney.TryGetValue(pawnKindDef
+                    .defName, out var value))
             {
                 continue;
             }
 
-            pawnKindDef.weaponMoney =
-                ChoosePawnSettings_Mod.instance.Settings.CustomWeaponMoney[pawnKindDef.defName];
+            pawnKindDef.weaponMoney = value;
             counter++;
         }
 

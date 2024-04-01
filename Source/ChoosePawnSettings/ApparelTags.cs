@@ -39,13 +39,13 @@ public static class ApparelTags
 
             foreach (var apparelTag in apparel.apparel.tags)
             {
-                if (!ApparelTagDictionary.ContainsKey(apparelTag))
+                if (!ApparelTagDictionary.TryGetValue(apparelTag, out var value))
                 {
-                    ApparelTagDictionary[apparelTag] = new List<ThingDef> { apparel };
+                    ApparelTagDictionary[apparelTag] = [apparel];
                     continue;
                 }
 
-                ApparelTagDictionary[apparelTag].Add(apparel);
+                value.Add(apparel);
             }
         }
     }
@@ -68,7 +68,7 @@ public static class ApparelTags
             counter++;
             if (ChoosePawnSettings_Mod.instance.Settings.CustomApparelTags[pawnKindDef.defName] == string.Empty)
             {
-                pawnKindDef.apparelTags = new List<string>();
+                pawnKindDef.apparelTags = [];
                 continue;
             }
 

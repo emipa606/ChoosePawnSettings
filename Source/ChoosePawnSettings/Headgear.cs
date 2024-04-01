@@ -35,13 +35,13 @@ public static class Headgear
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomHeadgearChances.ContainsKey(pawnKindDef.defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomHeadgearChances.TryGetValue(pawnKindDef.defName,
+                    out var chance))
             {
                 continue;
             }
 
-            pawnKindDef.apparelAllowHeadgearChance =
-                ChoosePawnSettings_Mod.instance.Settings.CustomHeadgearChances[pawnKindDef.defName];
+            pawnKindDef.apparelAllowHeadgearChance = chance;
             counter++;
         }
 

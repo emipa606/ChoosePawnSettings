@@ -36,14 +36,13 @@ public static class ChemicalAddiction
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomChemicalAddictionChances.ContainsKey(pawnKindDef
-                    .defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomChemicalAddictionChances.TryGetValue(pawnKindDef
+                    .defName, out var chance))
             {
                 continue;
             }
 
-            pawnKindDef.chemicalAddictionChance =
-                ChoosePawnSettings_Mod.instance.Settings.CustomChemicalAddictionChances[pawnKindDef.defName];
+            pawnKindDef.chemicalAddictionChance = chance;
             counter++;
         }
 

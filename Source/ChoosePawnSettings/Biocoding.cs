@@ -35,13 +35,13 @@ public static class Biocoding
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomBiocodeChances.ContainsKey(pawnKindDef.defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomBiocodeChances.TryGetValue(pawnKindDef.defName,
+                    out var chance))
             {
                 continue;
             }
 
-            pawnKindDef.biocodeWeaponChance =
-                ChoosePawnSettings_Mod.instance.Settings.CustomBiocodeChances[pawnKindDef.defName];
+            pawnKindDef.biocodeWeaponChance = chance;
             counter++;
         }
 

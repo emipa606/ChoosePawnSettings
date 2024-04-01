@@ -39,13 +39,13 @@ public static class WeaponTags
 
             foreach (var weaponTag in weapon.weaponTags)
             {
-                if (!WeaponTagDictionary.ContainsKey(weaponTag))
+                if (!WeaponTagDictionary.TryGetValue(weaponTag, out var value))
                 {
-                    WeaponTagDictionary[weaponTag] = new List<ThingDef> { weapon };
+                    WeaponTagDictionary[weaponTag] = [weapon];
                     continue;
                 }
 
-                WeaponTagDictionary[weaponTag].Add(weapon);
+                value.Add(weapon);
             }
         }
     }
@@ -68,7 +68,7 @@ public static class WeaponTags
             counter++;
             if (ChoosePawnSettings_Mod.instance.Settings.CustomWeaponTags[pawnKindDef.defName] == string.Empty)
             {
-                pawnKindDef.weaponTags = new List<string>();
+                pawnKindDef.weaponTags = [];
                 continue;
             }
 

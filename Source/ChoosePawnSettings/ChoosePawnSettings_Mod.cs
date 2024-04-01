@@ -41,8 +41,8 @@ public class ChoosePawnSettings_Mod : Mod
 
     private static readonly Color alternateBackground = new Color(0.1f, 0.1f, 0.1f, 0.5f);
 
-    private static readonly List<string> settingTabs = new List<string>
-    {
+    private static readonly List<string> settingTabs =
+    [
         "Settings",
         null,
         "Biocoding",
@@ -60,7 +60,7 @@ public class ChoosePawnSettings_Mod : Mod
         "DeathAcidifier",
         "GenerationAge",
         "GenderProbabilities"
-    };
+    ];
 
     /// <summary>
     ///     The private settings
@@ -427,7 +427,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.biocodeWeaponChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
                             sliderRect,
                             pawnKindDef.biocodeWeaponChance, 0,
                             1f, false,
@@ -452,7 +452,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.chemicalAddictionChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
                             sliderRect,
                             pawnKindDef.chemicalAddictionChance, 0,
                             1f, false,
@@ -477,7 +477,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.combatEnhancingDrugsChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
                             sliderRect,
                             pawnKindDef.combatEnhancingDrugsChance, 0,
                             1f, false,
@@ -502,7 +502,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.apparelAllowHeadgearChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
                             sliderRect,
                             pawnKindDef.apparelAllowHeadgearChance, 0,
                             1f, false,
@@ -527,7 +527,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.combatPower =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
                             sliderRect,
                             pawnKindDef.combatPower, 1f,
                             700f, false,
@@ -552,7 +552,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.techHediffsChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
                             sliderRect,
                             pawnKindDef.techHediffsChance, 0,
                             1f, false,
@@ -577,7 +577,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
 
                     pawnKindDef.royalTitleChance =
-                        (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
                             sliderRect,
                             pawnKindDef.royalTitleChance, 0,
                             1f, false,
@@ -701,7 +701,7 @@ public class ChoosePawnSettings_Mod : Mod
             }
 
             currentChance =
-                (float)Math.Round((decimal)Widgets.HorizontalSlider_NewTemp(
+                (float)Math.Round((decimal)Widgets.HorizontalSlider(
                     middleRect,
                     currentChance, 0,
                     1f, false,
@@ -1065,8 +1065,6 @@ public class ChoosePawnSettings_Mod : Mod
             checkboxRect.height -= 20f;
             checkboxRect.y += 20f;
             checkboxRect.x = sliderRect.x + smallerRect.width + 10f;
-            bool unlimited;
-            bool wasOn;
             switch (header)
             {
                 case "generationage":
@@ -1084,8 +1082,8 @@ public class ChoosePawnSettings_Mod : Mod
                         }
                     }
 
-                    unlimited = pawnKindDef.maxGenerationAge > maxValue;
-                    wasOn = unlimited;
+                    var unlimited = pawnKindDef.maxGenerationAge > maxValue;
+                    var wasOn = unlimited;
                     Widgets.CheckboxLabeled(checkboxRect, "CPS.unlimited".Translate(), ref unlimited);
                     var tempRange = new IntRange(pawnKindDef.minGenerationAge, pawnKindDef.maxGenerationAge);
                     Widgets.IntRange(
@@ -1486,7 +1484,7 @@ public class ChoosePawnSettings_Mod : Mod
                     {
                         if (pawnKindDef.techHediffsRequired == null)
                         {
-                            pawnKindDef.techHediffsRequired = new List<ThingDef>();
+                            pawnKindDef.techHediffsRequired = [];
                         }
 
                         if (!pawnKindDef.techHediffsRequired.Contains(DeathAcidifier.DeathAcidifierThingDef))
@@ -1539,7 +1537,7 @@ public class ChoosePawnSettings_Mod : Mod
         {
             if (string.IsNullOrEmpty(settingTab))
             {
-                listing_Standard.ListItemSelectable(null, Color.yellow, out _);
+                listing_Standard.ListItemSelectable(null, Color.yellow);
                 continue;
             }
 
@@ -1549,7 +1547,7 @@ public class ChoosePawnSettings_Mod : Mod
             }
 
             if (listing_Standard.ListItemSelectable($"CPS.{settingTab.ToLower()}".Translate(), Color.yellow,
-                    out _, SelectedDef == settingTab))
+                    SelectedDef == settingTab))
             {
                 SelectedDef = SelectedDef == settingTab ? null : settingTab;
             }

@@ -35,13 +35,13 @@ public static class RoyalTitleChance
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomRoyalTitleChances.ContainsKey(pawnKindDef.defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomRoyalTitleChances.TryGetValue(pawnKindDef.defName,
+                    out var chance))
             {
                 continue;
             }
 
-            pawnKindDef.royalTitleChance =
-                ChoosePawnSettings_Mod.instance.Settings.CustomRoyalTitleChances[pawnKindDef.defName];
+            pawnKindDef.royalTitleChance = chance;
             counter++;
         }
 

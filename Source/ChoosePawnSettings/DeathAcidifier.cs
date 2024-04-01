@@ -40,16 +40,17 @@ public static class DeathAcidifier
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomDeathAcidifier.ContainsKey(pawnKindDef.defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomDeathAcidifier.TryGetValue(pawnKindDef.defName,
+                    out var value))
             {
                 continue;
             }
 
-            if (ChoosePawnSettings_Mod.instance.Settings.CustomDeathAcidifier[pawnKindDef.defName])
+            if (value)
             {
                 if (pawnKindDef.techHediffsRequired == null)
                 {
-                    pawnKindDef.techHediffsRequired = new List<ThingDef>();
+                    pawnKindDef.techHediffsRequired = [];
                 }
 
                 if (!pawnKindDef.techHediffsRequired.Contains(DeathAcidifierThingDef))
@@ -82,7 +83,7 @@ public static class DeathAcidifier
             {
                 if (pawnKindDef.techHediffsRequired == null)
                 {
-                    pawnKindDef.techHediffsRequired = new List<ThingDef>();
+                    pawnKindDef.techHediffsRequired = [];
                 }
 
                 if (!pawnKindDef.techHediffsRequired.Contains(DeathAcidifierThingDef))

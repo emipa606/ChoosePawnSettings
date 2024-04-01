@@ -28,7 +28,7 @@ public static class Main
             if (allPawnKinds == null || allPawnKinds.Count == 0)
             {
                 allPawnKinds = (from pawn in DefDatabase<PawnKindDef>.AllDefsListForReading
-                    where pawn.RaceProps?.Humanlike == true
+                    where pawn.RaceProps?.Humanlike == true && !pawn.race.IsCorpse
                     orderby pawn.label
                     select pawn).ToList();
             }

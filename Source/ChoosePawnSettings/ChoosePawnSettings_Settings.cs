@@ -203,128 +203,128 @@ public class ChoosePawnSettings_Settings : ModSettings
     {
         if (valueLabel is "biocoding" or "all")
         {
-            customBiocodeChancesKeys = new List<string>();
-            customBiocodeChancesValues = new List<float>();
+            customBiocodeChancesKeys = [];
+            customBiocodeChancesValues = [];
             CustomBiocodeChances = new Dictionary<string, float>();
             Biocoding.ResetBiocodingToVanillaValues();
         }
 
         if (valueLabel is "chemicaladdiction" or "all")
         {
-            customChemicalAddictionChancesKeys = new List<string>();
-            customChemicalAddictionChancesValues = new List<float>();
+            customChemicalAddictionChancesKeys = [];
+            customChemicalAddictionChancesValues = [];
             CustomChemicalAddictionChances = new Dictionary<string, float>();
             ChemicalAddiction.ResetChemicalAddictionToVanillaValues();
         }
 
         if (valueLabel is "combatenhancingdrugs" or "all")
         {
-            customCombatEnhancingDrugsChancesKeys = new List<string>();
-            customCombatEnhancingDrugsChancesValues = new List<float>();
+            customCombatEnhancingDrugsChancesKeys = [];
+            customCombatEnhancingDrugsChancesValues = [];
             CustomCombatEnhancingDrugsChances = new Dictionary<string, float>();
             CombatEnhancingDrugs.ResetCombatEnhancingDrugsToVanillaValues();
         }
 
         if (valueLabel is "headgear" or "all")
         {
-            customHeadgearChancesKeys = new List<string>();
-            customHeadgearChancesValues = new List<float>();
+            customHeadgearChancesKeys = [];
+            customHeadgearChancesValues = [];
             CustomHeadgearChances = new Dictionary<string, float>();
             Headgear.ResetHeadgearToVanillaValues();
         }
 
         if (valueLabel is "combatpower" or "all")
         {
-            customCombatPowersKeys = new List<string>();
-            customCombatPowersValues = new List<float>();
+            customCombatPowersKeys = [];
+            customCombatPowersValues = [];
             CustomCombatPowers = new Dictionary<string, float>();
             CombatPower.ResetCombatPowerToVanillaValues();
         }
 
         if (valueLabel is "techhediffs" or "all")
         {
-            customTechHediffsChancesKeys = new List<string>();
-            customTechHediffsChancesValues = new List<float>();
+            customTechHediffsChancesKeys = [];
+            customTechHediffsChancesValues = [];
             CustomTechHediffsChances = new Dictionary<string, float>();
             TechHediffs.ResetTechHediffsToVanillaValues();
         }
 
         if (valueLabel is "techhediffsmoney" or "all")
         {
-            customTechHediffsMoneyKeys = new List<string>();
-            customTechHediffsMoneyValues = new List<FloatRange>();
+            customTechHediffsMoneyKeys = [];
+            customTechHediffsMoneyValues = [];
             CustomTechHediffsMoney = new Dictionary<string, FloatRange>();
             TechHediffsMoney.ResetTechHediffsMoneyToVanillaValues();
         }
 
         if (valueLabel is "techhedifftags" or "all")
         {
-            customTechHediffTagKeys = new List<string>();
-            customTechHediffTagValues = new List<string>();
+            customTechHediffTagKeys = [];
+            customTechHediffTagValues = [];
             CustomTechHediffTags = new Dictionary<string, string>();
             TechHediffTags.ResetTechHediffTagsToVanillaValues();
         }
 
         if (valueLabel is "weaponmoney" or "all")
         {
-            customWeaponMoneyKeys = new List<string>();
-            customWeaponMoneyValues = new List<FloatRange>();
+            customWeaponMoneyKeys = [];
+            customWeaponMoneyValues = [];
             CustomWeaponMoney = new Dictionary<string, FloatRange>();
             WeaponMoney.ResetWeaponMoneyToVanillaValues();
         }
 
         if (valueLabel is "apparelmoney" or "all")
         {
-            customApparelMoneyKeys = new List<string>();
-            customApparelMoneyValues = new List<FloatRange>();
+            customApparelMoneyKeys = [];
+            customApparelMoneyValues = [];
             CustomApparelMoney = new Dictionary<string, FloatRange>();
             ApparelMoney.ResetApparelMoneyToVanillaValues();
         }
 
         if (valueLabel is "weapontags" or "all")
         {
-            customWeaponTagKeys = new List<string>();
-            customWeaponTagValues = new List<string>();
+            customWeaponTagKeys = [];
+            customWeaponTagValues = [];
             CustomWeaponTags = new Dictionary<string, string>();
             WeaponTags.ResetWeaponTagsToVanillaValues();
         }
 
         if (valueLabel is "appareltags" or "all")
         {
-            customApparelTagKeys = new List<string>();
-            customApparelTagValues = new List<string>();
+            customApparelTagKeys = [];
+            customApparelTagValues = [];
             CustomApparelTags = new Dictionary<string, string>();
             ApparelTags.ResetApparelTagsToVanillaValues();
         }
 
         if (valueLabel is "deathacidifier" or "all")
         {
-            customDeathAcidifiersKeys = new List<string>();
-            customDeathAcidifiersValues = new List<bool>();
+            customDeathAcidifiersKeys = [];
+            customDeathAcidifiersValues = [];
             CustomDeathAcidifier = new Dictionary<string, bool>();
             DeathAcidifier.ResetDeathAcidifierToVanillaValues();
         }
 
         if (valueLabel is "generationage" or "all")
         {
-            customGenerationAgeKeys = new List<string>();
-            customGenerationAgeValues = new List<IntRange>();
+            customGenerationAgeKeys = [];
+            customGenerationAgeValues = [];
             CustomGenerationAge = new Dictionary<string, IntRange>();
             GenerationAge.ResetGenerationAgeToVanillaValues();
         }
 
         if (valueLabel is "royaltitlechance" or "all")
         {
-            customRoyalTitleChancesKeys = new List<string>();
-            customRoyalTitleChancesValues = new List<float>();
+            customRoyalTitleChancesKeys = [];
+            customRoyalTitleChancesValues = [];
             CustomRoyalTitleChances = new Dictionary<string, float>();
             RoyalTitleChance.ResetRoyalTitleChanceToVanillaRates();
         }
 
         if (valueLabel is "genderprobabilities" or "all")
         {
-            customGenderProbabilitiesKeys = new List<string>();
-            customGenderProbabilitiesValues = new List<float>();
+            customGenderProbabilitiesKeys = [];
+            customGenderProbabilitiesValues = [];
             CustomGenderProbabilities = new Dictionary<string, float>();
         }
     }

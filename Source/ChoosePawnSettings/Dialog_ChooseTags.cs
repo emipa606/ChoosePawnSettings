@@ -78,7 +78,7 @@ public class Dialog_ChooseTags : Window
             {
                 if (ChoosePawnSettings_Mod.CurrentTags == null)
                 {
-                    ChoosePawnSettings_Mod.CurrentTags = new List<string>();
+                    ChoosePawnSettings_Mod.CurrentTags = [];
                 }
 
                 ChoosePawnSettings_Mod.CurrentTags.Add(tag.Key);

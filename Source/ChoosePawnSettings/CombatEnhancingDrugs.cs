@@ -36,14 +36,14 @@ public static class CombatEnhancingDrugs
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomCombatEnhancingDrugsChances.ContainsKey(pawnKindDef
-                    .defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomCombatEnhancingDrugsChances.TryGetValue(pawnKindDef
+                    .defName, out var chance))
             {
                 continue;
             }
 
             pawnKindDef.combatEnhancingDrugsChance =
-                ChoosePawnSettings_Mod.instance.Settings.CustomCombatEnhancingDrugsChances[pawnKindDef.defName];
+                chance;
             counter++;
         }
 

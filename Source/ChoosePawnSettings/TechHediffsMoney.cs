@@ -37,14 +37,13 @@ public static class TechHediffsMoney
         var counter = 0;
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
-            if (!ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffsMoney.ContainsKey(pawnKindDef
-                    .defName))
+            if (!ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffsMoney.TryGetValue(pawnKindDef
+                    .defName, out var value))
             {
                 continue;
             }
 
-            pawnKindDef.techHediffsMoney =
-                ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffsMoney[pawnKindDef.defName];
+            pawnKindDef.techHediffsMoney = value;
             counter++;
         }
 
