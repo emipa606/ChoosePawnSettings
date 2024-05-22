@@ -2,7 +2,7 @@
 <ModSyncNinjaData>
   <ID>b0528426-4c12-4d51-b830-9f162801841d</ID>
   <ModName>Choose Pawn Settings</ModName>
-  <Version>1.5.0</Version>
+  <Version>1.5.1</Version>
   <SaveBreaking>False</SaveBreaking>
   <Host name="Github">
     <Owner>emipa606</Owner>
