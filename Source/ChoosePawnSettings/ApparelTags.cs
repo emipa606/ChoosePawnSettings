@@ -7,11 +7,9 @@ namespace ChoosePawnSettings;
 
 public static class ApparelTags
 {
-    public static readonly Dictionary<string, List<ThingDef>> ApparelTagDictionary =
-        new Dictionary<string, List<ThingDef>>();
+    public static readonly Dictionary<string, List<ThingDef>> ApparelTagDictionary = new();
 
-    public static readonly Dictionary<string, List<string>> VanillaApparelTagsDictionary =
-        new Dictionary<string, List<string>>();
+    public static readonly Dictionary<string, List<string>> VanillaApparelTagsDictionary = new();
 
     static ApparelTags()
     {
@@ -88,10 +86,7 @@ public static class ApparelTags
         foreach (var pawnKindDef in Main.AllPawnKinds)
         {
             pawnKindDef.apparelTags = VanillaApparelTagsDictionary[pawnKindDef.defName].ListFullCopyOrNull();
-            if (ChoosePawnSettings_Mod.instance.Settings.CustomApparelTags?.ContainsKey(pawnKindDef.defName) == true)
-            {
-                ChoosePawnSettings_Mod.instance.Settings.CustomApparelTags.Remove(pawnKindDef.defName);
-            }
+            ChoosePawnSettings_Mod.instance.Settings.CustomApparelTags?.Remove(pawnKindDef.defName);
         }
     }
 
@@ -101,9 +96,6 @@ public static class ApparelTags
             $"Resetting {pawnKindDefName} to vanilla apparel tags");
         PawnKindDef.Named(pawnKindDefName).apparelTags =
             VanillaApparelTagsDictionary[pawnKindDefName].ListFullCopyOrNull();
-        if (ChoosePawnSettings_Mod.instance.Settings.CustomApparelTags?.ContainsKey(pawnKindDefName) == true)
-        {
-            ChoosePawnSettings_Mod.instance.Settings.CustomApparelTags.Remove(pawnKindDefName);
-        }
+        ChoosePawnSettings_Mod.instance.Settings.CustomApparelTags?.Remove(pawnKindDefName);
     }
 }

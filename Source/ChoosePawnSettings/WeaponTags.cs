@@ -7,11 +7,9 @@ namespace ChoosePawnSettings;
 
 public static class WeaponTags
 {
-    public static readonly Dictionary<string, List<ThingDef>> WeaponTagDictionary =
-        new Dictionary<string, List<ThingDef>>();
+    public static readonly Dictionary<string, List<ThingDef>> WeaponTagDictionary = new();
 
-    public static readonly Dictionary<string, List<string>> VanillaWeaponTagsDictionary =
-        new Dictionary<string, List<string>>();
+    public static readonly Dictionary<string, List<string>> VanillaWeaponTagsDictionary = new();
 
     static WeaponTags()
     {
@@ -89,10 +87,7 @@ public static class WeaponTags
         {
             pawnKindDef.weaponTags = VanillaWeaponTagsDictionary[pawnKindDef.defName].ListFullCopyOrNull();
 
-            if (ChoosePawnSettings_Mod.instance.Settings.CustomWeaponTags?.ContainsKey(pawnKindDef.defName) == true)
-            {
-                ChoosePawnSettings_Mod.instance.Settings.CustomWeaponTags.Remove(pawnKindDef.defName);
-            }
+            ChoosePawnSettings_Mod.instance.Settings.CustomWeaponTags?.Remove(pawnKindDef.defName);
         }
     }
 
@@ -102,9 +97,6 @@ public static class WeaponTags
             $"Resetting {pawnKindDefName} to vanilla weapon tags");
         PawnKindDef.Named(pawnKindDefName).weaponTags =
             VanillaWeaponTagsDictionary[pawnKindDefName].ListFullCopyOrNull();
-        if (ChoosePawnSettings_Mod.instance.Settings.CustomWeaponTags?.ContainsKey(pawnKindDefName) == true)
-        {
-            ChoosePawnSettings_Mod.instance.Settings.CustomWeaponTags.Remove(pawnKindDefName);
-        }
+        ChoosePawnSettings_Mod.instance.Settings.CustomWeaponTags?.Remove(pawnKindDefName);
     }
 }

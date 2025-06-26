@@ -5,8 +5,7 @@ namespace ChoosePawnSettings;
 
 public static class TechHediffs
 {
-    public static readonly Dictionary<string, float> VanillaTechHediffsChances =
-        new Dictionary<string, float>();
+    public static readonly Dictionary<string, float> VanillaTechHediffsChances = new();
 
     static TechHediffs()
     {

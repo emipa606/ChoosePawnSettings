@@ -5,7 +5,7 @@ namespace ChoosePawnSettings;
 
 public static class Headgear
 {
-    public static readonly Dictionary<string, float> VanillaHeadgearChances = new Dictionary<string, float>();
+    public static readonly Dictionary<string, float> VanillaHeadgearChances = new();
 
     static Headgear()
     {

@@ -5,7 +5,7 @@ namespace ChoosePawnSettings;
 
 public static class RoyalTitleChance
 {
-    public static readonly Dictionary<string, float> VanillaRoyalTitleChances = new Dictionary<string, float>();
+    public static readonly Dictionary<string, float> VanillaRoyalTitleChances = new();
 
     static RoyalTitleChance()
     {

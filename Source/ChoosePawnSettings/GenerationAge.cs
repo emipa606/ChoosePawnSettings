@@ -6,8 +6,7 @@ namespace ChoosePawnSettings;
 
 public static class GenerationAge
 {
-    public static readonly Dictionary<string, IntRange> VanillaGenerationAge =
-        new Dictionary<string, IntRange>();
+    public static readonly Dictionary<string, IntRange> VanillaGenerationAge = new();
 
     static GenerationAge()
     {

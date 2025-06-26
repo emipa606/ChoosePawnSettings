@@ -6,8 +6,7 @@ namespace ChoosePawnSettings;
 
 public static class WeaponMoney
 {
-    public static readonly Dictionary<string, FloatRange> VanillaWeaponMoney =
-        new Dictionary<string, FloatRange>();
+    public static readonly Dictionary<string, FloatRange> VanillaWeaponMoney = new();
 
     static WeaponMoney()
     {

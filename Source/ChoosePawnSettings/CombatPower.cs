@@ -5,7 +5,7 @@ namespace ChoosePawnSettings;
 
 public static class CombatPower
 {
-    public static readonly Dictionary<string, float> VanillaCombatPowers = new Dictionary<string, float>();
+    public static readonly Dictionary<string, float> VanillaCombatPowers = new();
 
     static CombatPower()
     {

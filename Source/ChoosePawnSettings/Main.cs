@@ -17,7 +17,7 @@ public static class Main
 
     static Main()
     {
-        ChoosePawnSettings_Mod.instance.Settings.Initialize();
+        ChoosePawnSettings_Settings.Initialize();
         new Harmony("Mlie.ChoosePawnSettings").PatchAll(Assembly.GetExecutingAssembly());
     }
 
@@ -35,7 +35,6 @@ public static class Main
 
             return allPawnKinds;
         }
-        set => allPawnKinds = value;
     }
 
     public static List<ThingDef> AllWeapons
@@ -52,7 +51,6 @@ public static class Main
 
             return allWeapons;
         }
-        set => allWeapons = value;
     }
 
     public static List<ThingDef> AllTechHediffs
@@ -69,7 +67,6 @@ public static class Main
 
             return allTechHediffs;
         }
-        set => allTechHediffs = value;
     }
 
     public static List<ThingDef> AllApparel
@@ -86,7 +83,6 @@ public static class Main
 
             return allApparel;
         }
-        set => allApparel = value;
     }
 
 

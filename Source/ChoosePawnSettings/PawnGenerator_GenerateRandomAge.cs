@@ -22,8 +22,8 @@ public static class PawnGenerator_GenerateRandomAge
             return;
         }
 
-        if (ChoosePawnSettings_Mod.instance.Settings.CustomGenderProbabilities.TryGetValue(pawn.kindDef.defName,
-                out var probability) == false)
+        if (!ChoosePawnSettings_Mod.instance.Settings.CustomGenderProbabilities.TryGetValue(pawn.kindDef.defName,
+                out var probability))
         {
             return;
         }

@@ -5,7 +5,7 @@ namespace ChoosePawnSettings;
 
 public static class Biocoding
 {
-    public static readonly Dictionary<string, float> VanillaBiocodeChances = new Dictionary<string, float>();
+    public static readonly Dictionary<string, float> VanillaBiocodeChances = new();
 
     static Biocoding()
     {

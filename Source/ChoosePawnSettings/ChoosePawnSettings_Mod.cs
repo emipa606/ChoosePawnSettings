@@ -16,9 +16,9 @@ public class ChoosePawnSettings_Mod : Mod
     /// </summary>
     public static ChoosePawnSettings_Mod instance;
 
-    public static readonly Vector2 buttonSize = new Vector2(100f, 25f);
+    public static readonly Vector2 buttonSize = new(100f, 25f);
 
-    private static readonly Vector2 searchSize = new Vector2(175f, 25f);
+    private static readonly Vector2 searchSize = new(175f, 25f);
 
     private static readonly int buttonSpacer = 200;
 
@@ -39,7 +39,7 @@ public class ChoosePawnSettings_Mod : Mod
     public static List<string> CurrentTags;
     public static string TagStage;
 
-    private static readonly Color alternateBackground = new Color(0.1f, 0.1f, 0.1f, 0.5f);
+    private static readonly Color alternateBackground = new(0.1f, 0.1f, 0.1f, 0.5f);
 
     private static readonly List<string> settingTabs =
     [
@@ -76,10 +76,7 @@ public class ChoosePawnSettings_Mod : Mod
     {
         instance = this;
         Settings = GetSettings<ChoosePawnSettings_Settings>();
-        if (instance.Settings.CustomBiocodeChances == null)
-        {
-            instance.Settings.CustomBiocodeChances = new Dictionary<string, float>();
-        }
+        instance.Settings.CustomBiocodeChances ??= new Dictionary<string, float>();
 
         if (ModLister.RoyaltyInstalled)
         {
@@ -91,7 +88,7 @@ public class ChoosePawnSettings_Mod : Mod
             VersionFromManifest.GetVersionFromModMetaData(content.ModMetaData);
     }
 
-    public string SelectedDef { get; set; }
+    private string SelectedDef { get; set; }
 
     public override void WriteSettings()
     {
@@ -113,8 +110,8 @@ public class ChoosePawnSettings_Mod : Mod
 
         listing_Standard = new Listing_Standard();
 
-        DrawOptions(rect2);
-        DrawTabsList(rect2);
+        drawOptions(rect2);
+        drawTabsList(rect2);
         Settings.Write();
     }
 
@@ -128,7 +125,7 @@ public class ChoosePawnSettings_Mod : Mod
     }
 
 
-    private static void DrawButton(Action action, string text, Vector2 pos)
+    private static void drawButton(Action action, string text, Vector2 pos)
     {
         var rect = new Rect(pos.x, pos.y, buttonSize.x, buttonSize.y);
         if (!Widgets.ButtonText(rect, text, true, false, Color.white))
@@ -141,39 +138,7 @@ public class ChoosePawnSettings_Mod : Mod
     }
 
 
-    private void DrawIcon(PawnKindDef pawnKind, Rect rect)
-    {
-        Main.LogMessage($"Draw icon for {pawnKind}");
-        //var texture2D = pawnKind?.lifeStages?.Last()?.bodyGraphicData?.Graphic?.MatSingle?.mainTexture;
-        var texture2D = pawnKind?.race?.graphicData?.Graphic?.MatSingle?.mainTexture;
-
-        if (texture2D == null)
-        {
-            return;
-        }
-
-        var toolTip = $"{pawnKind.LabelCap}\n{pawnKind.race?.description}";
-        if (texture2D.width != texture2D.height)
-        {
-            var ratio = (float)texture2D.width / texture2D.height;
-
-            if (ratio < 1)
-            {
-                rect.x += (rect.width - (rect.width * ratio)) / 2;
-                rect.width *= ratio;
-            }
-            else
-            {
-                rect.y += (rect.height - (rect.height / ratio)) / 2;
-                rect.height /= ratio;
-            }
-        }
-
-        GUI.DrawTexture(rect, texture2D);
-        TooltipHandler.TipRegion(rect, toolTip);
-    }
-
-    private void DrawOptions(Rect rect)
+    private void drawOptions(Rect rect)
     {
         var optionsOuterContainer = rect.ContractedBy(10);
         optionsOuterContainer.x += leftSideWidth + columnSpacer;
@@ -204,7 +169,7 @@ public class ChoosePawnSettings_Mod : Mod
                 {
                     var labelPoint = listing_Standard.Label("CPS.resetall.label".Translate(), -1F,
                         "CPS.resetall.tooltip".Translate());
-                    DrawButton(() =>
+                    drawButton(() =>
                         {
                             Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
                                 "CPS.resetall.confirm".Translate(),
@@ -228,93 +193,93 @@ public class ChoosePawnSettings_Mod : Mod
             }
             case "Biocoding":
             {
-                FloatScrollView(ref frameRect, ref instance.Settings.CustomBiocodeChances,
+                floatScrollView(ref frameRect, ref instance.Settings.CustomBiocodeChances,
                     Biocoding.VanillaBiocodeChances, "biocoding");
                 break;
             }
             case "ChemicalAddiction":
             {
-                FloatScrollView(ref frameRect, ref instance.Settings.CustomChemicalAddictionChances,
+                floatScrollView(ref frameRect, ref instance.Settings.CustomChemicalAddictionChances,
                     ChemicalAddiction.VanillaChemicalAddictionChances, "chemicaladdiction");
                 break;
             }
             case "CombatEnhancingDrugs":
             {
-                FloatScrollView(ref frameRect, ref instance.Settings.CustomCombatEnhancingDrugsChances,
+                floatScrollView(ref frameRect, ref instance.Settings.CustomCombatEnhancingDrugsChances,
                     CombatEnhancingDrugs.VanillaCombatEnhancingDrugsChances, "combatenhancingdrugs");
                 break;
             }
             case "Headgear":
             {
-                FloatScrollView(ref frameRect, ref instance.Settings.CustomHeadgearChances,
+                floatScrollView(ref frameRect, ref instance.Settings.CustomHeadgearChances,
                     Headgear.VanillaHeadgearChances, "headgear");
                 break;
             }
             case "CombatPower":
             {
-                FloatScrollView(ref frameRect, ref instance.Settings.CustomCombatPowers,
+                floatScrollView(ref frameRect, ref instance.Settings.CustomCombatPowers,
                     CombatPower.VanillaCombatPowers, "combatpower");
                 break;
             }
             case "TechHediffs":
             {
-                FloatScrollView(ref frameRect, ref instance.Settings.CustomTechHediffsChances,
+                floatScrollView(ref frameRect, ref instance.Settings.CustomTechHediffsChances,
                     TechHediffs.VanillaTechHediffsChances, "techhediffs");
                 break;
             }
             case "TechHediffsMoney":
             {
-                FloatRangeScrollView(ref frameRect, ref instance.Settings.CustomTechHediffsMoney,
+                floatRangeScrollView(ref frameRect, ref instance.Settings.CustomTechHediffsMoney,
                     TechHediffsMoney.VanillaTechHediffsMoney, "techhediffsmoney", 8000, 99999);
                 break;
             }
             case "WeaponMoney":
             {
-                FloatRangeScrollView(ref frameRect, ref instance.Settings.CustomWeaponMoney,
+                floatRangeScrollView(ref frameRect, ref instance.Settings.CustomWeaponMoney,
                     WeaponMoney.VanillaWeaponMoney, "weaponmoney", 10000, 99999);
                 break;
             }
             case "ApparelMoney":
             {
-                FloatRangeScrollView(ref frameRect, ref instance.Settings.CustomApparelMoney,
+                floatRangeScrollView(ref frameRect, ref instance.Settings.CustomApparelMoney,
                     ApparelMoney.VanillaApparelMoney, "apparelmoney", 12000, 9999999);
                 break;
             }
             case "WeaponTags":
             {
-                TagsScrollView(ref frameRect, ref instance.Settings.CustomWeaponTags, "weapontags");
+                tagsScrollView(ref frameRect, ref instance.Settings.CustomWeaponTags, "weapontags");
                 break;
             }
             case "ApparelTags":
             {
-                TagsScrollView(ref frameRect, ref instance.Settings.CustomApparelTags, "appareltags");
+                tagsScrollView(ref frameRect, ref instance.Settings.CustomApparelTags, "appareltags");
                 break;
             }
             case "TechHediffTags":
             {
-                TagsScrollView(ref frameRect, ref instance.Settings.CustomTechHediffTags, "techhedifftags");
+                tagsScrollView(ref frameRect, ref instance.Settings.CustomTechHediffTags, "techhedifftags");
                 break;
             }
             case "DeathAcidifier":
             {
-                BoolScrollView(ref frameRect, ref instance.Settings.CustomDeathAcidifier,
+                boolScrollView(ref frameRect, ref instance.Settings.CustomDeathAcidifier,
                     DeathAcidifier.VanillaDeathAcidifiers, "deathacidifier");
                 break;
             }
             case "RoyalTitleChance":
             {
-                FloatScrollView(ref frameRect, ref instance.Settings.CustomRoyalTitleChances,
+                floatScrollView(ref frameRect, ref instance.Settings.CustomRoyalTitleChances,
                     RoyalTitleChance.VanillaRoyalTitleChances, "royaltitlechance");
                 break;
             }
             case "GenderProbabilities":
             {
-                GenderScrollView(ref frameRect);
+                genderScrollView(ref frameRect);
                 break;
             }
             case "GenerationAge":
             {
-                IntRangeScrollView(ref frameRect, ref instance.Settings.CustomGenerationAge,
+                intRangeScrollView(ref frameRect, ref instance.Settings.CustomGenerationAge,
                     GenerationAge.VanillaGenerationAge, "generationage", 1000, 999999);
                 break;
             }
@@ -322,7 +287,7 @@ public class ChoosePawnSettings_Mod : Mod
     }
 
 
-    private void FloatScrollView(ref Rect frameRect, ref Dictionary<string, float> modifiedValues,
+    private static void floatScrollView(ref Rect frameRect, ref Dictionary<string, float> modifiedValues,
         Dictionary<string, float> vanillaValues, string header)
     {
         listing_Standard.Begin(frameRect);
@@ -334,14 +299,11 @@ public class ChoosePawnSettings_Mod : Mod
             headerLabel.position,
             searchSize), $"CPS.{header}.tooltip".Translate());
 
-        if (modifiedValues == null)
-        {
-            modifiedValues = new Dictionary<string, float>();
-        }
+        modifiedValues ??= new Dictionary<string, float>();
 
         if (modifiedValues.Any())
         {
-            DrawButton(() =>
+            drawButton(() =>
                 {
                     Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
                         "CPS.resetone.confirm".Translate($"CPS.{header}".Translate().ToLower()),
@@ -397,15 +359,15 @@ public class ChoosePawnSettings_Mod : Mod
                 Widgets.DrawBoxSolid(sliderRect, alternateBackground);
             }
 
-            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
-            if (pawnkindLabel.Length > 45)
+            var pawnKindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            if (pawnKindLabel.Length > 45)
             {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
+                pawnKindLabel = $"{pawnKindLabel[..42]}...";
             }
 
             if (modInfo is { Length: > 45 })
             {
-                modInfo = $"{modInfo.Substring(0, 42)}...";
+                modInfo = $"{modInfo[..42]}...";
             }
 
             switch (header)
@@ -420,10 +382,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     pawnKindDef.biocodeWeaponChance =
@@ -432,7 +391,7 @@ public class ChoosePawnSettings_Mod : Mod
                             pawnKindDef.biocodeWeaponChance, 0,
                             1f, false,
                             "CPS.percent".Translate(Math.Round(pawnKindDef.biocodeWeaponChance * 100)),
-                            pawnkindLabel,
+                            pawnKindLabel,
                             modInfo), 2);
                     break;
                 case "chemicaladdiction":
@@ -445,10 +404,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     pawnKindDef.chemicalAddictionChance =
@@ -457,7 +413,7 @@ public class ChoosePawnSettings_Mod : Mod
                             pawnKindDef.chemicalAddictionChance, 0,
                             1f, false,
                             "CPS.percent".Translate(Math.Round(pawnKindDef.chemicalAddictionChance * 100)),
-                            pawnkindLabel,
+                            pawnKindLabel,
                             modInfo), 2);
                     break;
                 case "combatenhancingdrugs":
@@ -470,10 +426,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     pawnKindDef.combatEnhancingDrugsChance =
@@ -482,7 +435,7 @@ public class ChoosePawnSettings_Mod : Mod
                             pawnKindDef.combatEnhancingDrugsChance, 0,
                             1f, false,
                             "CPS.percent".Translate(Math.Round(pawnKindDef.combatEnhancingDrugsChance * 100)),
-                            pawnkindLabel,
+                            pawnKindLabel,
                             modInfo), 2);
                     break;
                 case "headgear":
@@ -495,10 +448,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     pawnKindDef.apparelAllowHeadgearChance =
@@ -507,7 +457,7 @@ public class ChoosePawnSettings_Mod : Mod
                             pawnKindDef.apparelAllowHeadgearChance, 0,
                             1f, false,
                             "CPS.percent".Translate(Math.Round(pawnKindDef.apparelAllowHeadgearChance * 100)),
-                            pawnkindLabel,
+                            pawnKindLabel,
                             modInfo), 2);
                     break;
                 case "combatpower":
@@ -520,10 +470,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     pawnKindDef.combatPower =
@@ -532,7 +479,7 @@ public class ChoosePawnSettings_Mod : Mod
                             pawnKindDef.combatPower, 1f,
                             700f, false,
                             Math.Round(pawnKindDef.combatPower).ToString(),
-                            pawnkindLabel,
+                            pawnKindLabel,
                             modInfo), 2);
                     break;
                 case "techhediffs":
@@ -545,10 +492,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     pawnKindDef.techHediffsChance =
@@ -557,7 +501,7 @@ public class ChoosePawnSettings_Mod : Mod
                             pawnKindDef.techHediffsChance, 0,
                             1f, false,
                             "CPS.percent".Translate(Math.Round(pawnKindDef.techHediffsChance * 100)),
-                            pawnkindLabel,
+                            pawnKindLabel,
                             modInfo), 2);
                     break;
                 case "royaltitlechance":
@@ -570,10 +514,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     pawnKindDef.royalTitleChance =
@@ -582,7 +523,7 @@ public class ChoosePawnSettings_Mod : Mod
                             pawnKindDef.royalTitleChance, 0,
                             1f, false,
                             "CPS.percent".Translate(Math.Round(pawnKindDef.royalTitleChance * 100)),
-                            pawnkindLabel,
+                            pawnKindLabel,
                             modInfo), 2);
                     break;
             }
@@ -595,7 +536,7 @@ public class ChoosePawnSettings_Mod : Mod
         Widgets.EndScrollView();
     }
 
-    private void GenderScrollView(ref Rect frameRect)
+    private static void genderScrollView(ref Rect frameRect)
     {
         listing_Standard.Begin(frameRect);
 
@@ -606,14 +547,11 @@ public class ChoosePawnSettings_Mod : Mod
             headerLabel.position,
             searchSize), "CPS.genderprobabilities.tooltip".Translate());
 
-        if (instance.Settings.CustomGenderProbabilities == null)
-        {
-            instance.Settings.CustomGenderProbabilities = new Dictionary<string, float>();
-        }
+        instance.Settings.CustomGenderProbabilities ??= new Dictionary<string, float>();
 
         if (instance.Settings.CustomGenderProbabilities.Any())
         {
-            DrawButton(() =>
+            drawButton(() =>
                 {
                     Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
                         "CPS.resetone.confirm".Translate("CPS.genderprobabilities".Translate().ToLower()),
@@ -674,12 +612,12 @@ public class ChoosePawnSettings_Mod : Mod
             var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
             if (pawnkindLabel.Length > 45)
             {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
+                pawnkindLabel = $"{pawnkindLabel[..42]}...";
             }
 
             if (modInfo is { Length: > 45 })
             {
-                modInfo = $"{modInfo.Substring(0, 42)}...";
+                modInfo = $"{modInfo[..42]}...";
             }
 
             pawnkindLabel = "Male".Translate().CapitalizeFirst() + "\n\n" + pawnkindLabel;
@@ -715,10 +653,7 @@ public class ChoosePawnSettings_Mod : Mod
             }
             else
             {
-                if (instance.Settings.CustomGenderProbabilities.ContainsKey(pawnKindDef.defName))
-                {
-                    instance.Settings.CustomGenderProbabilities.Remove(pawnKindDef.defName);
-                }
+                instance.Settings.CustomGenderProbabilities.Remove(pawnKindDef.defName);
             }
 
             GUI.color = Color.white;
@@ -729,7 +664,7 @@ public class ChoosePawnSettings_Mod : Mod
         Widgets.EndScrollView();
     }
 
-    private void FloatRangeScrollView(ref Rect frameRect, ref Dictionary<string, FloatRange> modifiedValues,
+    private static void floatRangeScrollView(ref Rect frameRect, ref Dictionary<string, FloatRange> modifiedValues,
         Dictionary<string, FloatRange> vanillaValues, string header, int maxValue, int unlimitedValue)
     {
         listing_Standard.Begin(frameRect);
@@ -741,14 +676,11 @@ public class ChoosePawnSettings_Mod : Mod
             headerLabel.position,
             searchSize), $"CPS.{header}.tooltip".Translate());
 
-        if (modifiedValues == null)
-        {
-            modifiedValues = new Dictionary<string, FloatRange>();
-        }
+        modifiedValues ??= new Dictionary<string, FloatRange>();
 
         if (modifiedValues.Any())
         {
-            DrawButton(() =>
+            drawButton(() =>
                 {
                     Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
                         "CPS.resetone.confirm".Translate($"CPS.{header}".Translate().ToLower()),
@@ -805,15 +737,15 @@ public class ChoosePawnSettings_Mod : Mod
 
             Text.Font = GameFont.Tiny;
             var modInfo = pawnKindDef.modContentPack?.Name;
-            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
-            if (pawnkindLabel.Length > 45)
+            var pawnKindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            if (pawnKindLabel.Length > 45)
             {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
+                pawnKindLabel = $"{pawnKindLabel[..42]}...";
             }
 
             if (modInfo is { Length: > 45 })
             {
-                modInfo = $"{modInfo.Substring(0, 42)}...";
+                modInfo = $"{modInfo[..42]}...";
             }
 
             var smallerRect = sliderRect.ContractedBy(4f, 20f);
@@ -838,10 +770,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     unlimited = pawnKindDef.techHediffsMoney.max > maxValue;
@@ -879,10 +808,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     unlimited = pawnKindDef.weaponMoney.max > maxValue;
@@ -920,10 +846,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     unlimited = pawnKindDef.apparelMoney.max > maxValue;
@@ -957,7 +880,7 @@ public class ChoosePawnSettings_Mod : Mod
             var textRect = sliderRect;
             textRect.width -= 100f;
             Text.Anchor = TextAnchor.UpperLeft;
-            Widgets.Label(textRect, pawnkindLabel);
+            Widgets.Label(textRect, pawnKindLabel);
             Text.Anchor = TextAnchor.UpperRight;
             Widgets.Label(textRect, modInfo);
             Text.Anchor = default;
@@ -969,7 +892,7 @@ public class ChoosePawnSettings_Mod : Mod
         Widgets.EndScrollView();
     }
 
-    private void IntRangeScrollView(ref Rect frameRect, ref Dictionary<string, IntRange> modifiedValues,
+    private static void intRangeScrollView(ref Rect frameRect, ref Dictionary<string, IntRange> modifiedValues,
         Dictionary<string, IntRange> vanillaValues, string header, int maxValue, int unlimitedValue)
     {
         listing_Standard.Begin(frameRect);
@@ -981,14 +904,11 @@ public class ChoosePawnSettings_Mod : Mod
             headerLabel.position,
             searchSize), $"CPS.{header}.tooltip".Translate());
 
-        if (modifiedValues == null)
-        {
-            modifiedValues = new Dictionary<string, IntRange>();
-        }
+        modifiedValues ??= new Dictionary<string, IntRange>();
 
         if (modifiedValues.Any())
         {
-            DrawButton(() =>
+            drawButton(() =>
                 {
                     Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
                         "CPS.resetone.confirm".Translate($"CPS.{header}".Translate().ToLower()),
@@ -1045,15 +965,15 @@ public class ChoosePawnSettings_Mod : Mod
 
             Text.Font = GameFont.Tiny;
             var modInfo = pawnKindDef.modContentPack?.Name;
-            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
-            if (pawnkindLabel.Length > 45)
+            var pawnKindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            if (pawnKindLabel.Length > 45)
             {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
+                pawnKindLabel = $"{pawnKindLabel[..42]}...";
             }
 
             if (modInfo is { Length: > 45 })
             {
-                modInfo = $"{modInfo.Substring(0, 42)}...";
+                modInfo = $"{modInfo[..42]}...";
             }
 
             var smallerRect = sliderRect.ContractedBy(4f, 20f);
@@ -1076,10 +996,7 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
                     var unlimited = pawnKindDef.maxGenerationAge > maxValue;
@@ -1119,7 +1036,7 @@ public class ChoosePawnSettings_Mod : Mod
             var textRect = sliderRect;
             textRect.width -= 100f;
             Text.Anchor = TextAnchor.UpperLeft;
-            Widgets.Label(textRect, pawnkindLabel);
+            Widgets.Label(textRect, pawnKindLabel);
             Text.Anchor = TextAnchor.UpperRight;
             Widgets.Label(textRect, modInfo);
             Text.Anchor = default;
@@ -1131,7 +1048,7 @@ public class ChoosePawnSettings_Mod : Mod
         Widgets.EndScrollView();
     }
 
-    private void TagsScrollView(ref Rect frameRect, ref Dictionary<string, string> modifiedValues, string header)
+    private static void tagsScrollView(ref Rect frameRect, ref Dictionary<string, string> modifiedValues, string header)
     {
         listing_Standard.Begin(frameRect);
 
@@ -1142,14 +1059,11 @@ public class ChoosePawnSettings_Mod : Mod
             headerLabel.position,
             searchSize), $"CPS.{header}.tooltip".Translate());
 
-        if (modifiedValues == null)
-        {
-            modifiedValues = new Dictionary<string, string>();
-        }
+        modifiedValues ??= new Dictionary<string, string>();
 
         if (modifiedValues.Any())
         {
-            DrawButton(() =>
+            drawButton(() =>
                 {
                     Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
                         "CPS.resetone.confirm".Translate($"CPS.{header}".Translate().ToLower()),
@@ -1205,15 +1119,15 @@ public class ChoosePawnSettings_Mod : Mod
             }
 
             var modInfo = pawnKindDef.modContentPack?.Name;
-            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
-            if (pawnkindLabel.Length > 45)
+            var pawnKindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            if (pawnKindLabel.Length > 45)
             {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 42)}...";
+                pawnKindLabel = $"{pawnKindLabel[..42]}...";
             }
 
             if (modInfo is { Length: > 45 })
             {
-                modInfo = $"{modInfo.Substring(0, 42)}...";
+                modInfo = $"{modInfo[..42]}...";
             }
 
             var smallerRect = sliderRect.ContractedBy(4f);
@@ -1360,7 +1274,7 @@ public class ChoosePawnSettings_Mod : Mod
             GUI.color = Color.white;
             Text.Font = GameFont.Tiny;
             Text.Anchor = TextAnchor.UpperLeft;
-            Widgets.Label(sliderRect, pawnkindLabel);
+            Widgets.Label(sliderRect, pawnKindLabel);
             Text.Anchor = TextAnchor.UpperRight;
             Widgets.Label(sliderRect, modInfo);
             Text.Anchor = default;
@@ -1373,7 +1287,7 @@ public class ChoosePawnSettings_Mod : Mod
         Widgets.EndScrollView();
     }
 
-    private void BoolScrollView(ref Rect frameRect, ref Dictionary<string, bool> modifiedValues,
+    private static void boolScrollView(ref Rect frameRect, ref Dictionary<string, bool> modifiedValues,
         Dictionary<string, bool> vanillaValues, string header)
     {
         listing_Standard.Begin(frameRect);
@@ -1385,14 +1299,11 @@ public class ChoosePawnSettings_Mod : Mod
             headerLabel.position,
             searchSize), $"CPS.{header}.tooltip".Translate());
 
-        if (modifiedValues == null)
-        {
-            modifiedValues = new Dictionary<string, bool>();
-        }
+        modifiedValues ??= new Dictionary<string, bool>();
 
         if (modifiedValues.Any())
         {
-            DrawButton(() =>
+            drawButton(() =>
                 {
                     Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
                         "CPS.resetone.confirm".Translate($"CPS.{header}".Translate().ToLower()),
@@ -1448,15 +1359,15 @@ public class ChoosePawnSettings_Mod : Mod
                 Widgets.DrawBoxSolid(sliderRect, alternateBackground);
             }
 
-            var pawnkindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
-            if (pawnkindLabel.Length > 65)
+            var pawnKindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            if (pawnKindLabel.Length > 65)
             {
-                pawnkindLabel = $"{pawnkindLabel.Substring(0, 62)}...";
+                pawnKindLabel = $"{pawnKindLabel[..62]}...";
             }
 
             if (modInfo is { Length: > 65 })
             {
-                modInfo = $"{modInfo.Substring(0, 62)}...";
+                modInfo = $"{modInfo[..62]}...";
             }
 
             switch (header)
@@ -1472,20 +1383,14 @@ public class ChoosePawnSettings_Mod : Mod
                     }
                     else
                     {
-                        if (modifiedValues.ContainsKey(pawnKindDef.defName))
-                        {
-                            modifiedValues.Remove(pawnKindDef.defName);
-                        }
+                        modifiedValues.Remove(pawnKindDef.defName);
                     }
 
-                    Widgets.CheckboxLabeled(sliderRect, $"{pawnkindLabel} - {modInfo}", ref hasDeathAcidifier);
+                    Widgets.CheckboxLabeled(sliderRect, $"{pawnKindLabel} - {modInfo}", ref hasDeathAcidifier);
 
                     if (hasDeathAcidifier)
                     {
-                        if (pawnKindDef.techHediffsRequired == null)
-                        {
-                            pawnKindDef.techHediffsRequired = [];
-                        }
+                        pawnKindDef.techHediffsRequired ??= [];
 
                         if (!pawnKindDef.techHediffsRequired.Contains(DeathAcidifier.DeathAcidifierThingDef))
                         {
@@ -1511,7 +1416,7 @@ public class ChoosePawnSettings_Mod : Mod
         Widgets.EndScrollView();
     }
 
-    private void DrawTabsList(Rect rect)
+    private void drawTabsList(Rect rect)
     {
         var scrollContainer = rect.ContractedBy(10);
         scrollContainer.width = leftSideWidth;
@@ -1526,7 +1431,7 @@ public class ChoosePawnSettings_Mod : Mod
         tabContentRect.y = 0;
         tabContentRect.width -= 20;
 
-        var listAddition = 24;
+        const int listAddition = 24;
 
 
         tabContentRect.height = (settingTabs.Count * 25f) + listAddition;

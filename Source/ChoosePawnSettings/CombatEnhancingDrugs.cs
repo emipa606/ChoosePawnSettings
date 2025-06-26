@@ -5,8 +5,7 @@ namespace ChoosePawnSettings;
 
 public static class CombatEnhancingDrugs
 {
-    public static readonly Dictionary<string, float> VanillaCombatEnhancingDrugsChances =
-        new Dictionary<string, float>();
+    public static readonly Dictionary<string, float> VanillaCombatEnhancingDrugsChances = new();
 
     static CombatEnhancingDrugs()
     {

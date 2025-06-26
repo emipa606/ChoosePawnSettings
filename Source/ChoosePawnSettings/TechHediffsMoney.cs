@@ -6,8 +6,7 @@ namespace ChoosePawnSettings;
 
 public static class TechHediffsMoney
 {
-    public static readonly Dictionary<string, FloatRange> VanillaTechHediffsMoney =
-        new Dictionary<string, FloatRange>();
+    public static readonly Dictionary<string, FloatRange> VanillaTechHediffsMoney = new();
 
     static TechHediffsMoney()
     {

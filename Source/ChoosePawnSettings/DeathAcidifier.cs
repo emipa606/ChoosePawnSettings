@@ -6,7 +6,7 @@ namespace ChoosePawnSettings;
 
 public static class DeathAcidifier
 {
-    public static readonly Dictionary<string, bool> VanillaDeathAcidifiers = new Dictionary<string, bool>();
+    public static readonly Dictionary<string, bool> VanillaDeathAcidifiers = new();
 
     public static ThingDef DeathAcidifierThingDef;
 
@@ -48,10 +48,7 @@ public static class DeathAcidifier
 
             if (value)
             {
-                if (pawnKindDef.techHediffsRequired == null)
-                {
-                    pawnKindDef.techHediffsRequired = [];
-                }
+                pawnKindDef.techHediffsRequired ??= [];
 
                 if (!pawnKindDef.techHediffsRequired.Contains(DeathAcidifierThingDef))
                 {
@@ -81,10 +78,7 @@ public static class DeathAcidifier
         {
             if (VanillaDeathAcidifiers[pawnKindDef.defName])
             {
-                if (pawnKindDef.techHediffsRequired == null)
-                {
-                    pawnKindDef.techHediffsRequired = [];
-                }
+                pawnKindDef.techHediffsRequired ??= [];
 
                 if (!pawnKindDef.techHediffsRequired.Contains(DeathAcidifierThingDef))
                 {

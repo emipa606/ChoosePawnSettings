@@ -5,8 +5,7 @@ namespace ChoosePawnSettings;
 
 public static class ChemicalAddiction
 {
-    public static readonly Dictionary<string, float> VanillaChemicalAddictionChances =
-        new Dictionary<string, float>();
+    public static readonly Dictionary<string, float> VanillaChemicalAddictionChances = new();
 
     static ChemicalAddiction()
     {
@@ -15,7 +14,7 @@ public static class ChemicalAddiction
     public static void Initialize()
     {
         saveVanillaChemicalAddictionValues();
-        setCustomChemicalAddictiongValues();
+        setCustomChemicalAddictionValues();
     }
 
     private static void saveVanillaChemicalAddictionValues()
@@ -26,7 +25,7 @@ public static class ChemicalAddiction
         }
     }
 
-    private static void setCustomChemicalAddictiongValues()
+    private static void setCustomChemicalAddictionValues()
     {
         if (ChoosePawnSettings_Mod.instance?.Settings?.CustomChemicalAddictionChances == null)
         {

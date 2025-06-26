@@ -7,11 +7,9 @@ namespace ChoosePawnSettings;
 
 public static class TechHediffTags
 {
-    public static readonly Dictionary<string, List<ThingDef>> TechHediffTagDictionary =
-        new Dictionary<string, List<ThingDef>>();
+    public static readonly Dictionary<string, List<ThingDef>> TechHediffTagDictionary = new();
 
-    public static readonly Dictionary<string, List<string>> VanillaTechHediffTagDictionary =
-        new Dictionary<string, List<string>>();
+    public static readonly Dictionary<string, List<string>> VanillaTechHediffTagDictionary = new();
 
     static TechHediffTags()
     {
@@ -89,10 +87,7 @@ public static class TechHediffTags
         {
             pawnKindDef.techHediffsTags = VanillaTechHediffTagDictionary[pawnKindDef.defName].ListFullCopyOrNull();
 
-            if (ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffTags?.ContainsKey(pawnKindDef.defName) == true)
-            {
-                ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffTags.Remove(pawnKindDef.defName);
-            }
+            ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffTags?.Remove(pawnKindDef.defName);
         }
     }
 
@@ -102,9 +97,6 @@ public static class TechHediffTags
             $"Resetting {pawnKindDefName} to vanilla techHediff tags");
         PawnKindDef.Named(pawnKindDefName).techHediffsTags =
             VanillaTechHediffTagDictionary[pawnKindDefName].ListFullCopyOrNull();
-        if (ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffTags?.ContainsKey(pawnKindDefName) == true)
-        {
-            ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffTags.Remove(pawnKindDefName);
-        }
+        ChoosePawnSettings_Mod.instance.Settings.CustomTechHediffTags?.Remove(pawnKindDefName);
     }
 }

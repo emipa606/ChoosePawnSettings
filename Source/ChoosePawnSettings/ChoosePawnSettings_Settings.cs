@@ -6,8 +6,7 @@ namespace ChoosePawnSettings;
 
 public class ChoosePawnSettings_Settings : ModSettings
 {
-    public Dictionary<string, FloatRange> CustomApparelMoney =
-        new Dictionary<string, FloatRange>();
+    public Dictionary<string, FloatRange> CustomApparelMoney = new();
 
     private List<string> customApparelMoneyKeys;
 
@@ -17,29 +16,25 @@ public class ChoosePawnSettings_Settings : ModSettings
 
     private List<string> customApparelTagValues;
 
-    public Dictionary<string, float> CustomBiocodeChances =
-        new Dictionary<string, float>();
+    public Dictionary<string, float> CustomBiocodeChances = new();
 
     private List<string> customBiocodeChancesKeys;
 
     private List<float> customBiocodeChancesValues;
 
-    public Dictionary<string, float> CustomChemicalAddictionChances =
-        new Dictionary<string, float>();
+    public Dictionary<string, float> CustomChemicalAddictionChances = new();
 
     private List<string> customChemicalAddictionChancesKeys;
 
     private List<float> customChemicalAddictionChancesValues;
 
-    public Dictionary<string, float> CustomCombatEnhancingDrugsChances =
-        new Dictionary<string, float>();
+    public Dictionary<string, float> CustomCombatEnhancingDrugsChances = new();
 
     private List<string> customCombatEnhancingDrugsChancesKeys;
 
     private List<float> customCombatEnhancingDrugsChancesValues;
 
-    public Dictionary<string, float> CustomCombatPowers =
-        new Dictionary<string, float>();
+    public Dictionary<string, float> CustomCombatPowers = new();
 
     private List<string> customCombatPowersKeys;
 
@@ -49,43 +44,37 @@ public class ChoosePawnSettings_Settings : ModSettings
     public List<string> customDeathAcidifiersKeys;
     public List<bool> customDeathAcidifiersValues;
 
-    public Dictionary<string, float> CustomGenderProbabilities =
-        new Dictionary<string, float>();
+    public Dictionary<string, float> CustomGenderProbabilities = new();
 
     private List<string> customGenderProbabilitiesKeys;
 
     private List<float> customGenderProbabilitiesValues;
 
-    public Dictionary<string, IntRange> CustomGenerationAge =
-        new Dictionary<string, IntRange>();
+    public Dictionary<string, IntRange> CustomGenerationAge = new();
 
     private List<string> customGenerationAgeKeys;
 
     private List<IntRange> customGenerationAgeValues;
 
-    public Dictionary<string, float> CustomHeadgearChances =
-        new Dictionary<string, float>();
+    public Dictionary<string, float> CustomHeadgearChances = new();
 
     private List<string> customHeadgearChancesKeys;
 
     private List<float> customHeadgearChancesValues;
 
-    public Dictionary<string, float> CustomRoyalTitleChances =
-        new Dictionary<string, float>();
+    public Dictionary<string, float> CustomRoyalTitleChances = new();
 
     private List<string> customRoyalTitleChancesKeys;
 
     private List<float> customRoyalTitleChancesValues;
 
-    public Dictionary<string, float> CustomTechHediffsChances =
-        new Dictionary<string, float>();
+    public Dictionary<string, float> CustomTechHediffsChances = new();
 
     private List<string> customTechHediffsChancesKeys;
 
     private List<float> customTechHediffsChancesValues;
 
-    public Dictionary<string, FloatRange> CustomTechHediffsMoney =
-        new Dictionary<string, FloatRange>();
+    public Dictionary<string, FloatRange> CustomTechHediffsMoney = new();
 
     private List<string> customTechHediffsMoneyKeys;
 
@@ -96,8 +85,7 @@ public class ChoosePawnSettings_Settings : ModSettings
 
     private List<string> customTechHediffTagValues;
 
-    public Dictionary<string, FloatRange> CustomWeaponMoney =
-        new Dictionary<string, FloatRange>();
+    public Dictionary<string, FloatRange> CustomWeaponMoney = new();
 
     private List<string> customWeaponMoneyKeys;
 
@@ -177,7 +165,7 @@ public class ChoosePawnSettings_Settings : ModSettings
             ref customGenderProbabilitiesKeys, ref customGenderProbabilitiesValues);
     }
 
-    public void Initialize()
+    public static void Initialize()
     {
         Biocoding.Initialize();
         ChemicalAddiction.Initialize();
@@ -321,96 +309,39 @@ public class ChoosePawnSettings_Settings : ModSettings
             RoyalTitleChance.ResetRoyalTitleChanceToVanillaRates();
         }
 
-        if (valueLabel is "genderprobabilities" or "all")
+        if (valueLabel is not ("genderprobabilities" or "all"))
         {
-            customGenderProbabilitiesKeys = [];
-            customGenderProbabilitiesValues = [];
-            CustomGenderProbabilities = new Dictionary<string, float>();
+            return;
         }
+
+        customGenderProbabilitiesKeys = [];
+        customGenderProbabilitiesValues = [];
+        CustomGenderProbabilities = new Dictionary<string, float>();
     }
 
     public bool HasCustomValues(string type = null)
     {
-        if (type is null or "biocoding" && CustomBiocodeChances?.Any() == true)
+        switch (type)
         {
-            return true;
+            case null or "biocoding" when CustomBiocodeChances?.Any() == true:
+            case null or "chemicaladdiction" when CustomChemicalAddictionChances?.Any() == true:
+            case null or "combatenhancingdrugs" when CustomCombatEnhancingDrugsChances?.Any() == true:
+            case null or "headgear" when CustomHeadgearChances?.Any() == true:
+            case null or "combatpower" when CustomCombatPowers?.Any() == true:
+            case null or "techhediffs" when CustomTechHediffsChances?.Any() == true:
+            case null or "techhediffsmoney" when CustomTechHediffsMoney?.Any() == true:
+            case null or "weaponmoney" when CustomWeaponMoney?.Any() == true:
+            case null or "apparelmoney" when CustomApparelMoney?.Any() == true:
+            case null or "weapontags" when CustomWeaponTags?.Any() == true:
+            case null or "appareltags" when CustomApparelTags?.Any() == true:
+            case null or "techhedifftags" when CustomTechHediffTags?.Any() == true:
+            case null or "deathacidifier" when CustomDeathAcidifier?.Any() == true:
+            case null or "generationage" when CustomGenerationAge?.Any() == true:
+            case null or "royaltitlechance" when CustomRoyalTitleChances?.Any() == true:
+            case null or "genderprobabilities" when CustomGenderProbabilities?.Any() == true:
+                return true;
+            default:
+                return false;
         }
-
-        if (type is null or "chemicaladdiction" && CustomChemicalAddictionChances?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "combatenhancingdrugs" && CustomCombatEnhancingDrugsChances?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "headgear" && CustomHeadgearChances?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "combatpower" && CustomCombatPowers?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "techhediffs" && CustomTechHediffsChances?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "techhediffsmoney" && CustomTechHediffsMoney?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "weaponmoney" && CustomWeaponMoney?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "apparelmoney" && CustomApparelMoney?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "weapontags" && CustomWeaponTags?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "appareltags" && CustomApparelTags?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "techhedifftags" && CustomTechHediffTags?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "deathacidifier" && CustomDeathAcidifier?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "generationage" && CustomGenerationAge?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "royaltitlechance" && CustomRoyalTitleChances?.Any() == true)
-        {
-            return true;
-        }
-
-        if (type is null or "genderprobabilities" && CustomGenderProbabilities?.Any() == true)
-        {
-            return true;
-        }
-
-        return false;
     }
 }
