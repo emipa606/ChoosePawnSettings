@@ -83,6 +83,11 @@ public class ChoosePawnSettings_Mod : Mod
             settingTabs.Add("RoyalTitleChance");
         }
 
+        if (ModLister.BiotechInstalled)
+        {
+            settingTabs.Add("HumanPregnancyChance");
+        }
+
         SelectedDef = "Settings";
         currentVersion =
             VersionFromManifest.GetVersionFromModMetaData(content.ModMetaData);
@@ -201,6 +206,12 @@ public class ChoosePawnSettings_Mod : Mod
             {
                 floatScrollView(ref frameRect, ref instance.Settings.CustomChemicalAddictionChances,
                     ChemicalAddiction.VanillaChemicalAddictionChances, "chemicaladdiction");
+                break;
+            }
+            case "HumanPregnancyChance":
+            {
+                floatScrollView(ref frameRect, ref instance.Settings.HumanPregnancyChanceChances,
+                    HumanPregnancyChance.VanillaHumanPregnancyChanceChances, "humanpregnancychance");
                 break;
             }
             case "CombatEnhancingDrugs":
@@ -330,9 +341,9 @@ public class ChoosePawnSettings_Mod : Mod
         if (!string.IsNullOrEmpty(searchText))
         {
             allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label?.ToLower().Contains(searchText.ToLower()) == true || def.modContentPack?.Name.ToLower()
-                        .Contains(searchText.ToLower()) == true || def.defName.ToLower()
-                        .Contains(searchText.ToLower()))
+                    (def.label?.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0 ||
+                    (def.modContentPack?.Name?.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0 ||
+                    def.defName.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                 .ToList();
         }
 
@@ -359,7 +370,7 @@ public class ChoosePawnSettings_Mod : Mod
                 Widgets.DrawBoxSolid(sliderRect, alternateBackground);
             }
 
-            var pawnKindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            var pawnKindLabel = (pawnKindDef.label ?? pawnKindDef.defName).CapitalizeFirst();
             if (pawnKindLabel.Length > 45)
             {
                 pawnKindLabel = $"{pawnKindLabel[..42]}...";
@@ -390,7 +401,7 @@ public class ChoosePawnSettings_Mod : Mod
                             sliderRect,
                             pawnKindDef.biocodeWeaponChance, 0,
                             1f, false,
-                            "CPS.percent".Translate(Math.Round(pawnKindDef.biocodeWeaponChance * 100)),
+                            "CPS.percent".Translate(pawnKindDef.biocodeWeaponChance.ToStringPercent()),
                             pawnKindLabel,
                             modInfo), 2);
                     break;
@@ -412,7 +423,29 @@ public class ChoosePawnSettings_Mod : Mod
                             sliderRect,
                             pawnKindDef.chemicalAddictionChance, 0,
                             1f, false,
-                            "CPS.percent".Translate(Math.Round(pawnKindDef.chemicalAddictionChance * 100)),
+                            "CPS.percent".Translate(pawnKindDef.chemicalAddictionChance.ToStringPercent()),
+                            pawnKindLabel,
+                            modInfo), 2);
+                    break;
+                case "humanpregnancychance":
+                    if (pawnKindDef.humanPregnancyChance !=
+                        vanillaValues[pawnKindDef.defName])
+                    {
+                        modifiedValues[pawnKindDef.defName] =
+                            pawnKindDef.humanPregnancyChance;
+                        GUI.color = Color.green;
+                    }
+                    else
+                    {
+                        modifiedValues.Remove(pawnKindDef.defName);
+                    }
+
+                    pawnKindDef.humanPregnancyChance =
+                        (float)Math.Round((decimal)Widgets.HorizontalSlider(
+                            sliderRect,
+                            pawnKindDef.humanPregnancyChance, 0,
+                            1f, false,
+                            "CPS.percent".Translate(pawnKindDef.humanPregnancyChance.ToStringPercent()),
                             pawnKindLabel,
                             modInfo), 2);
                     break;
@@ -434,7 +467,7 @@ public class ChoosePawnSettings_Mod : Mod
                             sliderRect,
                             pawnKindDef.combatEnhancingDrugsChance, 0,
                             1f, false,
-                            "CPS.percent".Translate(Math.Round(pawnKindDef.combatEnhancingDrugsChance * 100)),
+                            "CPS.percent".Translate(pawnKindDef.combatEnhancingDrugsChance.ToStringPercent()),
                             pawnKindLabel,
                             modInfo), 2);
                     break;
@@ -456,7 +489,7 @@ public class ChoosePawnSettings_Mod : Mod
                             sliderRect,
                             pawnKindDef.apparelAllowHeadgearChance, 0,
                             1f, false,
-                            "CPS.percent".Translate(Math.Round(pawnKindDef.apparelAllowHeadgearChance * 100)),
+                            "CPS.percent".Translate(pawnKindDef.apparelAllowHeadgearChance.ToStringPercent()),
                             pawnKindLabel,
                             modInfo), 2);
                     break;
@@ -500,7 +533,7 @@ public class ChoosePawnSettings_Mod : Mod
                             sliderRect,
                             pawnKindDef.techHediffsChance, 0,
                             1f, false,
-                            "CPS.percent".Translate(Math.Round(pawnKindDef.techHediffsChance * 100)),
+                            "CPS.percent".Translate(pawnKindDef.techHediffsChance.ToStringPercent()),
                             pawnKindLabel,
                             modInfo), 2);
                     break;
@@ -522,11 +555,13 @@ public class ChoosePawnSettings_Mod : Mod
                             sliderRect,
                             pawnKindDef.royalTitleChance, 0,
                             1f, false,
-                            "CPS.percent".Translate(Math.Round(pawnKindDef.royalTitleChance * 100)),
+                            "CPS.percent".Translate(pawnKindDef.royalTitleChance.ToStringPercent()),
                             pawnKindLabel,
                             modInfo), 2);
                     break;
             }
+
+            TooltipHandler.TipRegion(sliderRect, pawnKindDef.defName);
 
             GUI.color = Color.white;
         }
@@ -707,9 +742,9 @@ public class ChoosePawnSettings_Mod : Mod
         if (!string.IsNullOrEmpty(searchText))
         {
             allPawnKinds = Main.AllPawnKinds.Where(def =>
-                    def.label?.ToLower().Contains(searchText.ToLower()) == true || def.modContentPack?.Name.ToLower()
-                        .Contains(searchText.ToLower()) == true || def.defName.ToLower()
-                        .Contains(searchText.ToLower()))
+                    (def.label?.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0 ||
+                    (def.modContentPack?.Name?.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0 ||
+                    def.defName.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                 .ToList();
         }
 
@@ -737,7 +772,7 @@ public class ChoosePawnSettings_Mod : Mod
 
             Text.Font = GameFont.Tiny;
             var modInfo = pawnKindDef.modContentPack?.Name;
-            var pawnKindLabel = $"{pawnKindDef.label.CapitalizeFirst()} ({pawnKindDef.defName})";
+            var pawnKindLabel = (pawnKindDef.label ?? pawnKindDef.defName).CapitalizeFirst();
             if (pawnKindLabel.Length > 45)
             {
                 pawnKindLabel = $"{pawnKindLabel[..42]}...";
@@ -881,6 +916,7 @@ public class ChoosePawnSettings_Mod : Mod
             textRect.width -= 100f;
             Text.Anchor = TextAnchor.UpperLeft;
             Widgets.Label(textRect, pawnKindLabel);
+            TooltipHandler.TipRegion(textRect, pawnKindDef.defName);
             Text.Anchor = TextAnchor.UpperRight;
             Widgets.Label(textRect, modInfo);
             Text.Anchor = default;

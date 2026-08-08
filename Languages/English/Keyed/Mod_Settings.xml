@@ -51,4 +51,6 @@
   <CPS.generationage.tooltip>The min and max age allowed for pawns to generate with</CPS.generationage.tooltip>
   <CPS.deathacidifier>Death Acidifier</CPS.deathacidifier>
   <CPS.deathacidifier.tooltip>If the pawn should spawn with a death acidifier</CPS.deathacidifier.tooltip>
+  <CPS.humanpregnancychance>Human Pregnancy Chance</CPS.humanpregnancychance>
+  <CPS.humanpregnancychance.tooltip>Chance of a human pawn being pregnant when generated</CPS.humanpregnancychance.tooltip>
 </LanguageData>

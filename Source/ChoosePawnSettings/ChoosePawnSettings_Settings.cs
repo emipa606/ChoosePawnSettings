@@ -41,8 +41,8 @@ public class ChoosePawnSettings_Settings : ModSettings
     private List<float> customCombatPowersValues;
 
     public Dictionary<string, bool> CustomDeathAcidifier;
-    public List<string> customDeathAcidifiersKeys;
-    public List<bool> customDeathAcidifiersValues;
+    private List<string> customDeathAcidifiersKeys;
+    private List<bool> customDeathAcidifiersValues;
 
     public Dictionary<string, float> CustomGenderProbabilities = new();
 
@@ -95,6 +95,12 @@ public class ChoosePawnSettings_Settings : ModSettings
     public Dictionary<string, string> CustomWeaponTags;
 
     private List<string> customWeaponTagValues;
+
+    public Dictionary<string, float> HumanPregnancyChanceChances = new();
+
+    private List<string> humanPregnancyChanceChancesKeys;
+
+    private List<float> humanPregnancyChanceChancesValues;
     public bool VerboseLogging;
 
 
@@ -115,6 +121,10 @@ public class ChoosePawnSettings_Settings : ModSettings
             LookMode.Value,
             LookMode.Value,
             ref customChemicalAddictionChancesKeys, ref customChemicalAddictionChancesValues);
+        Scribe_Collections.Look(ref HumanPregnancyChanceChances, "HumanPregnancyChanceChances",
+            LookMode.Value,
+            LookMode.Value,
+            ref humanPregnancyChanceChancesKeys, ref humanPregnancyChanceChancesValues);
         Scribe_Collections.Look(ref CustomCombatEnhancingDrugsChances, "CustomCombatEnhancingDrugsChances",
             LookMode.Value,
             LookMode.Value,
@@ -184,6 +194,11 @@ public class ChoosePawnSettings_Settings : ModSettings
         if (ModLister.RoyaltyInstalled)
         {
             RoyalTitleChance.Initialize();
+        }
+
+        if (ModLister.BiotechInstalled)
+        {
+            HumanPregnancyChance.Initialize();
         }
     }
 
@@ -309,6 +324,14 @@ public class ChoosePawnSettings_Settings : ModSettings
             RoyalTitleChance.ResetRoyalTitleChanceToVanillaRates();
         }
 
+        if (valueLabel is "humanpregnancychance" or "all")
+        {
+            humanPregnancyChanceChancesKeys = [];
+            humanPregnancyChanceChancesValues = [];
+            HumanPregnancyChanceChances = new Dictionary<string, float>();
+            HumanPregnancyChance.ResetHumanPregnancyChanceToVanillaValues();
+        }
+
         if (valueLabel is not ("genderprobabilities" or "all"))
         {
             return;
@@ -325,6 +348,7 @@ public class ChoosePawnSettings_Settings : ModSettings
         {
             case null or "biocoding" when CustomBiocodeChances?.Any() == true:
             case null or "chemicaladdiction" when CustomChemicalAddictionChances?.Any() == true:
+            case null or "humanpregnancychance" when HumanPregnancyChanceChances?.Any() == true:
             case null or "combatenhancingdrugs" when CustomCombatEnhancingDrugsChances?.Any() == true:
             case null or "headgear" when CustomHeadgearChances?.Any() == true:
             case null or "combatpower" when CustomCombatPowers?.Any() == true:
