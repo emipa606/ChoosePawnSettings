@@ -54,4 +54,6 @@
   <CPS.genderprobabilities.tooltip>Chance pour le pion d'être un homme ou une femme, vanille est 50%/50%. Les pions dont le sexe est forcé auront priorité sur cette valeur. Toute valeur définie ici remplacera toute probabilité définie par les races aliens humanoïdes.</CPS.genderprobabilities.tooltip>
   <CPS.humanpregnancychance>Probabilité de grossesse chez les humains</CPS.humanpregnancychance>
   <CPS.humanpregnancychance.tooltip>Probabilité qu'un personnage humain soit enceinte lors de sa création</CPS.humanpregnancychance.tooltip>
+  <CPS.all.button>Tous</CPS.all.button>
+  <CPS.none.button>Aucun</CPS.none.button>
 </LanguageData>

@@ -105,12 +105,12 @@ public class ChoosePawnSettings_Mod : Mod
     /// <summary>
     ///     The settings-window
     /// </summary>
-    /// <param name="rect"></param>
-    public override void DoSettingsWindowContents(Rect rect)
+    /// <param name="inRect"></param>
+    public override void DoSettingsWindowContents(Rect inRect)
     {
-        base.DoSettingsWindowContents(rect);
+        base.DoSettingsWindowContents(inRect);
 
-        var rect2 = rect.ContractedBy(1);
+        var rect2 = inRect.ContractedBy(1);
         leftSideWidth = rect2.ContractedBy(10).width / 4;
 
         listing_Standard = new Listing_Standard();
@@ -384,8 +384,7 @@ public class ChoosePawnSettings_Mod : Mod
             switch (header)
             {
                 case "biocoding":
-                    if (pawnKindDef.biocodeWeaponChance !=
-                        vanillaValues[pawnKindDef.defName])
+                    if (!pawnKindDef.biocodeWeaponChance.Equals(vanillaValues[pawnKindDef.defName]))
                     {
                         modifiedValues[pawnKindDef.defName] =
                             pawnKindDef.biocodeWeaponChance;
@@ -406,8 +405,7 @@ public class ChoosePawnSettings_Mod : Mod
                             modInfo), 2);
                     break;
                 case "chemicaladdiction":
-                    if (pawnKindDef.chemicalAddictionChance !=
-                        vanillaValues[pawnKindDef.defName])
+                    if (!pawnKindDef.chemicalAddictionChance.Equals(vanillaValues[pawnKindDef.defName]))
                     {
                         modifiedValues[pawnKindDef.defName] =
                             pawnKindDef.chemicalAddictionChance;
@@ -428,8 +426,7 @@ public class ChoosePawnSettings_Mod : Mod
                             modInfo), 2);
                     break;
                 case "humanpregnancychance":
-                    if (pawnKindDef.humanPregnancyChance !=
-                        vanillaValues[pawnKindDef.defName])
+                    if (!pawnKindDef.humanPregnancyChance.Equals(vanillaValues[pawnKindDef.defName]))
                     {
                         modifiedValues[pawnKindDef.defName] =
                             pawnKindDef.humanPregnancyChance;
@@ -450,8 +447,7 @@ public class ChoosePawnSettings_Mod : Mod
                             modInfo), 2);
                     break;
                 case "combatenhancingdrugs":
-                    if (pawnKindDef.combatEnhancingDrugsChance !=
-                        vanillaValues[pawnKindDef.defName])
+                    if (!pawnKindDef.combatEnhancingDrugsChance.Equals(vanillaValues[pawnKindDef.defName]))
                     {
                         modifiedValues[pawnKindDef.defName] =
                             pawnKindDef.combatEnhancingDrugsChance;
@@ -472,8 +468,7 @@ public class ChoosePawnSettings_Mod : Mod
                             modInfo), 2);
                     break;
                 case "headgear":
-                    if (pawnKindDef.apparelAllowHeadgearChance !=
-                        vanillaValues[pawnKindDef.defName])
+                    if (!pawnKindDef.apparelAllowHeadgearChance.Equals(vanillaValues[pawnKindDef.defName]))
                     {
                         modifiedValues[pawnKindDef.defName] =
                             pawnKindDef.apparelAllowHeadgearChance;
@@ -494,8 +489,7 @@ public class ChoosePawnSettings_Mod : Mod
                             modInfo), 2);
                     break;
                 case "combatpower":
-                    if (pawnKindDef.combatPower !=
-                        vanillaValues[pawnKindDef.defName])
+                    if (!pawnKindDef.combatPower.Equals(vanillaValues[pawnKindDef.defName]))
                     {
                         modifiedValues[pawnKindDef.defName] =
                             pawnKindDef.combatPower;
@@ -516,8 +510,7 @@ public class ChoosePawnSettings_Mod : Mod
                             modInfo), 2);
                     break;
                 case "techhediffs":
-                    if (pawnKindDef.techHediffsChance !=
-                        vanillaValues[pawnKindDef.defName])
+                    if (!pawnKindDef.techHediffsChance.Equals(vanillaValues[pawnKindDef.defName]))
                     {
                         modifiedValues[pawnKindDef.defName] =
                             pawnKindDef.techHediffsChance;
@@ -538,8 +531,7 @@ public class ChoosePawnSettings_Mod : Mod
                             modInfo), 2);
                     break;
                 case "royaltitlechance":
-                    if (pawnKindDef.royalTitleChance !=
-                        vanillaValues[pawnKindDef.defName])
+                    if (!pawnKindDef.royalTitleChance.Equals(vanillaValues[pawnKindDef.defName]))
                     {
                         modifiedValues[pawnKindDef.defName] =
                             pawnKindDef.royalTitleChance;
@@ -662,7 +654,7 @@ public class ChoosePawnSettings_Mod : Mod
 
             if (instance.Settings.CustomGenderProbabilities.ContainsKey(pawnKindDef.defName))
             {
-                if (Math.Round(instance.Settings.CustomGenderProbabilities[pawnKindDef.defName], 2) == 0.5f)
+                if (Math.Round(instance.Settings.CustomGenderProbabilities[pawnKindDef.defName], 2).Equals(0.5f))
                 {
                     instance.Settings.CustomGenderProbabilities.Remove(pawnKindDef.defName);
                 }
@@ -682,7 +674,7 @@ public class ChoosePawnSettings_Mod : Mod
                     pawnkindLabel,
                     modInfo), 2);
 
-            if (currentChance != 0.5f)
+            if (!currentChance.Equals(0.5f))
             {
                 instance.Settings.CustomGenderProbabilities[pawnKindDef.defName] = currentChance;
             }
@@ -1473,7 +1465,6 @@ public class ChoosePawnSettings_Mod : Mod
         tabContentRect.height = (settingTabs.Count * 25f) + listAddition;
         Widgets.BeginScrollView(tabFrameRect, ref tabsScrollPosition, tabContentRect);
         listing_Standard.Begin(tabContentRect);
-        //Text.Font = GameFont.Tiny;
         foreach (var settingTab in settingTabs)
         {
             if (string.IsNullOrEmpty(settingTab))
@@ -1497,7 +1488,6 @@ public class ChoosePawnSettings_Mod : Mod
         }
 
         listing_Standard.End();
-        //Text.Font = GameFont.Small;
         Widgets.EndScrollView();
     }
 }

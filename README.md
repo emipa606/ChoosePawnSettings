@@ -24,6 +24,7 @@ Currently implemented
 -  Gender Probability
 -  Death Acidifier
 -  Royal Title Chance (Royalty required)
+-  Human Pregnancy Chance (Biotech required)
 
 
 

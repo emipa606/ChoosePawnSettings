@@ -54,4 +54,6 @@
   <CPS.genderprobabilities.tooltip>Шанс того, что пешка будет мужского или женского пола, в ванильном варианте - 50%/50%. Принудительное определение пола пешки отменяет это значение. Любое определенное здесь значение отменяет любую вероятность, определенную в Гуманоидных инопланетных расах.</CPS.genderprobabilities.tooltip>
   <CPS.humanpregnancychance>Вероятность беременности у людей</CPS.humanpregnancychance>
   <CPS.humanpregnancychance.tooltip>Вероятность того, что человеческая фигура будет беременной при генерации</CPS.humanpregnancychance.tooltip>
+  <CPS.all.button>Все</CPS.all.button>
+  <CPS.none.button>Нет</CPS.none.button>
 </LanguageData>

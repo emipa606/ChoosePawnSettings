@@ -54,4 +54,6 @@
   <CPS.genderprobabilities.tooltip>Die Chance, dass die Spielfigur männlich oder weiblich ist, beträgt bei Vanille 50%/50%. Erzwungene geschlechtliche Spielfiguren setzen diesen Wert außer Kraft. Jeder hier definierte Wert überschreibt jede Wahrscheinlichkeit, die von Humanoid Alien Races definiert wird.</CPS.genderprobabilities.tooltip>
   <CPS.humanpregnancychance>Schwangerschaftswahrscheinlichkeit bei Menschen</CPS.humanpregnancychance>
   <CPS.humanpregnancychance.tooltip>Wahrscheinlichkeit, dass eine menschliche Spielfigur bei ihrer Erzeugung schwanger ist</CPS.humanpregnancychance.tooltip>
+  <CPS.all.button>Alle</CPS.all.button>
+  <CPS.none.button>Keine</CPS.none.button>
 </LanguageData>

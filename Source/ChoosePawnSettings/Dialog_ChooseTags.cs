@@ -10,6 +10,7 @@ public class Dialog_ChooseTags : Window
 {
     private readonly string currentPawnKindDefName;
     private readonly Dictionary<string, List<ThingDef>> currentTagContents;
+    private readonly List<string> originalTagContents;
 
     private Vector2 scrollPosition;
 
@@ -19,6 +20,9 @@ public class Dialog_ChooseTags : Window
         absorbInputAroundWindow = true;
         currentTagContents = tagContents;
         currentPawnKindDefName = pawnKindDefName;
+        originalTagContents = ChoosePawnSettings_Mod.CurrentTags is null
+            ? []
+            : [..ChoosePawnSettings_Mod.CurrentTags];
     }
 
 
@@ -34,6 +38,13 @@ public class Dialog_ChooseTags : Window
                     ChoosePawnSettings_Mod.buttonSize),
                 "CPS.save.button".Translate()))
         {
+            // If the tags are the same as the original, clear the current tags to avoid saving unnecessary data
+            if (ChoosePawnSettings_Mod.CurrentTags != null &&
+                ChoosePawnSettings_Mod.CurrentTags.SequenceEqual(originalTagContents))
+            {
+                ChoosePawnSettings_Mod.CurrentTags = null;
+            }
+
             ChoosePawnSettings_Mod.TagStage = currentPawnKindDefName;
             Find.WindowStack.TryRemove(this, false);
             return;
@@ -47,6 +58,42 @@ public class Dialog_ChooseTags : Window
             ChoosePawnSettings_Mod.CurrentTags = null;
             ChoosePawnSettings_Mod.TagStage = currentPawnKindDefName;
             Find.WindowStack.TryRemove(this, false);
+            return;
+        }
+
+        if (Widgets.ButtonText(
+                new Rect(inRect.position + new Vector2(inRect.width - (ChoosePawnSettings_Mod.buttonSize.x * 2.5f), 0),
+                    ChoosePawnSettings_Mod.buttonSize - new Vector2(ChoosePawnSettings_Mod.buttonSize.x * 0.5f, 0)),
+                "CPS.all.button".Translate()))
+        {
+            foreach (var currentTagContent in currentTagContents.Select(pair => pair.Key))
+            {
+                if (ChoosePawnSettings_Mod.CurrentTags.Contains(currentTagContent))
+                {
+                    continue;
+                }
+
+                ChoosePawnSettings_Mod.CurrentTags.Add(currentTagContent);
+            }
+
+            return;
+        }
+
+        if (Widgets.ButtonText(
+                new Rect(inRect.position + new Vector2(inRect.width - (ChoosePawnSettings_Mod.buttonSize.x * 3f), 0),
+                    ChoosePawnSettings_Mod.buttonSize - new Vector2(ChoosePawnSettings_Mod.buttonSize.x * 0.5f, 0)),
+                "CPS.none.button".Translate()))
+        {
+            foreach (var currentTagContent in currentTagContents.Select(pair => pair.Key))
+            {
+                if (!ChoosePawnSettings_Mod.CurrentTags.Contains(currentTagContent))
+                {
+                    continue;
+                }
+
+                ChoosePawnSettings_Mod.CurrentTags.Remove(currentTagContent);
+            }
+
             return;
         }
 
@@ -82,7 +129,7 @@ public class Dialog_ChooseTags : Window
                 break;
             }
 
-            ChoosePawnSettings_Mod.CurrentTags.Remove(tag.Key);
+            ChoosePawnSettings_Mod.CurrentTags?.Remove(tag.Key);
         }
 
         listingStandard.End();

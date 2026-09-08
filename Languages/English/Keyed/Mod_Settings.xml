@@ -16,6 +16,8 @@
   <CPS.reset.button>Reset</CPS.reset.button>
   <CPS.undo.button>Undo</CPS.undo.button>
   <CPS.save.button>Save</CPS.save.button>
+  <CPS.all.button>All</CPS.all.button>
+  <CPS.none.button>None</CPS.none.button>
   <CPS.search>Search pawn</CPS.search>
   <CPS.customexists>Has custom values defined</CPS.customexists>
   <CPS.percent>{0} percent</CPS.percent>
