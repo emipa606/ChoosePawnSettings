@@ -22,7 +22,7 @@ public class Dialog_ChooseTags : Window
         currentPawnKindDefName = pawnKindDefName;
         originalTagContents = ChoosePawnSettings_Mod.CurrentTags is null
             ? []
-            : [..ChoosePawnSettings_Mod.CurrentTags];
+            : [.. ChoosePawnSettings_Mod.CurrentTags];
     }
 
 

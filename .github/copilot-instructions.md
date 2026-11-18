@@ -1,58 +1,101 @@
-# GitHub Copilot Instructions for Choose Pawn Settings Mod
+# GitHub Copilot Instructions for ChoosePawnSettings Mod
+
+Welcome to the ChoosePawnSettings mod for RimWorld! This mod allows you to customize various aspects of pawn kinds, enhancing the diversity and complexity of your RimWorld game.
 
 ## Mod Overview and Purpose
 
-**Mod Name:** Choose Pawn Settings  
-**Mod Description:** The Choose Pawn Settings mod allows players to modify various attributes of pawns in RimWorld, enhancing gameplay customization. Originally intended as a replacement for Configurable Biocoding, this mod expanded to include a broader range of properties that can be adjusted to tailor pawn behavior and attributes to player preferences.
-
-The modifications apply immediately, although they only affect pawns that spawn after changes are made. Suggestions for additional adjustable properties are welcomed by the mod author.
+ChoosePawnSettings is a mod that lets you change various attributes and properties of pawn kinds in RimWorld. It was initially developed as a replacement for the Configurable Biocoding mod but has since expanded to include more properties for customization. The mod is designed to provide players with greater control over pawn generation, making their RimWorld experience more unique and tailored to their preferences.
 
 ## Key Features and Systems
 
-### Implemented Features:
-- **Biocode Chance:** Control the likelihood of weapons being biocoded.
-- **Chemical Addiction Chance:** Adjust how often pawns develop chemical addictions.
-- **Combat Enhancing Drugs Chance:** Set the probability of pawns using combat drugs.
-- **Headgear Chance:** Determine the chance that pawns will wear headgear.
-- **Combat Power:** Modify the combat power rating of pawns.
-- **Tech Hediffs Chance, Money, and Tags:** Manage technological health differences.
-- **Weapon Money and Tags:** Customize the monetary value and types of weapons available to pawns.
-- **Apparel Money and Tags:** Configure the cost and categories of wearable apparel.
-- **Generation Age:** Alter the age at which pawns are generated.
-- **Gender Probability:** Fine-tune the likelihood of a pawn being a specific gender.
-- **Death Acidifier:** Enable or disable death acidifiers in pawns.
-- **Royal Title Chance (Royalty required):** Adjust the chance of pawns receiving royal titles if the Royalty DLC is enabled.
+ChoosePawnSettings currently supports the following customization options:
+
+- **Biocode Chance**: Adjust the likelihood of a pawn kind having biocode.
+- **Chemical Addiction Chance**: Modify the chance of a pawn kind being addicted to chemicals.
+- **Combat Enhancing Drugs Chance**: Set the probability of a pawn kind using combat-enhancing drugs.
+- **Headgear Chance**: Control the likelihood of a pawn kind wearing headgear.
+- **Combat Power**: Adjust the base combat power of a pawn kind.
+- **Tech Hediffs Chance**: Modify the chance of a pawn kind having tech hediffs.
+- **Tech Hediffs Money**: Control the cost of tech hediffs for a pawn kind.
+- **Tech Hediffs Tags**: Specify tags for tech hediffs associated with a pawn kind.
+- **Weapon Money**: Adjust the cost of weapons for a pawn kind.
+- **Weapon Tags**: Specify tags for weapons associated with a pawn kind.
+- **Apparel Money**: Control the cost of apparel for a pawn kind.
+- **Apparel Tags**: Specify tags for apparel associated with a pawn kind.
+- **Generation Age**: Modify the age range for pawn kind generation.
+- **Gender Probability**: Adjust the gender distribution for a pawn kind.
+- **Death Acidifier**: Enable or disable the death acidifier effect for a pawn kind.
+- **Royal Title Chance**: Modify the chance of a pawn kind having a royal title (requires Royalty mod).
+- **Human Pregnancy Chance**: Control the chance of a pawn kind being able to have human pregnancies (requires Biotech mod).
+
+All changes made through the mod are instant and will only affect pawns that are generated after the changes are applied.
 
 ## Coding Patterns and Conventions
 
-- **Naming Conventions:** Classes and methods follow PascalCase, while variables use camelCase for clarity and consistency.
-- **Methodology:** Classes often contain `Initialize` methods to set the mod options initially. Methods like `ResetToVanillaValues` and `SetCustomValues` are used to toggle between modded settings and defaults.
-- **Documentation:** Comments and method summaries help explain the purpose of major logic sections and configurations.
+### C# Naming Conventions
+
+- **Classes**: PascalCase (e.g., `ChemicalAddiction`)
+- **Methods**: PascalCase (e.g., `Initialize`)
+- **Variables**: camelCase (e.g., `vanillaChemicalAddictionValues`)
+
+### XML Naming Conventions
+
+- **Tags**: Lowercase (e.g., `<pawnkind>`)
+- **Attributes**: Lowercase (e.g., `id="example"`)
+- **Values**: Lowercase or as specified in the mod documentation
+
+### General Coding Guidelines
+
+- Use meaningful and descriptive names for classes, methods, and variables.
+- Follow the SOLID principles to ensure code is maintainable and extensible.
+- Document code thoroughly, especially for public methods and classes.
+- Ensure that all code is compatible with the latest version of RimWorld and the Harmony patching framework.
 
 ## XML Integration
 
-Although the mod, as currently structured, does not directly modify XML defs, integration may be necessary if the mod expands to include XML changes. For future XML handling, consider using:
-- **PatchOperations:** To make non-destructive changes to existing game XML files.
-- **XML Defs File Creation:** If new defs are introduced.
+ChoosePawnSettings does not currently use XML files for configuration. However, the mod is designed to be extensible, and future updates may include XML support for more advanced customization options. If you have suggestions for XML-based features, please leave a comment in the mod's discussion thread.
 
 ## Harmony Patching
 
-The Choose Pawn Settings mod utilizes **Harmony** for runtime modifications without altering RimWorld's assemblies, ensuring compatibility with the base game and other mods.
+ChoosePawnSettings uses the Harmony patching framework to modify the behavior of RimWorld. Harmony is a popular and widely-used tool for modders to make non-invasive changes to the game without modifying the original codebase. If you are unfamiliar with Harmony patching, you can find more information in the [Harmony documentation](https://harmony.pardeike.net/).
 
-- **Namespace:** Ensure that all Harmony patches are wrapped with appropriately scoped namespaces for clarity.
-- **Patch Methodology:** Use `Prefix`, `Postfix`, and `Transpiler` where suitable, with detailed comments explaining the purpose of each patch.
-- **Dependency Management:** Declare the dependency on Harmony via `brrainz.harmony` in the mod's configuration files.
+Here is an example of a Harmony patch used in ChoosePawnSettings:
+
+csharp
+using HarmonyLib;
+using RimWorld;
+using Verse;
+
+namespace ChoosePawnSettings
+{
+    [HarmonyPatch(typeof(PawnGenerator), "GeneratePawn", new Type[] { typeof(PawnGenerationRequest) })]
+    public static class PawnGenerator_Patch
+    {
+        [HarmonyPostfix]
+        public static void Postfix(Pawn pawn)
+        {
+            // Custom logic to modify pawn properties
+            if (pawn.kindDef == PawnKindDef.Named("CustomKind"))
+            {
+                // Modify pawn properties
+            }
+        }
+    }
+}
+
 
 ## Suggestions for Copilot
 
-Given the structure of this project, GitHub Copilot could assist by:
-- **Generating Method Stubs:** Automate the creation of initialization, reset, and set methods for new customizable attributes in the mod.
-- **Code Documentation:** Provide comments and summaries for new methods and classes to ensure they align with existing project documentation practices.
-- **Harmony Patch Templates:** Suggest Transpiler patches when adding new game logic interventions.
-- **Error Handling Patterns:** Offer robust error handling constructs to improve mod stability.
-- **Unit Testing Assistance:** If considering tests, Copilot can assist in generating basic unit test structures using a testing framework compatible with RimWorld mods.
+To make the most of GitHub Copilot with the ChoosePawnSettings mod, consider the following suggestions:
 
-By following these guidelines and leveraging the power of GitHub Copilot, further development on the Choose Pawn Settings mod can be efficient and maintainable.
+- **Explore Harmony Patching**: If you are new to Harmony patching, start by exploring how it works in the mod and experiment with creating your own patches.
+- **Understand XML Configuration**: If XML support is added in the future, familiarize yourself with the XML tags and attributes used in ChoosePawnSettings.
+- **Contribute to the Mod**: If you have ideas for new features or improvements, consider contributing to the mod. Fork the repository and submit pull requests with your changes.
+- **Document Your Code**: Ensure that your code is well-documented, especially if you are contributing new features or patches.
+
+By following these guidelines, you can effectively use GitHub Copilot to enhance your RimWorld modding experience with ChoosePawnSettings.
+
+Happy modding!
 
 ## Project Solution Guidelines
 - Relevant mod XML files are included as Solution Items under the solution folder named XML, these can be read and modified from within the solution.
@@ -66,4 +109,6 @@ By following these guidelines and leveraging the power of GitHub Copilot, furthe
 ## Hard rules (must follow)
 - Do NOT run commands that modify the repo (no git commit, git apply, dotnet format) unless explicitly asked.
 - Prefer minimal reads: read only the smallest code region needed (around the suspicious lines).
+- When mentioning SonarQube issues, automatically use the SonarQube MCP service to fetch and address issues instead of making inferred fixes without querying SonarQube first.
+- When mentioning the rimworld log, automatically use the Rimworld MCP service to fetch the log.
 

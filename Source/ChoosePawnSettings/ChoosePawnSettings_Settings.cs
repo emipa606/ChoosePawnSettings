@@ -7,101 +7,101 @@ namespace ChoosePawnSettings;
 public class ChoosePawnSettings_Settings : ModSettings
 {
     public Dictionary<string, FloatRange> CustomApparelMoney = new();
+    public Dictionary<string, string> CustomApparelTags;
+
+    public Dictionary<string, float> CustomBiocodeChances = new();
+
+    public Dictionary<string, float> CustomChemicalAddictionChances = new();
+
+    public Dictionary<string, float> CustomCombatEnhancingDrugsChances = new();
+
+    public Dictionary<string, float> CustomCombatPowers = new();
+
+    public Dictionary<string, bool> CustomDeathAcidifier;
+
+    public Dictionary<string, float> CustomGenderProbabilities = new();
+
+    public Dictionary<string, IntRange> CustomGenerationAge = new();
+
+    public Dictionary<string, float> CustomHeadgearChances = new();
+
+    public Dictionary<string, float> CustomRoyalTitleChances = new();
+    public Dictionary<string, string> CustomTechHediffTags;
+
+    public Dictionary<string, float> CustomTechHediffsChances = new();
+
+    public Dictionary<string, FloatRange> CustomTechHediffsMoney = new();
+
+    public Dictionary<string, FloatRange> CustomWeaponMoney = new();
+
+    public Dictionary<string, string> CustomWeaponTags;
+
+    public Dictionary<string, float> HumanPregnancyChanceChances = new();
+    public bool VerboseLogging;
 
     private List<string> customApparelMoneyKeys;
 
     private List<FloatRange> customApparelMoneyValues;
     private List<string> customApparelTagKeys;
-    public Dictionary<string, string> CustomApparelTags;
 
     private List<string> customApparelTagValues;
-
-    public Dictionary<string, float> CustomBiocodeChances = new();
 
     private List<string> customBiocodeChancesKeys;
 
     private List<float> customBiocodeChancesValues;
 
-    public Dictionary<string, float> CustomChemicalAddictionChances = new();
-
     private List<string> customChemicalAddictionChancesKeys;
 
     private List<float> customChemicalAddictionChancesValues;
-
-    public Dictionary<string, float> CustomCombatEnhancingDrugsChances = new();
 
     private List<string> customCombatEnhancingDrugsChancesKeys;
 
     private List<float> customCombatEnhancingDrugsChancesValues;
 
-    public Dictionary<string, float> CustomCombatPowers = new();
-
     private List<string> customCombatPowersKeys;
 
     private List<float> customCombatPowersValues;
-
-    public Dictionary<string, bool> CustomDeathAcidifier;
     private List<string> customDeathAcidifiersKeys;
     private List<bool> customDeathAcidifiersValues;
-
-    public Dictionary<string, float> CustomGenderProbabilities = new();
 
     private List<string> customGenderProbabilitiesKeys;
 
     private List<float> customGenderProbabilitiesValues;
 
-    public Dictionary<string, IntRange> CustomGenerationAge = new();
-
     private List<string> customGenerationAgeKeys;
 
     private List<IntRange> customGenerationAgeValues;
-
-    public Dictionary<string, float> CustomHeadgearChances = new();
 
     private List<string> customHeadgearChancesKeys;
 
     private List<float> customHeadgearChancesValues;
 
-    public Dictionary<string, float> CustomRoyalTitleChances = new();
-
     private List<string> customRoyalTitleChancesKeys;
 
     private List<float> customRoyalTitleChancesValues;
 
-    public Dictionary<string, float> CustomTechHediffsChances = new();
+    private List<string> customTechHediffTagKeys;
+
+    private List<string> customTechHediffTagValues;
 
     private List<string> customTechHediffsChancesKeys;
 
     private List<float> customTechHediffsChancesValues;
 
-    public Dictionary<string, FloatRange> CustomTechHediffsMoney = new();
-
     private List<string> customTechHediffsMoneyKeys;
 
     private List<FloatRange> customTechHediffsMoneyValues;
-
-    private List<string> customTechHediffTagKeys;
-    public Dictionary<string, string> CustomTechHediffTags;
-
-    private List<string> customTechHediffTagValues;
-
-    public Dictionary<string, FloatRange> CustomWeaponMoney = new();
 
     private List<string> customWeaponMoneyKeys;
 
     private List<FloatRange> customWeaponMoneyValues;
     private List<string> customWeaponTagKeys;
 
-    public Dictionary<string, string> CustomWeaponTags;
-
     private List<string> customWeaponTagValues;
-
-    public Dictionary<string, float> HumanPregnancyChanceChances = new();
 
     private List<string> humanPregnancyChanceChancesKeys;
 
     private List<float> humanPregnancyChanceChancesValues;
-    public bool VerboseLogging;
 
 
     public override void ExposeData()
